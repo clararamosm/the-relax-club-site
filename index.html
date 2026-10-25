@@ -49,7 +49,7 @@ h1 em{font-style:italic}
 .card.main{display:flex;align-items:center;gap:14px}
 .card.main .ct{flex:1;min-width:0}
 .orb{flex:none;width:96px;height:96px;overflow:visible}
-.orb ellipse{fill:none;stroke:rgba(241,235,220,.75);stroke-width:.9}
+.orb ellipse,.orb .o{fill:none;stroke:rgba(241,235,220,.75);stroke-width:.9}
 .orb{animation:orb 60s linear infinite}
 .card.main:hover .orb{animation-duration:14s}
 @keyframes orb{to{transform:rotate(360deg)}}
@@ -60,16 +60,33 @@ h1 em{font-style:italic}
 .social a:hover{background:rgba(255,255,255,.5)}
 footer{margin-top:auto;padding-top:34px;text-align:center;font-size:13px;color:var(--muted)}
 footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
+.lead b{font-weight:600;color:var(--green-deep)}
+.col{flex:1;display:flex;flex-direction:column}
+@media (min-width:900px){
+  .wrap{max-width:1240px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto 1fr;column-gap:56px;padding:36px 48px 32px;min-height:100dvh}
+  header{grid-column:1;justify-content:flex-start;padding-bottom:0}
+  .hero{grid-column:2;grid-row:1 / span 2;height:auto;min-height:480px;margin:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+  .col{grid-column:1;justify-content:center;padding-top:24px}
+  h1{font-size:clamp(50px,4.8vw,70px);margin-top:0}
+  .lead{margin-bottom:22px}
+  .card{padding:16px 20px}
+  h1 em{display:block}
+  .lead{max-width:500px}
+  .links{max-width:520px}
+  footer{text-align:left;padding-top:0;margin-top:22px;display:flex;gap:10px;align-items:baseline}
+  footer br{display:none}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header><img src="/logo.svg" alt="the relax club"></header>
   <div class="hero" id="mare" aria-hidden="true"><canvas></canvas></div>
+  <div class="col">
   <h1>um lugar pra parar <em>de propósito</em></h1>
-  <p class="lead">se escutar é o caminho mais curto pro descanso. a the relax club é sobre presença, bem-estar e descanso, pra você entender o que te drena, o que te devolve energia e viver o dia a dia com mais intenção.</p>
+  <p class="lead"><b>se escutar é o caminho mais curto pro descanso.</b> a the relax club é sobre <b>presença, bem-estar e descanso</b>, pra você entender o que te drena, o que te devolve energia e viver o dia a dia com <b>mais intenção</b>.</p>
   <div class="links">
-    <a class="card main" href="/teste/"><div class="ct"><small>teste gratuito · 3 minutos</small><b>qual tipo de descanso você precisa?</b><span>um teste rápido pra entender quais dos 7 tipos de descanso tão descarregados em você agora, e por onde começar.</span></div><svg class="orb" viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(0.00 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(25.71 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(51.43 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(77.14 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(102.86 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(128.57 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(154.29 60 60)"/></svg></a>
+    <a class="card main" href="/teste/"><div class="ct"><small>teste gratuito · 3 minutos</small><b>qual tipo de descanso você precisa?</b><span>um teste rápido pra entender quais dos 7 tipos de descanso tão descarregados em você agora, e por onde começar.</span></div><svg class="orb" viewBox="0 0 120 120" aria-hidden="true"><ellipse class="o" cx="60.0" cy="36.0" rx="9.5" ry="27" transform="rotate(0.00 60.0 36.0)"/><ellipse class="o" cx="78.8" cy="45.0" rx="9.5" ry="27" transform="rotate(51.43 78.8 45.0)"/><ellipse class="o" cx="83.4" cy="65.3" rx="9.5" ry="27" transform="rotate(102.86 83.4 65.3)"/><ellipse class="o" cx="70.4" cy="81.6" rx="9.5" ry="27" transform="rotate(154.29 70.4 81.6)"/><ellipse class="o" cx="49.6" cy="81.6" rx="9.5" ry="27" transform="rotate(205.71 49.6 81.6)"/><ellipse class="o" cx="36.6" cy="65.3" rx="9.5" ry="27" transform="rotate(257.14 36.6 65.3)"/><ellipse class="o" cx="41.2" cy="45.0" rx="9.5" ry="27" transform="rotate(308.57 41.2 45.0)"/></svg></a>
     <a class="card" href="https://therelaxclub.substack.com" target="_blank" rel="noopener"><small>toda quinta</small><b>the relax news</b><span>a newsletter do clube, com histórias, guias e o que a ciência diz sobre descansar de verdade.</span></a>
     <div class="social">
       <a href="https://www.instagram.com/therelax.club/" target="_blank" rel="noopener">instagram</a>
@@ -77,6 +94,7 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
     </div>
   </div>
   <footer><i>e mais nada.</i><br>the relax club</footer>
+  </div>
 </div>
 <script>
 /* maré: linhas finas ondulando devagar; o mouse (ou o toque) faz a água reverberar */
@@ -113,6 +131,11 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
     if(!reduce) requestAnimationFrame(draw);
   };
   requestAnimationFrame(draw);
+  /* no celular não tem hover: a água reverbera sozinha, de leve */
+  if(!reduce && matchMedia('(hover: none)').matches){
+    const auto=()=>{ ripples.push({x:W*(.15+Math.random()*.7), y:H*(.2+Math.random()*.6), t:performance.now(), amp:7+Math.random()*4}); if(ripples.length>14) ripples.shift(); };
+    auto(); setInterval(auto,1800);
+  }
 })();
 </script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
