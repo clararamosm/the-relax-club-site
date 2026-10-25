@@ -149,7 +149,7 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
     <div class="mixes" id="mixes"><small>ou começa por um mix pronto</small></div>
   </div>
   <div id="fams"></div>
-  <p class="note">os sons são criados ao vivo no seu navegador, então nunca repetem igual. funciona melhor com fone.</p>
+  <p class="note">funciona melhor com fone. alguns sons são criados ao vivo no navegador e outros são gravações livres de <a href="https://bigsoundbank.com" target="_blank" rel="noopener">bigsoundbank.com</a>.</p>
   <footer><i>e mais nada.</i><br>the relax club</footer>
 </main>
 
@@ -176,7 +176,7 @@ const SONS = [
   {fam:'fora', id:'vento',   nome:'vento na serra',        ds:'vento passando pelas árvores'},
   {fam:'fora', id:'grilo',   nome:'grilo de madrugada',    ds:'grilos no mato, de noite'},
   {fam:'fora', id:'cigarra', nome:'cigarra das cinco',     ds:'fim de tarde de verão'},
-  {fam:'fora', id:'bemtevi', nome:'bem-te-vi da manhã',    ds:'o canto que acorda a rua', beta:1},
+  {fam:'fora', id:'bemtevi', nome:'passarinhos da manhã',  ds:'a rua acordando'},
   {fam:'pausa',id:'sino',    nome:'sino da matriz',        ds:'igreja de cidade pequena, ao longe'},
   {fam:'pausa',id:'tigela',  nome:'tigela',                ds:'uma batida, ressoando devagar'},
 ];
@@ -242,6 +242,15 @@ function makeHits(secs, perSec, minF, maxF, decay, amp){
 }
 
 /* ---------- cada som: monta a cadeia e devolve um stop() ---------- */
+/* sons gravados (CC0, BigSoundBank.com / Joseph Sardin), em loop com emenda suave */
+const ARQ = { corrego:['audio/corrego.mp3',1.1], grilo:['audio/grilo.mp3',1.1], cigarra:['audio/cigarra.mp3',1.1], bemtevi:['audio/passarinhos.mp3',1.5], fogao:['audio/fogao.mp3',3] };
+const BUFS={};
+function loadBuf(url){ if(!BUFS[url]) BUFS[url]=fetch(url).then(r=>r.arrayBuffer()).then(a=>new Promise((ok,err)=>ctx.decodeAudioData(a,ok,err))); return BUFS[url]; }
+function fileSound(id,out){
+  const [url,g]=ARQ[id]; let s=null, alive=true; const gg=gain(g); gg.connect(out);
+  loadBuf(url).then(buf=>{ if(!alive) return; s=src(buf); s.loopStart=.06; s.loopEnd=buf.duration-.06; s.connect(gg); s.start(0, Math.random()*(buf.duration-1)); }).catch(()=>{});
+  return ()=>{ alive=false; if(s) try{s.stop();}catch(e){} gg.disconnect(); };
+}
 const BUILD = {
   chuva(out){
     const base=src(NOISE.pink); chain(base, filt('highpass',500), filt('lowpass',6500), gain(.55), out); base.start();
@@ -270,20 +279,8 @@ const BUILD = {
     wave();
     return ()=>{ alive=false; clearTimeout(tm); s.stop(); s2.stop(); };
   },
-  corrego(out){
-    /* água entre pedras: milhares de bolhinhas, cada uma uma nota curta que sobe de tom */
-    const bubbles=(secs,perSec)=>{ const sr=ctx.sampleRate, n=Math.floor(sr*secs), b=ctx.createBuffer(2,n,sr);
-      for(let c=0;c<2;c++){ const d=b.getChannelData(c); const count=Math.floor(secs*perSec);
-        for(let k=0;k<count;k++){ const f0=Math.exp(rnd(Math.log(380),Math.log(1500))), dur=rnd(.012,.05), rise=rnd(1.3,2.2), a=.09*Math.pow(Math.random(),1.6);
-          const t0=Math.floor(Math.random()*(n-sr*.08)), len=Math.floor(sr*dur*2.2); let ph=0;
-          for(let i=0;i<len;i++){ const tt=i/sr, f=f0*(1+(rise-1)*Math.min(1,tt/dur)); ph+=2*Math.PI*f/sr; d[t0+i]+=a*Math.sin(ph)*Math.exp(-tt/(dur*.55))*Math.min(1,i/(sr*.002)); } } }
-      return b; };
-    const b1=src(bubbles(11,140)); const b2=src(bubbles(7,90),true,.85);
-    chain(b1,filt('highpass',250),gain(1.4),out); chain(b2,filt('lowpass',1800),gain(1.15),out); b1.start(); b2.start();
-    const rush=src(NOISE.pink); const rg=gain(.18); chain(rush,filt('bandpass',900,.6),rg,out); rush.start(); const o=lfo(.13,.06,rg.gain);
-    const low=src(NOISE.brown); chain(low,filt('lowpass',220),gain(.25),out); low.start();
-    return ()=>{ b1.stop(); b2.stop(); rush.stop(); o.stop(); low.stop(); };
-  },
+  corrego(out){ return fileSound('corrego',out); },
+
 
   ventilador(out){
     const s=src(NOISE.brown); const lp=filt('lowpass',420); const g=gain(.7); chain(s,lp,g,out); s.start();
@@ -292,13 +289,8 @@ const BUILD = {
     const tic=src(makeHits(5,1.2,0,0,.004,.25)); chain(tic,filt('bandpass',1400,2),gain(.4),out); tic.start();
     return ()=>{ s.stop(); o.stop(); o2.stop(); hum.stop(); tic.stop(); };
   },
-  fogao(out){
-    const s=src(NOISE.brown); chain(s,filt('lowpass',260),gain(.45),out); s.start();
-    const cr=src(makeHits(8,14,0,0,.0012,1)); chain(cr,filt('highpass',1200),gain(.55),out); cr.start();
-    const pop=src(makeHits(11,1.1,0,0,.004,1)); chain(pop,filt('bandpass',700,1),gain(.8),out); pop.start();
-    const hiss=src(NOISE.white); const hg=gain(.02); chain(hiss,filt('bandpass',5000,1),hg,out); hiss.start(); const o=lfo(.2,.015,hg.gain);
-    return ()=>{ s.stop(); cr.stop(); pop.stop(); hiss.stop(); o.stop(); };
-  },
+  fogao(out){ return fileSound('fogao',out); },
+
   rede(out){
     let alive=true, tm; const bed=src(NOISE.pink); chain(bed,filt('lowpass',900),gain(.05),out); bed.start();
     const creak=(t,f0,f1,dur)=>{ const n=src(NOISE.white,false); const bp=filt('bandpass',f0,14); const e=gain(0);
@@ -325,60 +317,14 @@ const BUILD = {
     stops.push(()=>{leaves.stop();o3.stop();});
     return ()=>stops.forEach(f=>f());
   },
-  grilo(out){
-    /* um campo de grilos: cada um com seu tom, seu ritmo e sua distância, renderizado num buffer longo */
-    const field=(secs,count)=>{ const sr=ctx.sampleRate, n=Math.floor(sr*secs), b=ctx.createBuffer(2,n,sr);
-      for(let g=0; g<count; g++){ const f=rnd(4100,5300), per=rnd(.38,1.05), syl=Math.floor(rnd(2,5)), sd=rnd(.011,.019), gap=rnd(.006,.012);
-        const dist=Math.random(), a=.05*(1-.8*dist)*rnd(.6,1), pan=rnd(-1,1); let tm=Math.random()*per;
-        while(tm<secs-.2){ for(let s=0;s<syl;s++){ const t0=Math.floor(sr*(tm+s*(sd+gap))), len=Math.floor(sr*sd), ff=f*rnd(.995,1.005);
-            for(let i=0;i<len && t0+i<n;i++){ const u=i/len, env=Math.pow(Math.sin(Math.PI*u),2)*(1-.25*u), v=a*env*(Math.sin(2*Math.PI*ff*(1-.02*u)*i/sr)+.25*(1-dist)*Math.sin(4*Math.PI*ff*i/sr));
-              b.getChannelData(0)[t0+i]+=v*(1-Math.max(0,pan)); b.getChannelData(1)[t0+i]+=v*(1+Math.min(0,pan)); } }
-          tm+=per*rnd(.85,1.18); if(Math.random()<.04) tm+=rnd(1,4); } }
-      return b; };
-    const f1=src(field(13,9)), f2=src(field(17,6));
-    chain(f1,filt('lowpass',8000),gain(3.5),out); chain(f2,filt('lowpass',6000),gain(2.4),out); f1.start(); f2.start();
-    const verb=gain(.25); f2.connect(verb); verb.connect(reverb);
-    const night=src(NOISE.pink); chain(night,filt('lowpass',1100),gain(.06),out); night.start();
-    return ()=>{ f1.stop(); f2.stop(); night.stop(); verb.disconnect(); };
-  },
+  grilo(out){ return fileSound('grilo',out); },
 
-  cigarra(out){
-    /* cigarra: chiado modulado por um trem de pulsos irregular, que cresce e some sem padrão fixo */
-    const sr=ctx.sampleRate, secs=9, n=sr*secs, am=ctx.createBuffer(1,n,sr), d=am.getChannelData(0);
-    let tt=0, rate=rnd(190,230);
-    while(tt<secs){ const t0=Math.floor(tt*sr), len=Math.floor(sr*rnd(.003,.0045)), a=rnd(.55,1);
-      for(let i=0;i<len && t0+i<n;i++) d[t0+i]=a*Math.exp(-i/(len*.4));
-      rate+= rnd(-6,6); rate=Math.max(170,Math.min(250,rate)); tt+=1/rate*rnd(.9,1.1); }
-    const amS=src(am);
-    const bus=gain(0); const swell=gain(0); chain(bus,swell,gain(1.9),out); amS.connect(bus.gain); amS.start();
-    const stops=[()=>amS.stop()];
-    [[4300,3.5,1],[5600,4,.8],[7200,3,.45],[2900,2,.25]].forEach(([f,q,a])=>{ const s=src(NOISE.white,true,rnd(.9,1.1)); const g=gain(a*1.6); chain(s,filt('bandpass',f,q),g,bus); s.start(); stops.push(()=>s.stop()); });
-    let alive=true, tm;
-    const cycle=()=>{ if(!alive) return; const t=ctx.currentTime, up=rnd(2,6), hold=rnd(2,9), down=rnd(1.5,4), pk=rnd(.6,1.2), g=swell.gain;
-      g.cancelScheduledValues(t); g.setValueAtTime(g.value,t); g.linearRampToValueAtTime(pk*.7,t+up*.5); g.linearRampToValueAtTime(pk,t+up);
-      g.linearRampToValueAtTime(pk*rnd(.75,1),t+up+hold*.5); g.linearRampToValueAtTime(pk*rnd(.85,1),t+up+hold); g.linearRampToValueAtTime(0,t+up+hold+down);
-      tm=setTimeout(cycle,(up+hold+down+rnd(.5,6))*1000); };
-    cycle();
-    const far=src(NOISE.white); const fg=gain(.03); chain(far,filt('bandpass',5000,2),fg,out); far.start(); const o=lfo(.05,.02,fg.gain); stops.push(()=>{far.stop();o.stop();});
-    const bed=src(NOISE.pink); chain(bed,filt('lowpass',1500),gain(.05),out); bed.start(); stops.push(()=>bed.stop());
-    return ()=>{ alive=false; clearTimeout(tm); stops.forEach(f=>f()); };
-  },
 
-  bemtevi(out){
-    let alive=true, tm; const wet=gain(.25); chain(wet,reverb,out); const dry=gain(.8); dry.connect(out);
-    const note=(t,f0,f1,dur,a)=>{ const o=ctx.createOscillator(); o.type='sine'; const o2=ctx.createOscillator(); o2.type='sine'; const e=gain(0);
-      o.frequency.setValueAtTime(f0,t); o.frequency.exponentialRampToValueAtTime(f1,t+dur); o2.frequency.setValueAtTime(f0*2,t); o2.frequency.exponentialRampToValueAtTime(f1*2,t+dur);
-      const g2=gain(.15); o2.connect(g2); g2.connect(e); o.connect(e); e.connect(dry); e.connect(wet);
-      e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(a,t+.015); e.gain.setValueAtTime(a,t+dur*.7); e.gain.linearRampToValueAtTime(0,t+dur);
-      o.start(t); o2.start(t); o.stop(t+dur+.02); o2.stop(t+dur+.02); };
-    const call=()=>{ if(!alive) return; const t=ctx.currentTime+.05, k=rnd(.95,1.05);
-      note(t,2600*k,3300*k,.09,.22); note(t+.17,3500*k,3000*k,.12,.25); note(t+.36,3900*k,2500*k,.32,.28);
-      if(Math.random()<.5){ for(let i=0;i<3;i++) note(t+rnd(1.2,3),rnd(3500,5000),rnd(4000,5500),.04,.06); }
-      tm=setTimeout(call,rnd(6,16)*1000); };
-    tm=setTimeout(call,600);
-    const bed=src(NOISE.pink); chain(bed,filt('lowpass',800),gain(.05),out); bed.start();
-    return ()=>{ alive=false; clearTimeout(tm); bed.stop(); };
-  },
+  cigarra(out){ return fileSound('cigarra',out); },
+
+
+  bemtevi(out){ return fileSound('bemtevi',out); },
+
   sino(out){
     let alive=true, tm; const lp=filt('lowpass',2600); const wet=gain(.7); const dry=gain(.35); chain(lp,dry,out); chain(lp,wet,reverb,out);
     const R=[.5,1,1.183,1.506,2,2.514,2.662,3.011,4.166], A=[.6,1,.55,.45,.35,.22,.18,.12,.07];
@@ -440,7 +386,7 @@ let playing=true;
 const fams=[...new Set(SONS.map(s=>s.fam))];
 $('#fams').innerHTML=fams.map(f=>`<section class="fam"><h2>${f}</h2><div class="grid">${SONS.filter(s=>s.fam===f).map(s=>`
   <div class="snd" data-id="${s.id}"><span class="dot"></span>
-    <button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true">${ILUS[s.id]||''}</svg><span class="tx"><span class="nm">${esc(s.nome)}</span><span class="ds">${esc(s.ds)}</span>${s.beta?'<span class="tag">em teste</span>':''}</span></button>
+    <button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true">${ILUS[s.id]||''}</svg><span class="tx"><span class="nm">${esc(s.nome)}</span></span></button>
     <input type="range" min="1" max="100" value="50" aria-label="volume de ${esc(s.nome)}">
   </div>`).join('')}</div></section>`).join('');
 document.querySelectorAll('.snd').forEach(el=>{
