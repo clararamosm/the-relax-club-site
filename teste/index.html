@@ -646,7 +646,7 @@ async function enviar(email, hp){
   await sleep(500);
   const r = st.result;
   const params = new URLSearchParams(location.search);
-  const payload = { email, nome:st.nome, site:hp, energia:r.energia, perfil:r.perfil, principal:r.principal, segundo:r.segundo, bat:r.bat,
+  const payload = { email, nome:st.nome, site:hp, energia:r.energia, perfil:r.perfil, principal:r.principal, segundo:r.segundo, bat:r.bat, rank:r.rank,
     respostas:{ energia:st.energia, perguntas:st.resp.map((x,i)=>PERGUNTAS[i].o[x][0]), final:FINAL.o[st.final][0] },
     origem: params.get('utm_source') || params.get('ref') || (document.referrer ? document.referrer.replace(/^https?:\/\//,'').split('/')[0] : '') || 'direto' };
   const envio = PREVIA ? Promise.resolve('previa') :

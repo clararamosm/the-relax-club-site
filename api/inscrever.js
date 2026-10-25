@@ -13,8 +13,25 @@ const ATRIBUTOS = {
   NOME:'text', AMBITO:'text', AMBITO_2:'text', PERFIL:'text', BATERIA:'text', ENERGIA:'float',
   BAT_FISICO:'float', BAT_MENTAL:'float', BAT_EMOCIONAL:'float', BAT_SOCIAL:'float',
   BAT_SENSORIAL:'float', BAT_CRIATIVO:'float', BAT_ESPIRITUAL:'float',
-  ORIGEM:'text', QUIZ_AT:'date', TESTE_RESPOSTAS:'text'
+  ORIGEM:'text', QUIZ_AT:'date', TESTE_RESPOSTAS:'text',
+  // mapa ordenado do menor % pro maior, igual ao da pagina de resultado
+  BAT_SORT_1_NOME:'text', BAT_SORT_2_NOME:'text', BAT_SORT_3_NOME:'text', BAT_SORT_4_NOME:'text',
+  BAT_SORT_5_NOME:'text', BAT_SORT_6_NOME:'text', BAT_SORT_7_NOME:'text',
+  BAT_SORT_1_PCT:'float', BAT_SORT_2_PCT:'float', BAT_SORT_3_PCT:'float', BAT_SORT_4_PCT:'float',
+  BAT_SORT_5_PCT:'float', BAT_SORT_6_PCT:'float', BAT_SORT_7_PCT:'float'
 };
+const ORDEM = ['fis', 'men', 'emo', 'soc', 'sen', 'cri', 'esp'];
+
+// ordem do mapa: usa o rank que o site mandou (se valido); senao ordena por % crescente,
+// empate na ordem canonica fisico -> espiritual
+function ordenarBaterias(batNum, rank) {
+  if (Array.isArray(rank)) {
+    const r = rank.filter(k => ORDEM.includes(k));
+    if (r.length === 7 && new Set(r).size === 7 && r.every(k => batNum[k] != null)) return r;
+  }
+  return ORDEM.filter(k => batNum[k] != null)
+    .sort((a, b) => (batNum[a] - batNum[b]) || (ORDEM.indexOf(a) - ORDEM.indexOf(b)));
+}
 const BAT_KEY = { fis:'BAT_FISICO', men:'BAT_MENTAL', emo:'BAT_EMOCIONAL', soc:'BAT_SOCIAL', sen:'BAT_SENSORIAL', cri:'BAT_CRIATIVO', esp:'BAT_ESPIRITUAL' };
 
 // templates SMTP ativos (remetente clara@therelax.club): perfil especial ou ambito no perfil normal
@@ -70,7 +87,7 @@ export default async function handler(req, res) {
 
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
   const {
-    email, nome, site, energia, perfil, principal, segundo, bat, respostas, origem
+    email, nome, site, energia, perfil, principal, segundo, bat, rank, respostas, origem
   } = body;
 
   // honeypot: bots preenchem "site" → responde ok sem gravar
@@ -100,12 +117,17 @@ export default async function handler(req, res) {
     TESTE_RESPOSTAS: respostas != null ? JSON.stringify(respostas).slice(0, 5000) : undefined
   };
 
+  const batNum = {};
   for (const [k, attr] of Object.entries(BAT_KEY)) {
     if (batObj[k] != null && batObj[k] !== '') {
       const n = Number(batObj[k]);
-      if (!Number.isNaN(n)) attributes[attr] = n;
+      if (!Number.isNaN(n)) { attributes[attr] = n; batNum[k] = n; }
     }
   }
+  ordenarBaterias(batNum, rank).forEach((k, i) => {
+    attributes[`BAT_SORT_${i + 1}_NOME`] = NOMES[k];
+    attributes[`BAT_SORT_${i + 1}_PCT`] = batNum[k];
+  });
 
   // remove undefined pra nao apagar attrs no update
   for (const k of Object.keys(attributes)) {
