@@ -40,8 +40,10 @@ h1 em{font-style:italic}
 .lead{color:var(--green);max-width:560px;text-wrap:pretty}
 .lead b{font-weight:600;color:var(--green-deep)}
 
-.mixes{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 6px}
-.mixes small{width:100%;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage)}
+.mixes{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:24px calc(50% - 50vw) 0;padding:2px max(20px,calc(50vw - 540px))}
+.mixes::-webkit-scrollbar{display:none}
+.mixes small{flex:none;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-right:6px}
+.mix{flex:none;white-space:nowrap}
 .mix{border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:8px 14px;font-size:14px;color:var(--green)}
 .mix:hover{background:#fff}
 .mix.on{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
@@ -128,9 +130,7 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
   header{padding-top:32px}
   header img{height:56px}
   .waves{height:clamp(260px,38dvh,380px)}
-  .top{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:end}
-  .mixes{margin:0;justify-content:flex-end}
-  .mixes small{text-align:right}
+  .lead{max-width:720px}
 }
 @media (max-width:719px){.snd .ds{display:none}.snd > button{grid-template-columns:28px 1fr;gap:10px}.snd .il{width:28px;height:28px}.snd .nm{font-size:18px}}
 </style>
@@ -146,8 +146,8 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
       <h1>o som do seu <em>descanso</em></h1>
       <p class="lead">liga os sons que te acalmam, ajusta cada um e deixa tocando enquanto você <b>trabalha, lê, medita ou dorme</b>. cada som que você liga vira uma onda lá em cima.</p>
     </div>
-    <div class="mixes" id="mixes"><small>ou começa por um mix pronto</small></div>
   </div>
+  <div class="mixes" id="mixes"><small>mixes prontos</small></div>
   <div id="fams"></div>
   <p class="note">funciona melhor com fone. sino e tigela são criados ao vivo no navegador. os outros são gravações livres de <a href="https://bigsoundbank.com" target="_blank" rel="noopener">bigsoundbank.com</a>.</p>
   <footer><i>e mais nada.</i><br>the relax club</footer>
