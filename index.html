@@ -26,11 +26,13 @@
 html,body{background:var(--paper);color:var(--ink);overflow-x:hidden}
 body{font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;text-transform:lowercase}
 a{color:inherit}
-.wrap{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:16px 22px 28px}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:16px 22px 28px}
 header{display:flex;justify-content:center;padding-bottom:4px}
-header img{height:36px}
-.hero{position:relative;height:clamp(220px,38dvh,380px);margin:0 calc(50% - 50vw) 6px;cursor:default}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+header a{display:block}
+header img{height:48px;display:block}
+#mare{position:fixed;inset:0;z-index:0;pointer-events:none}
+#mare canvas{width:100%;height:100%;display:block}
+.spacer{height:clamp(150px,26dvh,260px)}
 
 h1{font-family:var(--serif);font-weight:300;font-size:clamp(46px,12.5vw,72px);line-height:1;letter-spacing:-.01em;text-wrap:balance;margin:6px 0 16px}
 h1 em{font-style:italic}
@@ -63,28 +65,29 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
 .lead b{font-weight:600;color:var(--green-deep)}
 .col{flex:1;display:flex;flex-direction:column}
 @media (min-width:900px){
-  .wrap{max-width:1240px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto 1fr;column-gap:56px;padding:36px 48px 32px;min-height:100dvh}
-  header{grid-column:1;justify-content:flex-start;padding-bottom:0}
-  .hero{grid-column:2;grid-row:1 / span 2;height:auto;min-height:480px;margin:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
-  .col{grid-column:1;justify-content:center;padding-top:24px}
-  h1{font-size:clamp(50px,4.8vw,70px);margin-top:0}
-  .lead{margin-bottom:22px}
-  .card{padding:16px 20px}
-  h1 em{display:block}
-  .lead{max-width:500px}
-  .links{max-width:520px}
-  footer{text-align:left;padding-top:0;margin-top:22px;display:flex;gap:10px;align-items:baseline}
+  .wrap{max-width:1180px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr auto;column-gap:72px;padding:32px 48px 28px}
+  header{grid-column:1 / -1;padding-bottom:0}
+  header img{height:56px}
+  .spacer{display:none}
+  .col{display:contents}
+  .txt{grid-column:1;align-self:center}
+  .links{grid-column:2;align-self:center}
+  footer{grid-column:1 / -1;padding-top:24px;margin-top:0;display:flex;gap:10px;justify-content:center;align-items:baseline}
   footer br{display:none}
+  h1{font-size:clamp(54px,5.2vw,78px);margin-top:0}
+  h1 em{display:block}
+  .card{padding:18px 22px}
 }
 </style>
 </head>
 <body>
+<div id="mare" aria-hidden="true"><canvas></canvas></div>
 <div class="wrap">
-  <header><img src="/logo.svg" alt="the relax club"></header>
-  <div class="hero" id="mare" aria-hidden="true"><canvas></canvas></div>
+  <header><a href="/" aria-label="the relax club, ir pra home"><img src="/logo.svg" alt="the relax club"></a></header>
+  <div class="spacer"></div>
   <div class="col">
-  <h1>um lugar pra parar <em>de propósito</em></h1>
-  <p class="lead"><b>se escutar é o caminho mais curto pro descanso.</b> a the relax club é sobre <b>presença, bem-estar e descanso</b>, pra você entender o que te drena, o que te devolve energia e viver o dia a dia com <b>mais intenção</b>.</p>
+  <div class="txt"><h1>um lugar pra parar <em>de propósito</em></h1>
+  <p class="lead"><b>se escutar é o caminho mais curto pro descanso.</b> a the relax club é sobre <b>presença, bem-estar e descanso</b>, pra você entender o que te drena, o que te devolve energia e viver o dia a dia com <b>mais intenção</b>.</p></div>
   <div class="links">
     <a class="card main" href="/teste/"><div class="ct"><small>teste gratuito · 3 minutos</small><b>qual tipo de descanso você precisa?</b><span>um teste rápido pra entender quais dos 7 tipos de descanso tão descarregados em você agora, e por onde começar.</span></div><svg class="orb" viewBox="0 0 120 120" aria-hidden="true"><ellipse class="o" cx="60.0" cy="36.0" rx="9.5" ry="27" transform="rotate(0.00 60.0 36.0)"/><ellipse class="o" cx="78.8" cy="45.0" rx="9.5" ry="27" transform="rotate(51.43 78.8 45.0)"/><ellipse class="o" cx="83.4" cy="65.3" rx="9.5" ry="27" transform="rotate(102.86 83.4 65.3)"/><ellipse class="o" cx="70.4" cy="81.6" rx="9.5" ry="27" transform="rotate(154.29 70.4 81.6)"/><ellipse class="o" cx="49.6" cy="81.6" rx="9.5" ry="27" transform="rotate(205.71 49.6 81.6)"/><ellipse class="o" cx="36.6" cy="65.3" rx="9.5" ry="27" transform="rotate(257.14 36.6 65.3)"/><ellipse class="o" cx="41.2" cy="45.0" rx="9.5" ry="27" transform="rotate(308.57 41.2 45.0)"/></svg></a>
     <a class="card" href="https://therelaxclub.substack.com" target="_blank" rel="noopener"><small>toda quinta</small><b>the relax news</b><span>a newsletter do clube, com histórias, guias e o que a ciência diz sobre descansar de verdade.</span></a>
@@ -97,45 +100,48 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
   </div>
 </div>
 <script>
-/* maré: linhas finas ondulando devagar; o mouse (ou o toque) faz a água reverberar */
+/* maré: linhas finas pela página inteira; somem embaixo do texto; o mouse (ou o tempo, no celular) faz a água reverberar */
 (()=>{
-  const box=document.getElementById('mare'), c=box.querySelector('canvas'), x=c.getContext('2d');
+  const c=document.querySelector('#mare canvas'), x=c.getContext('2d');
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W=0,H=0;
-  const fit=()=>{ const r=box.getBoundingClientRect(), d=devicePixelRatio||1; W=r.width; H=r.height; c.width=W*d; c.height=H*d; x.setTransform(d,0,0,d,0,0); };
+  const touch=matchMedia('(hover: none)').matches;
+  let W=0,H=0,N=0,lines=[];
+  const fit=()=>{ const d=devicePixelRatio||1; W=innerWidth; H=innerHeight; c.width=W*d; c.height=H*d; x.setTransform(d,0,0,d,0,0);
+    const n=Math.max(10,Math.round(H/(W<700?42:56))); if(n!==N){ N=n; lines=[...Array(N)].map((_,i)=>({y:(i+.5)/N, a:3+Math.random()*4, f:1+Math.random()*1.2, s:.15+Math.random()*.2, p:Math.random()*6})); } };
   fit(); addEventListener('resize',fit);
-  const N=9;
-  const lines=[...Array(N)].map((_,i)=>({y:i/(N-1), a:3+Math.random()*4, f:1+Math.random()*1.2, s:.15+Math.random()*.2, p:Math.random()*6}));
   const ripples=[]; let lastAdd=0;
-  const add=(px,py,force)=>{ const now=performance.now(); if(now-lastAdd<90 && !force) return; lastAdd=now; ripples.push({x:px,y:py,t:now,amp:force?14:8}); if(ripples.length>14) ripples.shift(); };
-  const pos=e=>{ const r=box.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
-  box.addEventListener('pointermove',e=>{ if(e.pointerType==='mouse'){ const [a,b]=pos(e); add(a,b,false);} });
-  box.addEventListener('pointerdown',e=>{ const [a,b]=pos(e); add(a,b,true); });
+  const add=(px,py,force,amp)=>{ const now=performance.now(); if(now-lastAdd<90 && !force) return; lastAdd=now; ripples.push({x:px,y:py,t:now,amp:amp||(force?14:8)}); if(ripples.length>14) ripples.shift(); };
+  addEventListener('pointermove',e=>{ if(e.pointerType==='mouse') add(e.clientX,e.clientY,false); });
+  addEventListener('pointerdown',e=>add(e.clientX,e.clientY,true));
   const col=getComputedStyle(document.documentElement).getPropertyValue('--green-deep').trim()||'#293729';
+  const paper=getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()||'#F1EBDC';
+  const veil=[...document.querySelectorAll('h1,.lead,.card,.social,header,footer')];
+  const rr=(X,Y,w,h,r)=>{ x.beginPath(); x.roundRect?x.roundRect(X,Y,w,h,r):x.rect(X,Y,w,h); };
   const draw=t=>{
     const T=t/1000; x.clearRect(0,0,W,H);
     for(let i=ripples.length-1;i>=0;i--) if(t-ripples[i].t>3200) ripples.splice(i,1);
     lines.forEach((L,i)=>{
-      const y0=H*.1+L.y*H*.8, persp=.4+.6*L.y;
+      const y0=L.y*H;
       x.beginPath();
-      for(let px=-10;px<=W+10;px+=5){
-        let y=y0+Math.sin(px/W*Math.PI*2*L.f+T*L.s*2+L.p)*L.a*persp+Math.sin(px/W*8+T*.6+i)*1.1*persp;
+      for(let px=-10;px<=W+10;px+=6){
+        let y=y0+Math.sin(px/W*Math.PI*2*L.f+T*L.s*2+L.p)*L.a+Math.sin(px/W*8+T*.6+i)*1.1;
         for(const R of ripples){ const age=(t-R.t)/1000, dx=px-R.x, dy=(y0-R.y)*1.6, dist=Math.sqrt(dx*dx+dy*dy);
-          const front=age*170; const k=dist-front; if(k>40) continue;
-          y+=R.amp*Math.exp(-age*1.3)*Math.exp(-Math.abs(k)/60)*Math.sin(k/14)*persp; }
+          const front=age*170, k=dist-front; if(k>40) continue;
+          y+=R.amp*Math.exp(-age*1.3)*Math.exp(-Math.abs(k)/60)*Math.sin(k/14); }
         px<0?x.moveTo(px,y):x.lineTo(px,y);
       }
-      x.strokeStyle=col; x.globalAlpha=.3+.55*persp; x.lineWidth=.7+.6*persp; x.stroke();
+      x.strokeStyle=col; x.globalAlpha=.32; x.lineWidth=1; x.stroke();
     });
+    /* véu cor de papel por baixo do texto: as linhas quase somem ali */
+    x.fillStyle=paper;
+    for(const el of veil){ const r=el.getBoundingClientRect(); if(r.bottom<0||r.top>H) continue;
+      x.globalAlpha=.45; rr(r.left-40,r.top-30,r.width+80,r.height+60,40); x.fill();
+      x.globalAlpha=.6; rr(r.left-14,r.top-10,r.width+28,r.height+20,24); x.fill(); }
     x.globalAlpha=1;
     if(!reduce) requestAnimationFrame(draw);
   };
   requestAnimationFrame(draw);
-  /* no celular não tem hover: a água reverbera sozinha, de leve */
-  if(!reduce && matchMedia('(hover: none)').matches){
-    const auto=()=>{ ripples.push({x:W*(.15+Math.random()*.7), y:H*(.2+Math.random()*.6), t:performance.now(), amp:7+Math.random()*4}); if(ripples.length>14) ripples.shift(); };
-    auto(); setInterval(auto,1800);
-  }
+  if(!reduce && touch){ const auto=()=>add(W*(.1+Math.random()*.8),H*(.1+Math.random()*.8),true,7+Math.random()*4); auto(); setInterval(auto,1800); }
 })();
 </script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>

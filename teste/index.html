@@ -142,7 +142,9 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 .welcome{position:fixed;inset:0;z-index:5;background:var(--paper);overflow-y:auto}
 .welcome .inner{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column}
 .hero{position:relative;padding:16px 20px 0;display:flex;flex-direction:column;align-items:center}
-.hero > img{height:34px;margin-bottom:4px}
+.brand{display:flex;justify-content:center;padding:18px 0 2px}
+.brand img{height:46px;display:block}
+.r-brand{padding:0 0 22px}
 .ilus{width:min(100%,380px);height:auto;max-height:36dvh;display:block}
 .ilus .el{fill:none;stroke:var(--green-deep);stroke-width:1.1;opacity:.85;stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 2.4s cubic-bezier(.4,.1,.2,1) forwards}
 .ilus .lb{font-family:var(--serif);font-size:17px;fill:var(--green-deep);text-anchor:middle;opacity:0;animation:fade .8s ease forwards}
@@ -163,14 +165,13 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 .facts span{font-size:13px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:var(--green)}
 .welcome .foot{margin-top:auto;padding-top:26px}
 .welcome p b{font-weight:600;color:var(--green-deep)}
-.dlogo{display:none}
 @media (min-width:900px){
-  .welcome .inner{max-width:1200px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;gap:40px;padding:40px 48px}
+  .welcome .inner{max-width:1200px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;align-content:center;gap:16px 40px;padding:32px 48px}
   .hero{order:2;padding:0}
-  .hero > img{display:none}
+  .brand{grid-column:1 / -1;padding:0 0 8px}
+  .brand img{height:54px}
   .ilus{width:100%;max-width:600px;max-height:82dvh}
   .welcome .body{order:1;padding:0;flex:none}
-  .dlogo{display:block;height:36px;margin-bottom:44px;align-self:flex-start}
   .welcome h1{font-size:clamp(50px,4.8vw,70px)}
   .welcome h1 .l1{white-space:nowrap}
   .welcome h1 em{display:block}
@@ -178,12 +179,11 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
   .welcome .btn.full{width:auto;align-self:flex-start;padding-left:34px;padding-right:34px}
   .welcome .foot{margin-top:0;padding-top:28px;font-size:13.5px;text-align:left;max-width:440px}
 }
-.r-logo{display:none}
 @media (min-width:900px){
   body.res .app{max-width:none}
   body.res .result{padding:40px 48px 56px}
   .result > div{max-width:1180px;margin-left:auto;margin-right:auto}
-  .r-logo{display:block;height:36px;margin-bottom:36px}
+  .r-brand{padding:0 0 30px}
   .r-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:64px;align-items:end;padding-bottom:44px;border-bottom:1px solid var(--line)}
   .r-hero .sub{margin-top:0}
   .r-map{background:rgba(255,255,255,.35);border:1px solid var(--line);border-radius:26px;padding:26px 28px}
@@ -231,9 +231,9 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 </head>
 <body>
 <div class="welcome" id="welcome"><div class="inner">
-  <div class="hero"><img src="logo.svg" alt="the relax club"><svg class="ilus" viewBox="-45 -10 570 500" role="img" aria-label="os 7 tipos de descanso"><g class="els"><ellipse class="el" style="animation-delay:0.00s" cx="240.0" cy="148.0" rx="36" ry="100" transform="rotate(0.00 240.0 148.0)"/><ellipse class="el" style="animation-delay:0.15s" cx="311.9" cy="182.6" rx="36" ry="100" transform="rotate(51.43 311.9 182.6)"/><ellipse class="el" style="animation-delay:0.30s" cx="329.7" cy="260.5" rx="36" ry="100" transform="rotate(102.86 329.7 260.5)"/><ellipse class="el" style="animation-delay:0.45s" cx="279.9" cy="322.9" rx="36" ry="100" transform="rotate(154.29 279.9 322.9)"/><ellipse class="el" style="animation-delay:0.60s" cx="200.1" cy="322.9" rx="36" ry="100" transform="rotate(205.71 200.1 322.9)"/><ellipse class="el" style="animation-delay:0.75s" cx="150.3" cy="260.5" rx="36" ry="100" transform="rotate(257.14 150.3 260.5)"/><ellipse class="el" style="animation-delay:0.90s" cx="168.1" cy="182.6" rx="36" ry="100" transform="rotate(308.57 168.1 182.6)"/></g><text class="lb" style="animation-delay:1.20s" x="240.0" y="10.0"><tspan x="240.0" dy="-0.25em" class="n">01</tspan><tspan x="240.0" dy="1.2em">físico</tspan></text><text class="lb" style="animation-delay:1.32s" x="427.4" y="96.6"><tspan x="427.4" dy="-0.25em" class="n">02</tspan><tspan x="427.4" dy="1.2em">mental</tspan></text><text class="lb" style="animation-delay:1.44s" x="473.7" y="289.8"><tspan x="473.7" dy="-0.25em" class="n">03</tspan><tspan x="473.7" dy="1.2em">emocional</tspan></text><text class="lb" style="animation-delay:1.56s" x="344.0" y="441.8"><tspan x="344.0" dy="-0.25em" class="n">04</tspan><tspan x="344.0" dy="1.2em">social</tspan></text><text class="lb" style="animation-delay:1.68s" x="136.0" y="441.8"><tspan x="136.0" dy="-0.25em" class="n">05</tspan><tspan x="136.0" dy="1.2em">sensorial</tspan></text><text class="lb" style="animation-delay:1.80s" x="6.3" y="289.8"><tspan x="6.3" dy="-0.25em" class="n">06</tspan><tspan x="6.3" dy="1.2em">criativo</tspan></text><text class="lb" style="animation-delay:1.92s" x="52.6" y="96.6"><tspan x="52.6" dy="-0.25em" class="n">07</tspan><tspan x="52.6" dy="1.2em">espiritual</tspan></text><path class="st" d="M40 50C41.3 58.7 41.3 58.7 50 60C41.3 61.3 41.3 61.3 40 70C38.7 61.3 38.7 61.3 30 60C38.7 58.7 38.7 58.7 40 50Z"/><path class="st" d="M452 39C452.91 45.09 452.91 45.09 459 46C452.91 46.91 452.91 46.91 452 53C451.09 46.91 451.09 46.91 445 46C451.09 45.09 451.09 45.09 452 39Z"/><path class="st" d="M430 417C431.43 426.57 431.43 426.57 441 428C431.43 429.43 431.43 429.43 430 439C428.57 429.43 428.57 429.43 419 428C428.57 426.57 428.57 426.57 430 417Z"/><path class="st" d="M52 403C52.91 409.09 52.91 409.09 59 410C52.91 410.91 52.91 410.91 52 417C51.09 410.91 51.09 410.91 45 410C51.09 409.09 51.09 409.09 52 403Z"/></svg></div>
+  <a class="brand" href="/" aria-label="the relax club, ir pra home"><img src="logo.svg" alt="the relax club"></a>
+  <div class="hero"><svg class="ilus" viewBox="-45 -10 570 500" role="img" aria-label="os 7 tipos de descanso"><g class="els"><ellipse class="el" style="animation-delay:0.00s" cx="240.0" cy="148.0" rx="36" ry="100" transform="rotate(0.00 240.0 148.0)"/><ellipse class="el" style="animation-delay:0.15s" cx="311.9" cy="182.6" rx="36" ry="100" transform="rotate(51.43 311.9 182.6)"/><ellipse class="el" style="animation-delay:0.30s" cx="329.7" cy="260.5" rx="36" ry="100" transform="rotate(102.86 329.7 260.5)"/><ellipse class="el" style="animation-delay:0.45s" cx="279.9" cy="322.9" rx="36" ry="100" transform="rotate(154.29 279.9 322.9)"/><ellipse class="el" style="animation-delay:0.60s" cx="200.1" cy="322.9" rx="36" ry="100" transform="rotate(205.71 200.1 322.9)"/><ellipse class="el" style="animation-delay:0.75s" cx="150.3" cy="260.5" rx="36" ry="100" transform="rotate(257.14 150.3 260.5)"/><ellipse class="el" style="animation-delay:0.90s" cx="168.1" cy="182.6" rx="36" ry="100" transform="rotate(308.57 168.1 182.6)"/></g><text class="lb" style="animation-delay:1.20s" x="240.0" y="10.0"><tspan x="240.0" dy="-0.25em" class="n">01</tspan><tspan x="240.0" dy="1.2em">físico</tspan></text><text class="lb" style="animation-delay:1.32s" x="427.4" y="96.6"><tspan x="427.4" dy="-0.25em" class="n">02</tspan><tspan x="427.4" dy="1.2em">mental</tspan></text><text class="lb" style="animation-delay:1.44s" x="473.7" y="289.8"><tspan x="473.7" dy="-0.25em" class="n">03</tspan><tspan x="473.7" dy="1.2em">emocional</tspan></text><text class="lb" style="animation-delay:1.56s" x="344.0" y="441.8"><tspan x="344.0" dy="-0.25em" class="n">04</tspan><tspan x="344.0" dy="1.2em">social</tspan></text><text class="lb" style="animation-delay:1.68s" x="136.0" y="441.8"><tspan x="136.0" dy="-0.25em" class="n">05</tspan><tspan x="136.0" dy="1.2em">sensorial</tspan></text><text class="lb" style="animation-delay:1.80s" x="6.3" y="289.8"><tspan x="6.3" dy="-0.25em" class="n">06</tspan><tspan x="6.3" dy="1.2em">criativo</tspan></text><text class="lb" style="animation-delay:1.92s" x="52.6" y="96.6"><tspan x="52.6" dy="-0.25em" class="n">07</tspan><tspan x="52.6" dy="1.2em">espiritual</tspan></text><path class="st" d="M40 50C41.3 58.7 41.3 58.7 50 60C41.3 61.3 41.3 61.3 40 70C38.7 61.3 38.7 61.3 30 60C38.7 58.7 38.7 58.7 40 50Z"/><path class="st" d="M452 39C452.91 45.09 452.91 45.09 459 46C452.91 46.91 452.91 46.91 452 53C451.09 46.91 451.09 46.91 445 46C451.09 45.09 451.09 45.09 452 39Z"/><path class="st" d="M430 417C431.43 426.57 431.43 426.57 441 428C431.43 429.43 431.43 429.43 430 439C428.57 429.43 428.57 429.43 419 428C428.57 426.57 428.57 426.57 430 417Z"/><path class="st" d="M52 403C52.91 409.09 52.91 409.09 59 410C52.91 410.91 52.91 410.91 52 417C51.09 410.91 51.09 410.91 45 410C51.09 409.09 51.09 409.09 52 403Z"/></svg></div>
   <div class="body">
-    <img class="dlogo" src="logo.svg" alt="the relax club">
     <div class="hi"><span class="av" data-av style="width:44px;height:44px;font-size:26px"></span><span>oi, eu sou a clara, da the relax club</span></div>
     <h1><span class="l1">qual tipo de descanso</span> <em>você precisa?</em></h1>
     <p>você dorme e continua cansada? talvez o descanso que falta <b>não seja o sono</b>. bora conversar uns minutinhos que eu te mostro em qual dos <b>7 tipos de descanso</b> a sua bateria tá mais baixa.</p>
@@ -716,8 +716,8 @@ function resultado(){
   const desejo = FINAL.o[st.final];
   const R = document.createElement('div'); R.className = 'result';
   R.innerHTML = `
+    <a class="brand r-brand" href="/" aria-label="the relax club, ir pra home"><img src="logo.svg" alt="the relax club"></a>
     <div class="r-hero"><div class="r-intro">
-    <img class="r-logo" src="logo.svg" alt="the relax club">
     <div class="by">${avatar()}<span>a clara preparou isso pra você</span></div>
     <h1>${H.h}</h1>
     <div class="battery"><div class="bat-icon"><i style="background:${cor(v)}"></i></div>
