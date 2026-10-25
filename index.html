@@ -38,8 +38,8 @@ h1{font-family:var(--serif);font-weight:300;font-size:clamp(46px,12.5vw,72px);li
 h1 em{font-style:italic}
 .lead{font-size:17.5px;color:var(--green);text-wrap:pretty;margin-bottom:26px}
 .links{display:flex;flex-direction:column;gap:12px}
-.card{display:block;text-decoration:none;border:1px solid var(--line);border-radius:22px;padding:18px 20px;background:rgba(255,255,255,.35);transition:background .15s,transform .1s}
-.card:hover{background:rgba(255,255,255,.7)}
+.card{display:block;text-decoration:none;border:1px solid var(--line);border-radius:22px;padding:18px 20px;background:#F7F3EA;transition:background .15s,transform .1s}
+.card:hover{background:#FBF8F2}
 .card:active{transform:scale(.99)}
 .card small{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-bottom:4px}
 .card b{display:block;text-wrap:balance;font-family:var(--serif);font-weight:300;font-size:30px;line-height:1.05}
@@ -58,8 +58,9 @@ h1 em{font-style:italic}
 @media (max-width:480px){.orb{width:72px;height:72px}}
 @media (prefers-reduced-motion:reduce){.orb{animation:none}}
 .social{display:flex;gap:10px;margin-top:2px}
-.social a{flex:1;text-align:center;text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:12px;font-size:15px;color:var(--green)}
-.social a:hover{background:rgba(255,255,255,.5)}
+.social a{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:12px;font-size:15px;color:var(--green);background:#F7F3EA}
+.social a:hover{background:#FBF8F2}
+.social svg{width:18px;height:18px;flex:none}
 footer{margin-top:auto;padding-top:34px;text-align:center;font-size:13px;color:var(--muted)}
 footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
 .lead b{font-weight:600;color:var(--green-deep)}
@@ -90,10 +91,10 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
   <p class="lead"><b>se escutar é o caminho mais curto pro descanso.</b> a the relax club é sobre <b>presença, bem-estar e descanso</b>, pra você entender o que te drena, o que te devolve energia e viver o dia a dia com <b>mais intenção</b>.</p></div>
   <div class="links">
     <a class="card main" href="/teste/"><div class="ct"><small>teste gratuito · 3 minutos</small><b>qual tipo de descanso você precisa?</b><span>um teste rápido pra entender quais dos 7 tipos de descanso tão descarregados em você agora, e por onde começar.</span></div><svg class="orb" viewBox="0 0 120 120" aria-hidden="true"><ellipse class="o" cx="60.0" cy="36.0" rx="9.5" ry="27" transform="rotate(0.00 60.0 36.0)"/><ellipse class="o" cx="78.8" cy="45.0" rx="9.5" ry="27" transform="rotate(51.43 78.8 45.0)"/><ellipse class="o" cx="83.4" cy="65.3" rx="9.5" ry="27" transform="rotate(102.86 83.4 65.3)"/><ellipse class="o" cx="70.4" cy="81.6" rx="9.5" ry="27" transform="rotate(154.29 70.4 81.6)"/><ellipse class="o" cx="49.6" cy="81.6" rx="9.5" ry="27" transform="rotate(205.71 49.6 81.6)"/><ellipse class="o" cx="36.6" cy="65.3" rx="9.5" ry="27" transform="rotate(257.14 36.6 65.3)"/><ellipse class="o" cx="41.2" cy="45.0" rx="9.5" ry="27" transform="rotate(308.57 41.2 45.0)"/></svg></a>
-    <a class="card" href="https://therelaxclub.substack.com" target="_blank" rel="noopener"><small>toda quinta</small><b>the relax news</b><span>a newsletter do clube, com histórias, guias e o que a ciência diz sobre descansar de verdade.</span></a>
+    <a class="card" href="https://therelaxclub.substack.com" target="_blank" rel="noopener"><small>toda segunda e quinta</small><b>the relax news</b><span>a newsletter do clube, com histórias, guias e o que a ciência diz sobre descansar de verdade.</span></a>
     <div class="social">
-      <a href="https://www.instagram.com/therelax.club/" target="_blank" rel="noopener">instagram</a>
-      <a href="https://www.pinterest.com/therelaxclubbr/" target="_blank" rel="noopener">pinterest</a>
+      <a href="https://www.instagram.com/therelax.club/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>instagram</a>
+      <a href="https://www.pinterest.com/therelaxclubbr/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.64 7.86 6.36 9.32-.09-.79-.17-2.01.03-2.87.18-.78 1.17-4.97 1.17-4.97s-.3-.6-.3-1.48c0-1.39.81-2.43 1.81-2.43.85 0 1.27.64 1.27 1.41 0 .86-.55 2.14-.83 3.33-.24 1 .5 1.81 1.48 1.81 1.78 0 3.15-1.88 3.15-4.58 0-2.39-1.72-4.07-4.18-4.07-2.85 0-4.52 2.14-4.52 4.34 0 .86.33 1.78.74 2.28.08.1.09.19.07.29-.08.31-.24.99-.28 1.13-.04.18-.15.22-.34.13-1.25-.58-2.03-2.41-2.03-3.88 0-3.16 2.29-6.06 6.62-6.06 3.47 0 6.17 2.48 6.17 5.79 0 3.45-2.18 6.23-5.2 6.23-1.02 0-1.97-.53-2.3-1.15l-.62 2.38c-.23.87-.84 1.96-1.25 2.62.94.29 1.93.45 2.97.45 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>pinterest</a>
     </div>
   </div>
   <footer><i>e mais nada.</i><br>the relax club</footer>
@@ -115,13 +116,17 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
   addEventListener('pointerdown',e=>add(e.clientX,e.clientY,true));
   const col=getComputedStyle(document.documentElement).getPropertyValue('--green-deep').trim()||'#293729';
   const paper=getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()||'#F1EBDC';
-  const veil=[...document.querySelectorAll('h1,.lead,.card,.social,header,footer')];
+  const veil=[...document.querySelectorAll('header,h1,.lead,.links,footer')];
+  /* quanto a linha passa por trás do conteúdo (0 a 1), em faixas de borda a borda, com transição suave */
+  let bands=[];
+  const cover=y=>{ let c=0; for(const [a,b] of bands){ const d=y<a?a-y:(y>b?y-b:0); c=Math.max(c,Math.max(0,1-d/70)); } return c; };
   const rr=(X,Y,w,h,r)=>{ x.beginPath(); x.roundRect?x.roundRect(X,Y,w,h,r):x.rect(X,Y,w,h); };
   const draw=t=>{
     const T=t/1000; x.clearRect(0,0,W,H);
     for(let i=ripples.length-1;i>=0;i--) if(t-ripples[i].t>3200) ripples.splice(i,1);
+    bands=veil.map(el=>{const r=el.getBoundingClientRect(); return [r.top,r.bottom];});
     lines.forEach((L,i)=>{
-      const y0=L.y*H;
+      const y0=L.y*H, vis=.8-.6*cover(y0);
       x.beginPath();
       for(let px=-10;px<=W+10;px+=6){
         let y=y0+Math.sin(px/W*Math.PI*2*L.f+T*L.s*2+L.p)*L.a+Math.sin(px/W*8+T*.6+i)*1.1;
@@ -130,13 +135,8 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
           y+=R.amp*Math.exp(-age*1.3)*Math.exp(-Math.abs(k)/60)*Math.sin(k/14); }
         px<0?x.moveTo(px,y):x.lineTo(px,y);
       }
-      x.strokeStyle=col; x.globalAlpha=.32; x.lineWidth=1; x.stroke();
+      x.strokeStyle=col; x.globalAlpha=.42*vis; x.lineWidth=1; x.stroke();
     });
-    /* véu cor de papel por baixo do texto: as linhas quase somem ali */
-    x.fillStyle=paper;
-    for(const el of veil){ const r=el.getBoundingClientRect(); if(r.bottom<0||r.top>H) continue;
-      x.globalAlpha=.45; rr(r.left-40,r.top-30,r.width+80,r.height+60,40); x.fill();
-      x.globalAlpha=.6; rr(r.left-14,r.top-10,r.width+28,r.height+20,24); x.fill(); }
     x.globalAlpha=1;
     if(!reduce) requestAnimationFrame(draw);
   };

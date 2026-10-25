@@ -142,9 +142,9 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 .welcome{position:fixed;inset:0;z-index:5;background:var(--paper);overflow-y:auto}
 .welcome .inner{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column}
 .hero{position:relative;padding:16px 20px 0;display:flex;flex-direction:column;align-items:center}
-.brand{display:flex;justify-content:center;padding:18px 0 2px}
-.brand img{height:46px;display:block}
-.r-brand{padding:0 0 22px}
+.brand{display:flex;justify-content:center;padding:16px 0 2px}
+.brand img{height:48px;display:block}
+.r-brand{padding:0 0 22px;margin-top:-8px}
 .ilus{width:min(100%,380px);height:auto;max-height:36dvh;display:block}
 .ilus .el{fill:none;stroke:var(--green-deep);stroke-width:1.1;opacity:.85;stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 2.4s cubic-bezier(.4,.1,.2,1) forwards}
 .ilus .lb{font-family:var(--serif);font-size:17px;fill:var(--green-deep);text-anchor:middle;opacity:0;animation:fade .8s ease forwards}
@@ -166,10 +166,11 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 .welcome .foot{margin-top:auto;padding-top:26px}
 .welcome p b{font-weight:600;color:var(--green-deep)}
 @media (min-width:900px){
-  .welcome .inner{max-width:1200px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;align-content:center;gap:16px 40px;padding:32px 48px}
+  .welcome .inner{max-width:1200px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;align-content:center;gap:16px 40px;padding:104px 48px 40px}
   .hero{order:2;padding:0}
-  .brand{grid-column:1 / -1;padding:0 0 8px}
-  .brand img{height:54px}
+  .welcome .inner{position:relative}
+  .welcome .brand{position:absolute;top:32px;left:0;right:0;padding:0}
+  .brand img{height:56px}
   .ilus{width:100%;max-width:600px;max-height:82dvh}
   .welcome .body{order:1;padding:0;flex:none}
   .welcome h1{font-size:clamp(50px,4.8vw,70px)}
@@ -183,7 +184,7 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
   body.res .app{max-width:none}
   body.res .result{padding:40px 48px 56px}
   .result > div{max-width:1180px;margin-left:auto;margin-right:auto}
-  .r-brand{padding:0 0 30px}
+  .r-brand{padding:0 0 30px;margin-top:-8px}
   .r-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:64px;align-items:end;padding-bottom:44px;border-bottom:1px solid var(--line)}
   .r-hero .sub{margin-top:0}
   .r-map{background:rgba(255,255,255,.35);border:1px solid var(--line);border-radius:26px;padding:26px 28px}
