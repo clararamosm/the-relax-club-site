@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>the relax club · e mais nada.</title>
+<meta name="description" content="um clube pra desmistificar o descanso. parar de propósito, e mais nada.">
+<meta property="og:title" content="the relax club">
+<meta property="og:description" content="um clube pra desmistificar o descanso. parar de propósito, e mais nada.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F1EBDC">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<!-- fonte de títulos: Meno Display Condensed (Adobe Fonts). cole aqui o link do seu projeto do Adobe Fonts. sem ele, usa a Instrument Serif -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1EBDC; --cream:#E8E0CD; --cream-2:#DED3BB;
+  --green-deep:#293729; --green:#3C4D3E; --sage:#8B9479;
+  --ink:#293729; --muted:#5d6b5d; --line:rgba(41,55,41,.14);
+  --serif:"meno-display-condensed","Meno Display Condensed","Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);overflow-x:hidden}
+body{font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;text-transform:lowercase}
+a{color:inherit}
+.wrap{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:16px 22px 28px}
+header{display:flex;justify-content:center;padding-bottom:4px}
+header img{height:36px}
+.hero{position:relative;height:clamp(220px,38dvh,380px);margin:0 calc(50% - 50vw) 6px;cursor:default}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+h1{font-family:var(--serif);font-weight:300;font-size:clamp(46px,12.5vw,72px);line-height:1;letter-spacing:-.01em;text-wrap:balance;margin:6px 0 16px}
+h1 em{font-style:italic}
+.lead{font-size:17.5px;color:var(--green);text-wrap:pretty;margin-bottom:26px}
+.links{display:flex;flex-direction:column;gap:12px}
+.card{display:block;text-decoration:none;border:1px solid var(--line);border-radius:22px;padding:18px 20px;background:rgba(255,255,255,.35);transition:background .15s,transform .1s}
+.card:hover{background:rgba(255,255,255,.7)}
+.card:active{transform:scale(.99)}
+.card small{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-bottom:4px}
+.card b{display:block;text-wrap:balance;font-family:var(--serif);font-weight:300;font-size:30px;line-height:1.05}
+.card span{display:block;font-size:15px;color:var(--green);margin-top:6px;text-wrap:pretty}
+.card.main{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
+.card.main small{color:rgba(241,235,220,.65)}
+.card.main span{color:rgba(241,235,220,.85)}
+.card.main:hover{background:var(--green)}
+.card.main{display:flex;align-items:center;gap:14px}
+.card.main .ct{flex:1;min-width:0}
+.orb{flex:none;width:96px;height:96px;overflow:visible}
+.orb ellipse{fill:none;stroke:rgba(241,235,220,.75);stroke-width:.9}
+.orb{animation:orb 60s linear infinite}
+.card.main:hover .orb{animation-duration:14s}
+@keyframes orb{to{transform:rotate(360deg)}}
+@media (max-width:480px){.orb{width:72px;height:72px}}
+@media (prefers-reduced-motion:reduce){.orb{animation:none}}
+.social{display:flex;gap:10px;margin-top:2px}
+.social a{flex:1;text-align:center;text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:12px;font-size:15px;color:var(--green)}
+.social a:hover{background:rgba(255,255,255,.5)}
+footer{margin-top:auto;padding-top:34px;text-align:center;font-size:13px;color:var(--muted)}
+footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><img src="/logo.svg" alt="the relax club"></header>
+  <div class="hero" id="mare" aria-hidden="true"><canvas></canvas></div>
+  <h1>descansar <em>sem virar tarefa</em></h1>
+  <p class="lead">a the relax club é um clube pra desmistificar o descanso. sem rotina perfeita, sem meta de bem-estar, só parar de propósito e entender o que realmente te devolve energia.</p>
+  <div class="links">
+    <a class="card main" href="/teste/"><div class="ct"><small>teste · 3 minutos</small><b>qual cansaço é o seu?</b><span>uma conversa rápida pra descobrir em qual dos 7 tipos de descanso a sua bateria tá mais baixa, e por onde começar.</span></div><svg class="orb" viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(0.00 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(25.71 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(51.43 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(77.14 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(102.86 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(128.57 60 60)"/><ellipse cx="60" cy="60" rx="22" ry="40" transform="rotate(154.29 60 60)"/></svg></a>
+    <a class="card" href="https://therelaxclub.substack.com" target="_blank" rel="noopener"><small>toda quinta</small><b>the relax news</b><span>a newsletter do clube, com histórias, guias e o que a ciência diz sobre descansar de verdade.</span></a>
+    <div class="social">
+      <a href="https://www.instagram.com/therelax.club/" target="_blank" rel="noopener">instagram</a>
+      <a href="https://www.pinterest.com/therelaxclubbr/" target="_blank" rel="noopener">pinterest</a>
+    </div>
+  </div>
+  <footer><i>e mais nada.</i><br>the relax club</footer>
+</div>
+<script>
+/* maré: linhas finas ondulando devagar; o mouse (ou o toque) faz a água reverberar */
+(()=>{
+  const box=document.getElementById('mare'), c=box.querySelector('canvas'), x=c.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W=0,H=0;
+  const fit=()=>{ const r=box.getBoundingClientRect(), d=devicePixelRatio||1; W=r.width; H=r.height; c.width=W*d; c.height=H*d; x.setTransform(d,0,0,d,0,0); };
+  fit(); addEventListener('resize',fit);
+  const N=9;
+  const lines=[...Array(N)].map((_,i)=>({y:i/(N-1), a:3+Math.random()*4, f:1+Math.random()*1.2, s:.15+Math.random()*.2, p:Math.random()*6}));
+  const ripples=[]; let lastAdd=0;
+  const add=(px,py,force)=>{ const now=performance.now(); if(now-lastAdd<90 && !force) return; lastAdd=now; ripples.push({x:px,y:py,t:now,amp:force?14:8}); if(ripples.length>14) ripples.shift(); };
+  const pos=e=>{ const r=box.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
+  box.addEventListener('pointermove',e=>{ if(e.pointerType==='mouse'){ const [a,b]=pos(e); add(a,b,false);} });
+  box.addEventListener('pointerdown',e=>{ const [a,b]=pos(e); add(a,b,true); });
+  const col=getComputedStyle(document.documentElement).getPropertyValue('--green-deep').trim()||'#293729';
+  const draw=t=>{
+    const T=t/1000; x.clearRect(0,0,W,H);
+    for(let i=ripples.length-1;i>=0;i--) if(t-ripples[i].t>3200) ripples.splice(i,1);
+    lines.forEach((L,i)=>{
+      const y0=H*.1+L.y*H*.8, persp=.4+.6*L.y;
+      x.beginPath();
+      for(let px=-10;px<=W+10;px+=5){
+        let y=y0+Math.sin(px/W*Math.PI*2*L.f+T*L.s*2+L.p)*L.a*persp+Math.sin(px/W*8+T*.6+i)*1.1*persp;
+        for(const R of ripples){ const age=(t-R.t)/1000, dx=px-R.x, dy=(y0-R.y)*1.6, dist=Math.sqrt(dx*dx+dy*dy);
+          const front=age*170; const k=dist-front; if(k>40) continue;
+          y+=R.amp*Math.exp(-age*1.3)*Math.exp(-Math.abs(k)/60)*Math.sin(k/14)*persp; }
+        px<0?x.moveTo(px,y):x.lineTo(px,y);
+      }
+      x.strokeStyle=col; x.globalAlpha=.3+.55*persp; x.lineWidth=.7+.6*persp; x.stroke();
+    });
+    x.globalAlpha=1;
+    if(!reduce) requestAnimationFrame(draw);
+  };
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

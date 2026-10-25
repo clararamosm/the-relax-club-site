@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>qual cansaço é o seu? · the relax club</title>
+<meta name="description" content="uma conversa rápida pra descobrir em qual dos 7 tipos de descanso a sua bateria tá mais baixa.">
+<meta property="og:title" content="qual cansaço é o seu?">
+<meta property="og:description" content="você dorme e continua cansada? descubra em qual dos 7 tipos de descanso a sua bateria tá mais baixa.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F1EBDC">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+
+<!-- fonte de títulos: Meno Display Condensed (Adobe Fonts).
+     cole aqui o link do seu projeto do Adobe Fonts, ex:
+     <link rel="stylesheet" href="https://use.typekit.net/SEU-ID.css">
+     enquanto não tiver, a página usa a Instrument Serif como reserva. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F1EBDC; --cream:#E8E0CD; --cream-2:#DED3BB;
+  --green-deep:#293729; --green:#3C4D3E; --green-soft:#4E614E; --sage:#8B9479; --clay:#B5764F;
+  --ink:#293729; --muted:#5d6b5d; --line:rgba(41,55,41,.14);
+  --ok:#4E614E; --mid:#A89A5B; --low:#B5764F;
+  --serif:"meno-display-condensed","Meno Display Condensed","Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);height:100%}
+body{font-family:var(--sans);font-size:16.5px;line-height:1.5;-webkit-font-smoothing:antialiased;text-transform:lowercase}
+input,button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--serif);font-weight:300;line-height:1.02;letter-spacing:-.01em;text-wrap:balance}
+p,li{text-wrap:pretty}
+.app{max-width:560px;margin:0 auto;height:100dvh;display:flex;flex-direction:column}
+
+/* topo */
+header{flex:none;padding:12px 18px 0;background:var(--paper)}
+.top{display:grid;grid-template-columns:80px 1fr 80px;align-items:center;height:44px}
+.top img{height:32px;justify-self:center}
+.back{justify-self:start;background:none;border:0;font-size:14.5px;color:var(--muted);cursor:pointer;padding:8px 0;visibility:hidden;text-transform:lowercase}
+.back.on{visibility:visible}
+.progress{height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin:8px 0 0;opacity:0;transition:opacity .3s}
+.progress.on{opacity:1}
+.progress i{display:block;height:100%;width:0;background:var(--green);transition:width .4s ease}
+
+/* conversa */
+.thread{flex:1;overflow-y:auto;padding:22px 18px 12px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:84%;padding:12px 16px;border-radius:20px;font-size:16.5px;line-height:1.42;animation:pop .28s ease both;text-wrap:pretty}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+.bot{align-self:flex-start;background:var(--cream);border-bottom-left-radius:6px}
+.bot.q{font-weight:500;color:var(--green-deep)}
+.me{align-self:flex-end;background:var(--green-deep);color:var(--paper);border-bottom-right-radius:6px}
+.gap{height:10px}
+.typing{align-self:flex-start;background:var(--cream);border-radius:20px;border-bottom-left-radius:6px;padding:15px 18px;display:flex;gap:5px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--sage);animation:dot 1s infinite ease-in-out}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.static .msg{animation:none}
+.who{align-self:center;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.msg.card{width:84%}
+.msg.card .bar-row{grid-template-columns:62px 1fr 38px;font-size:13.5px}
+
+/* área de resposta */
+.composer{flex:none;padding:10px 18px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(to bottom,rgba(241,235,220,0),var(--paper) 14px);max-height:58dvh;overflow-y:auto}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;background:rgba(255,255,255,.45);border:1px solid var(--line);border-radius:16px;padding:13px 17px;font-size:15.5px;line-height:1.38;cursor:pointer;transition:background .15s,border-color .15s,transform .1s;text-transform:lowercase;animation:pop .3s ease both}
+.opt:hover{background:rgba(255,255,255,.8);border-color:rgba(41,55,41,.3)}
+.opt:active{transform:scale(.99)}
+.inrow{display:flex;gap:8px}
+.field{flex:1;min-width:0;background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:99px;padding:14px 18px;font-size:16px;text-transform:none}
+.field:focus{outline:2px solid var(--green);outline-offset:1px}
+.send{flex:none;width:50px;height:50px;border-radius:50%;border:0;background:var(--green-deep);color:var(--paper);font-size:20px;cursor:pointer;display:grid;place-items:center}
+.send[disabled]{opacity:.4;cursor:default}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--green);cursor:pointer;margin-top:10px;padding:0 4px}
+.check input{margin-top:2px;accent-color:var(--green-deep);width:17px;height:17px;flex:none}
+.hint{font-size:13px;color:var(--clay);padding:6px 6px 0;min-height:1.2em}
+.btn{display:inline-flex;justify-content:center;align-items:center;background:var(--green-deep);color:var(--paper);border:0;border-radius:99px;padding:16px 28px;font-size:16px;font-weight:500;cursor:pointer;text-transform:lowercase}
+.btn.ghost{background:transparent;color:var(--green-deep);border:1px solid var(--green-deep)}
+.btn.full{width:100%}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;text-wrap:balance}
+
+/* carregando */
+.loading{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 30px 60px;animation:pop .4s ease both}
+.loading h2{font-size:clamp(40px,10vw,56px);margin-bottom:30px}
+.steps{list-style:none;display:flex;flex-direction:column;gap:18px}
+.steps li{display:flex;align-items:center;gap:14px;font-size:17px;color:var(--muted);opacity:.35;transition:opacity .4s,color .4s}
+.steps li.on{opacity:1;color:var(--green-deep)}
+.steps li i{width:24px;height:24px;border-radius:50%;border:2px solid var(--sage);flex:none;position:relative}
+.steps li.on i{border-color:var(--green);border-top-color:transparent;animation:spin .8s linear infinite}
+.steps li.done i{animation:none;background:var(--green);border-color:var(--green)}
+.steps li.done i::after{content:"";position:absolute;left:7px;top:3px;width:6px;height:11px;border:solid var(--paper);border-width:0 2px 2px 0;transform:rotate(45deg)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* resultado */
+.result{flex:1;overflow-y:auto;padding:24px 20px 40px;animation:pop .5s ease both}
+.tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--green);border:1px solid var(--line);border-radius:99px;padding:6px 14px 6px 10px;margin-bottom:20px}
+.tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+.result h1{font-size:clamp(44px,12vw,70px);margin-bottom:24px}
+.result h1 em{font-style:italic}
+.battery{display:flex;align-items:center;gap:18px;background:var(--cream);border-radius:22px;padding:20px 22px;margin-bottom:22px}
+.bat-icon{position:relative;width:74px;height:36px;border:2.5px solid var(--green-deep);border-radius:9px;padding:3px;flex:none}
+.bat-icon::after{content:"";position:absolute;right:-8px;top:10px;width:5px;height:11px;background:var(--green-deep);border-radius:0 3px 3px 0}
+.bat-icon i{display:block;height:100%;width:0;border-radius:4px;transition:width 1.4s ease}
+.battery b{display:block;font-family:var(--serif);font-weight:300;font-size:40px;line-height:1}
+.battery span{font-size:14.5px;color:var(--green)}
+.lead{font-size:18px;margin-bottom:12px}
+.sub{font-weight:600;font-size:20px;color:var(--green);margin:32px 0 12px;line-height:1.3;text-wrap:balance}
+.quotes{display:flex;flex-direction:column;gap:8px}
+.quotes p{background:var(--green-deep);color:var(--paper);border-radius:18px;border-bottom-right-radius:6px;padding:12px 16px;align-self:flex-end;max-width:90%;font-size:15.5px}
+.map{display:flex;flex-direction:column;gap:14px;margin:8px 0 6px}
+.bar-row{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:12px;font-size:15px}
+.bar{height:12px;background:var(--cream-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width 1s ease}
+.bar-row b{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--c)}
+.recargas{list-style:none;display:flex;flex-direction:column;gap:10px}
+.recargas li{background:var(--cream);border-radius:16px;padding:14px 18px;font-size:16px}
+.first{background:var(--green-deep);color:var(--paper);border-radius:20px;padding:18px 20px;font-size:17px;line-height:1.45}
+.first small,.menos small,.guia small{display:block;font-size:12px;font-weight:600;letter-spacing:.03em;margin-bottom:6px;opacity:.75}
+.mini-t{font-size:14px;font-weight:600;color:var(--green);margin:22px 0 10px}
+.menos{border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin-top:12px;font-size:16px}
+.txt{font-size:16.5px;line-height:1.6}
+.sinais{list-style:none;display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.sinais li{padding:12px 0 12px 26px;border-bottom:1px solid var(--line);position:relative;font-size:16px}
+.sinais li::before{content:"";position:absolute;left:4px;top:19px;width:8px;height:8px;border-radius:50%;background:var(--low)}
+.nota{font-size:14px;color:var(--muted);margin-top:12px}
+.menos ul{margin:4px 0 0 18px;display:flex;flex-direction:column;gap:6px}
+.qcheck{margin-top:12px;border-radius:18px;padding:16px 18px;background:var(--cream);font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.2;color:var(--green-deep)}
+.qcheck small{display:block;font-family:var(--sans);font-style:normal;font-size:12px;font-weight:600;letter-spacing:.03em;margin-bottom:8px;opacity:.75}
+.guia{display:block;text-decoration:none;color:var(--ink);background:var(--cream);border-radius:18px;padding:16px 18px;margin-top:22px;font-size:15.5px}
+.guia b{display:block;margin-top:8px;font-weight:600;color:var(--green)}
+.medico{background:var(--green-deep);color:var(--paper);border-radius:18px;padding:18px 20px;margin:20px 0;font-size:15.5px}
+.ok-msg{background:var(--cream);border-radius:16px;padding:14px 18px;font-size:14.5px;margin-top:28px}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:30px}
+.foot{font-size:12.5px;color:var(--muted);text-align:center;margin-top:30px;text-wrap:balance}
+
+/* boas-vindas */
+.welcome{position:fixed;inset:0;z-index:5;background:var(--paper);overflow-y:auto}
+.welcome .inner{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column}
+.hero{position:relative;padding:16px 20px 0;display:flex;flex-direction:column;align-items:center}
+.hero > img{height:34px;margin-bottom:4px}
+.ilus{width:min(100%,380px);height:auto;max-height:36dvh;display:block}
+.ilus .el{fill:none;stroke:var(--green-deep);stroke-width:1.1;opacity:.85;stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 2.4s cubic-bezier(.4,.1,.2,1) forwards}
+.ilus .lb{font-family:var(--serif);font-size:17px;fill:var(--green-deep);text-anchor:middle;opacity:0;animation:fade .8s ease forwards}
+.ilus .lb .n{font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.06em;fill:var(--sage)}
+.ilus .mid{font-family:var(--serif);font-style:italic;font-size:30px;fill:var(--green-deep);text-anchor:middle;opacity:0;animation:fade 1s ease 1.9s forwards}
+.ilus .st{fill:var(--green);opacity:0;animation:fade 1s ease 2.2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+@keyframes spinslow{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.ilus *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important}}
+.welcome .body{padding:6px 24px 30px;position:relative;flex:1;display:flex;flex-direction:column}
+.welcome .hi{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.welcome .hi > span:last-child{font-size:14.5px;color:var(--green)}
+.welcome h1{font-size:clamp(50px,13.5vw,78px);margin-bottom:16px}
+.welcome h1 em{font-style:italic}
+.welcome p{font-size:17.5px;color:var(--green)}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 26px}
+.facts span{font-size:13px;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:var(--green)}
+.welcome .foot{margin-top:auto;padding-top:26px}
+/* avatar */
+.av{position:relative;display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--green-deep);color:var(--paper);font-family:var(--serif);font-style:italic;font-size:21px;line-height:1;overflow:hidden;flex:none;text-transform:lowercase}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.av.lg{width:72px;height:72px;font-size:40px;border:3px solid var(--paper)}
+.av.sm{width:28px;height:28px;font-size:17px}
+.person{justify-self:center;display:flex;align-items:center;gap:10px}
+.person b{display:block;font-size:15px;font-weight:600;line-height:1.15}
+.person small{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;line-height:1.2}
+.person small::before{content:"";width:7px;height:7px;border-radius:50%;background:#6c9a5e}
+.row{display:flex;align-items:flex-end;gap:8px;align-self:flex-start;max-width:92%}
+.row .sp{width:28px;flex:none}
+.row .msg{max-width:100%}
+.row .msg.card{width:auto;min-width:250px}
+/* pista */
+.msg.pista{background:var(--green-deep);color:var(--paper);font-family:var(--serif);font-weight:300;font-size:25px;line-height:1.12;padding:16px 18px}
+.msg.pista small{display:block;font-family:var(--sans);font-size:12px;font-weight:500;opacity:.7;margin-bottom:8px;letter-spacing:.02em}
+/* bateria nas opções */
+.opt.batopt{display:flex;align-items:center;gap:14px}
+.mini{position:relative;width:34px;height:17px;border:2px solid var(--green-deep);border-radius:5px;padding:2px;flex:none}
+.mini::after{content:"";position:absolute;right:-5px;top:4px;width:3px;height:6px;background:var(--green-deep);border-radius:0 2px 2px 0}
+.mini i{display:block;height:100%;border-radius:2px}
+/* fotos */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 8px 36px}
+.pcard{position:relative;border:0;padding:0;border-radius:18px;overflow:hidden;aspect-ratio:4/5;cursor:pointer;background:var(--cream);animation:pop .3s ease both;transition:transform .15s}
+.pcard:active{transform:scale(.98)}
+.pcard img{width:100%;height:100%;object-fit:cover;display:block}
+.pcard span{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 11px;background:linear-gradient(transparent,rgba(18,26,18,.85));color:#fff;font-size:13.5px;line-height:1.3;text-align:left;text-wrap:pretty}
+.me.photo{padding:5px;max-width:46%}
+.me.photo img{width:100%;border-radius:15px;display:block;aspect-ratio:4/5;object-fit:cover}
+.me.photo div{padding:8px 9px 5px;font-size:14.5px;line-height:1.35}
+.by{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);margin-bottom:18px}
+.loading .av{margin-bottom:22px}
+</style>
+</head>
+<body>
+<div class="welcome" id="welcome"><div class="inner">
+  <div class="hero"><img src="logo.svg" alt="the relax club"><svg class="ilus" viewBox="0 0 480 480" role="img" aria-label="os 7 tipos de descanso"><g class="els"><ellipse class="el" style="animation-delay:0.00s" cx="240" cy="240" rx="90" ry="160" transform="rotate(0.00 240 240)"/><ellipse class="el" style="animation-delay:0.15s" cx="240" cy="240" rx="90" ry="160" transform="rotate(25.71 240 240)"/><ellipse class="el" style="animation-delay:0.30s" cx="240" cy="240" rx="90" ry="160" transform="rotate(51.43 240 240)"/><ellipse class="el" style="animation-delay:0.45s" cx="240" cy="240" rx="90" ry="160" transform="rotate(77.14 240 240)"/><ellipse class="el" style="animation-delay:0.60s" cx="240" cy="240" rx="90" ry="160" transform="rotate(102.86 240 240)"/><ellipse class="el" style="animation-delay:0.75s" cx="240" cy="240" rx="90" ry="160" transform="rotate(128.57 240 240)"/><ellipse class="el" style="animation-delay:0.90s" cx="240" cy="240" rx="90" ry="160" transform="rotate(154.29 240 240)"/></g><text class="lb" style="animation-delay:1.20s" x="240.0" y="40.0"><tspan x="240.0" dy="-0.25em" class="n">01</tspan><tspan x="240.0" dy="1.2em">físico</tspan></text><text class="lb" style="animation-delay:1.32s" x="396.4" y="115.3"><tspan x="396.4" dy="-0.25em" class="n">02</tspan><tspan x="396.4" dy="1.2em">mental</tspan></text><text class="lb" style="animation-delay:1.44s" x="435.0" y="284.5"><tspan x="435.0" dy="-0.25em" class="n">03</tspan><tspan x="435.0" dy="1.2em">emocional</tspan></text><text class="lb" style="animation-delay:1.56s" x="326.8" y="420.2"><tspan x="326.8" dy="-0.25em" class="n">04</tspan><tspan x="326.8" dy="1.2em">social</tspan></text><text class="lb" style="animation-delay:1.68s" x="153.2" y="420.2"><tspan x="153.2" dy="-0.25em" class="n">05</tspan><tspan x="153.2" dy="1.2em">sensorial</tspan></text><text class="lb" style="animation-delay:1.80s" x="45.0" y="284.5"><tspan x="45.0" dy="-0.25em" class="n">06</tspan><tspan x="45.0" dy="1.2em">criativo</tspan></text><text class="lb" style="animation-delay:1.92s" x="83.6" y="115.3"><tspan x="83.6" dy="-0.25em" class="n">07</tspan><tspan x="83.6" dy="1.2em">espiritual</tspan></text><text class="mid" x="240" y="248">"tô cansada!"</text><path class="st" d="M44 60C45.3 68.7 45.3 68.7 54 70C45.3 71.3 45.3 71.3 44 80C42.7 71.3 42.7 71.3 34 70C42.7 68.7 42.7 68.7 44 60Z"/><path class="st" d="M440 89C440.91 95.09 440.91 95.09 447 96C440.91 96.91 440.91 96.91 440 103C439.09 96.91 439.09 96.91 433 96C439.09 95.09 439.09 95.09 440 89Z"/><path class="st" d="M424 409C425.43 418.57 425.43 418.57 435 420C425.43 421.43 425.43 421.43 424 431C422.57 421.43 422.57 421.43 413 420C422.57 418.57 422.57 418.57 424 409Z"/><path class="st" d="M58 397C58.91 403.09 58.91 403.09 65 404C58.91 404.91 58.91 404.91 58 411C57.09 404.91 57.09 404.91 51 404C57.09 403.09 57.09 403.09 58 397Z"/></svg></div>
+  <div class="body">
+    <div class="hi"><span class="av" data-av style="width:44px;height:44px;font-size:26px"></span><span>oi, eu sou a clara, da the relax club</span></div>
+    <h1>qual cansaço <em>é o seu?</em></h1>
+    <p>você dorme e continua cansada? talvez o descanso que falta não seja o sono. bora conversar uns minutinhos que eu te mostro em qual dos 7 tipos de descanso a sua bateria tá mais baixa.</p>
+    <div class="facts"><span>3 minutos</span><span>16 perguntas</span><span>resultado na hora</span></div>
+    <button class="btn full" id="go">começar a conversa</button>
+    <p class="foot">isso aqui é um espelho, não um diagnóstico. se o cansaço tá em tudo e já dura semanas, vale conversar com um médico.</p>
+  </div>
+</div></div>
+<div class="app">
+  <header>
+    <div class="top">
+      <button class="back" id="back" type="button">← voltar</button>
+      <div class="person"><span class="av" data-av></span><div><b>clara</b><small>da the relax club</small></div></div>
+      <span></span>
+    </div>
+    <div class="progress" id="progress"><i></i></div>
+  </header>
+  <div class="thread" id="thread"></div>
+  <div class="composer" id="composer"></div>
+</div>
+<script>
+/* ============ configuração ============ */
+const CFG = {
+  api: '/api/inscrever',           // função da vercel que manda o contato pro brevo
+  shareUrl: 'therelax.club/teste', // o que aparece no card de compartilhar
+  guiaUrl: 'https://therelaxclub.substack.com', // link do guia "os 7 âmbitos da energia" na news (troque pelo link da edição quando sair)
+  digitando: [550, 800]            // quanto tempo (ms) o "digitando..." aparece antes de cada mensagem
+};
+// abrindo o arquivo direto no computador (sem a vercel), o teste roda em modo prévia: nada é enviado
+const PREVIA = location.protocol === 'file:';
+
+/* ============ os 7 âmbitos ============ */
+const AMB = {
+  fis:{nome:'físico',     bat:'física',     manchete:'seu corpo tá pedindo pausa',
+       texto:'você até dorme, mas o corpo passa o dia sem parar de verdade, e o cansaço vai acumulando no ombro, nas costas, no peso das pernas.',
+       recargas:['deitar 10 minutos no meio do dia, sem celular','esticar ou caminhar devagar entre uma tarefa e outra','ter um horário pra parar à noite, e respeitar']},
+  men:{nome:'mental',     bat:'mental',     manchete:'sua cabeça não desliga',
+       texto:'é a lista rodando o tempo todo, até na hora de deitar, e a atenção vai ficando curta, a frase não entra, a coisa simples some.',
+       recargas:['despejar a lista no papel antes de dormir','uma tarefa por vez, por meia hora','pausa de verdade entre um bloco de trabalho e outro']},
+  emo:{nome:'emocional',  bat:'emocional',  manchete:'você tá segurando demais',
+       texto:'você segura as pontas de todo mundo e engole o que sente pra não dar trabalho, e isso cansa mais do que parece.',
+       recargas:['escrever o que sentiu hoje, sem editar','ter uma pessoa com quem dá pra falar sem filtro','um "não tô bem" honesto quando não tiver']},
+  soc:{nome:'social',     bat:'social',     manchete:'suas relações tão tirando mais do que dando',
+       texto:'a agenda tá cheia de gente, mas quase tudo é obrigação, e sobra pouco espaço pra quem te deixa leve.',
+       recargas:['cortar um compromisso que é só obrigação','marcar com uma pessoa que te faz bem','um tempo só seu, sem culpa']},
+  sen:{nome:'sensorial',  bat:'sensorial',  manchete:'seus sentidos tão no limite',
+       texto:'é tela, fone, notificação e luz o dia todo, e no fim qualquer barulhinho irrita.',
+       recargas:['10 minutos de silêncio, sem fone','notificação desligada por blocos','luz baixa à noite']},
+  cri:{nome:'criativo',   bat:'criativa',   manchete:'sua fonte de inspiração secou',
+       texto:'a rotina ficou igual todo dia e nada encanta, aí as ideias param de vir.',
+       recargas:['ir num lugar novo, mesmo que perto de casa','ouvir um disco inteiro ou ver algo bonito sem objetivo nenhum','fazer algo com as mãos sem precisar ficar bom']},
+  esp:{nome:'espiritual', bat:'espiritual', manchete:'você perdeu o fio do sentido',
+       texto:'você faz muita coisa, mas não sabe mais muito bem pra quê, e a rotina parece não ter ligação com quem você é.',
+       recargas:['escrever o que importa pra você de verdade','um gesto pequeno por alguém ou por uma causa','tempo em algo maior que a rotina, seja natureza, fé ou comunidade']}
+};
+const ORDEM = ['fis','men','emo','soc','sen','cri','esp'];
+
+/* ============ perguntas ============ */
+const ENERGIA = {
+  q:'de modo geral, como tá a sua energia nas últimas duas semanas?',
+  opts:['cheia, tô bem','ok, com uns dias mais pesados','meia bateria quase sempre','no fim do dia não sobra nada','vazia, mesmo depois de descansar'],
+  peso:[0.15,0.35,0.55,0.75,0.90]
+};
+const PERGUNTAS = [
+  {q:'é domingo à tarde e você finalmente tem duas horas livres. o que mais te atrapalha de aproveitar?', o:[
+    ['fis','o corpo pede sofá e eu não consigo fazer mais nada'],['men','fico pensando no que tenho que fazer na segunda'],
+    ['emo','fico remoendo uma conversa ou algo que me chateou na semana'],['sen','o barulho da casa, da rua e do celular não me deixa relaxar']]},
+  {q:'que frase você mais tem dito ultimamente?', o:[
+    ['men','"peraí, o que eu ia falar mesmo?"'],['emo','"tá tudo bem, sério", quando não tá'],
+    ['soc','"hoje não vou conseguir ir, desculpa"'],['cri','"tanto faz, pode ser qualquer coisa"']]},
+  {q:'você chega em casa depois de um dia longo. do que mais precisa?', o:[
+    ['emo','desabafar com alguém ou chorar um pouco'],['soc','não falar com ninguém, nem por mensagem'],
+    ['sen','apagar as luzes e ficar no silêncio'],['esp','sentir que o dia valeu pra alguma coisa']]},
+  {q:'qual dessas cenas parece mais com o seu sábado?', o:[
+    ['soc','um compromisso atrás do outro, com gente que eu não escolhi bem'],['sen','rolando o feed com a tv ligada no fundo'],
+    ['cri','fazendo exatamente o mesmo de todo sábado'],['fis','dormindo até tarde e ainda assim acordando moída']]},
+  {q:'quando você tenta relaxar, o que costuma acontecer?', o:[
+    ['sen','pego o celular sem nem perceber'],['cri','não sei nem o que fazer, nada me dá vontade'],
+    ['esp','bate um vazio, uma sensação de "e agora?"'],['men','a cabeça começa a organizar a semana sozinha']]},
+  {q:'o que mais te faz falta hoje?', o:[
+    ['cri','ter ideias e vontade de criar alguma coisa'],['esp','sentir que o que eu faço tem um propósito'],
+    ['fis','disposição no corpo pra fazer as coisas'],['emo','alguém que perceba como eu tô de verdade']]},
+  {q:'segunda de manhã, qual é a sensação?', o:[
+    ['esp','"pra que mesmo eu faço tudo isso?"'],['fis','o corpo já começa a semana pesado'],
+    ['men','a lista já tá enorme antes de eu levantar'],['soc','preguiça de ter que falar com tanta gente']]},
+  {q:'se o seu cansaço morasse num lugar do corpo, onde seria?', o:[
+    ['fis','nas costas, nos ombros, nas pernas'],['men','atrás dos olhos, na testa'],
+    ['emo','no peito, num aperto'],['sen','nos ouvidos e nos olhos, como se tudo estivesse alto e claro demais']]},
+  {q:'na rotina, o que mais tem te travado?', o:[
+    ['men','não consigo focar numa coisa só por muito tempo'],['emo','me afeto demais com o que os outros falam ou precisam'],
+    ['soc','tanta reunião, mensagem e grupo que não sobra tempo pra mim'],['cri','tudo que eu faço parece igual, sem graça']]},
+  {q:'qual dessas frases você mais queria ouvir agora?', o:[
+    ['emo','"você não precisa dar conta de tudo sozinha"'],['soc','"pode cancelar, ninguém vai ficar chateado"'],
+    ['sen','"pode desligar o celular hoje, nada vai acontecer"'],['esp','"o que você faz importa"']]},
+  {q:'apareceu uma semana de folga do nada. o que você faria?', o:[
+    ['soc','sumiria pra um lugar onde ninguém me conhece'],['sen','iria pra um lugar bem quieto, no mato, sem sinal'],
+    ['cri','conheceria uma cidade nova, só pra ver coisa diferente'],['fis','dormiria e ficaria deitada a semana inteira']]},
+  {q:'quando você para pra pensar na sua vida, o que mais incomoda?', o:[
+    ['sen','não lembro a última vez que fiquei em silêncio de verdade'],['cri','faz tempo que não faço nada pela primeira vez'],
+    ['esp','parece que eu tô vivendo a vida que esperavam de mim'],['men','nem consigo parar pra pensar, a cabeça tá sempre ocupada']]},
+  {q:'o que você deixou de fazer nos últimos meses?', o:[
+    ['cri','algo criativo que eu amava, tipo desenhar, escrever, cozinhar com calma'],['esp','algo que me ligava a algo maior, tipo minha fé, a natureza, ajudar alguém'],
+    ['fis','me mexer, caminhar, alongar'],['emo','falar com alguém sobre o que eu sinto de verdade']]},
+  {q:'quando alguém pergunta "como você tá?", o que você pensa e não fala?', o:[
+    ['esp','"perdida, sem saber pra onde tô indo"'],['fis','"exausta, sem energia nenhuma"'],
+    ['men','"com a cabeça a mil"'],['soc','"cansada de gente"']]}
+];
+const FINAL = {q:'se você pudesse ganhar uma coisa agora, qual seria?', o:[
+  ['fis','uma tarde inteira deitada, sem culpa nenhuma'],['men','uma cabeça quietinha, sem lista rodando'],
+  ['emo','alguém que me escutasse sem eu precisar fingir que tá tudo bem'],['soc','um fim de semana só com quem me faz bem, sem obrigação com mais ninguém'],
+  ['sen','um dia sem tela, sem barulho e sem notificação'],['cri','voltar a me sentir inspirada, com vontade de criar'],
+  ['esp','entender de novo o sentido do que eu faço']]};
+
+
+
+
+/* ============ contexto de cada âmbito (página do resultado) ============ */
+// vai além do guia da news: o que tá acontecendo, como o corpo avisa e por que só dormir não resolve
+const CONTEXTO = {
+  fis:{acontece:'o cansaço físico nem sempre é de ter feito demais. muitas vezes é de ter ficado o dia inteiro na mesma posição, tensa, segurando o corpo sem perceber. o corpo foi feito pra alternar, mexer e soltar, mexer e soltar, e quando passa horas parado e em alerta, a tensão vai acumulando em camadas. no fim do dia você sente o peso, mas não sabe dizer de onde ele veio.',
+       sinais:['acordar sem energia mesmo depois de dormir as suas horas','ombro subido e mandíbula travada, e você só percebe quando alguém encosta','dor nas costas ou no pescoço que aparece no fim da tarde','prender a respiração enquanto faz alguma coisa importante','desabar no sofá à noite e mesmo assim não sentir que descansou'],
+       porque:'dormir é uma parte do descanso físico, mas não solta a tensão que o corpo segurou o dia inteiro. por isso dá pra dormir oito horas e acordar travada. o corpo também precisa de um descanso ativo, de mexer devagar e largar o peso, e é essa parte que quase todo mundo pula.'},
+  men:{acontece:'o cansaço mental vem de nunca terminar de pensar. você para de trabalhar, mas uma parte da cabeça continua resolvendo, revisando a conversa, montando a lista de amanhã. cada tarefa aberta e cada decisão pendente ocupam um pedacinho da sua atenção, e no fim do dia sobra pouco espaço pra qualquer outra coisa.',
+       sinais:['deitar e a cabeça ligar, repassando o dia','ler a mesma frase duas, três vezes e ela não entrar','esquecer coisa simples, tipo o que você ia buscar na cozinha','uma pressão atrás dos olhos ou na testa no fim do dia','sentir que até escolher o jantar é decisão demais'],
+       porque:'descansar o corpo não desliga a cabeça. dá pra passar o fim de semana deitada e voltar com a mente exausta, porque ela continuou trabalhando por baixo. o que repõe esse âmbito é se desligar de verdade do que te ocupa, e isso pede um gesto concreto, porque a cabeça não solta sozinha o que ela acha que vai esquecer.'},
+  emo:{acontece:'o cansaço emocional vem de segurar. segurar o que você sente pra não dar trabalho, segurar a onda dos outros, segurar a cara de que tá tudo bem. o sentimento engolido não some, ele fica guardado, e carregar isso o dia inteiro gasta uma energia que ninguém vê, nem você.',
+       sinais:['responder "tô bem" no automático, até pra você mesma','um aperto no peito ou um nó na garganta que vai e volta','explodir por uma bobagem ou chorar do nada','sentir que todo mundo te procura e você não tem pra onde levar o que é seu','um cansaço que piora depois de certas conversas'],
+       porque:'dormir ou tirar uns dias não esvazia o que tá guardado. você volta das férias e, na primeira situação difícil, tá tudo lá de novo. esse âmbito só recarrega quando o que você sente tem pra onde ir, falando, escrevendo, chorando, alguma saída.'},
+  soc:{acontece:'o cansaço social não é sobre gostar ou não de gente. é sobre quanto você precisa atuar nos encontros. tem convívio em que você pode ser você e sai mais leve, e tem convívio em que você precisa ser a animada, a forte, a que resolve, e sai vazia. quando a semana tem muito do segundo e pouco do primeiro, a bateria social cai.',
+       sinais:['sentir alívio quando um compromisso é cancelado','ver o nome de alguém na tela e já sentir cansaço','se sentir sozinha mesmo no meio de gente','inventar desculpa pra não ir, e depois se sentir culpada','um cansaço no rosto, de tanto sorrir e segurar a conversa'],
+       porque:'ficar sozinha resolve só uma parte. se o que te drena é o convívio errado, sumir de todo mundo pode até te deixar mais isolada. o que repõe é mudar a proporção, menos encontro por obrigação, mais tempo com quem te deixa ser você, e um tempo sozinha que seja escolha, não fuga.'},
+  sen:{acontece:'o cansaço sensorial vem do excesso de estímulo. tela, notificação, som de fundo, luz forte, tudo isso chega pelos seus sentidos o dia inteiro, e o corpo precisa filtrar cada coisa, mesmo quando você nem presta atenção. no fim do dia esse filtro tá gasto, e qualquer barulhinho parece alto demais.',
+       sinais:['se irritar com barulho, luz ou notificação mais rápido do que o normal','olhos ardendo ou pesados no fim do dia','vontade de apagar tudo e ficar no escuro e no silêncio','pegar o celular pra descansar e largar ele mais cansada','dificuldade de ficar num lugar cheio, com muita coisa acontecendo'],
+       porque:'o descanso mais comum hoje é o celular, e ele é justamente mais estímulo. você para de trabalhar e troca uma tela por outra, então os sentidos nunca saem do alerta. esse âmbito recarrega com menos, menos som, menos luz, menos tela, e não com mais uma coisa pra fazer.'},
+  cri:{acontece:'o cansaço criativo aparece quando tudo vira execução. a cabeça passa o dia produzindo, entregando, resolvendo, e quase nunca vaga sem destino. só que é desse tempo solto, de olhar, se encantar e não fazer nada com isso, que as ideias se alimentam. quando ele some, a fonte vai secando devagar.',
+       sinais:['sentir que todo dia é igual ao anterior','travar quando precisa ter uma ideia nova','olhar uma paisagem bonita e já estar pensando em outra coisa','não fazer mais nada só por prazer, tudo precisa servir pra algo','um tédio pesado, diferente de preguiça'],
+       porque:'parar de trabalhar não basta se o tempo livre também vira tarefa, série pra terminar, hobby com meta, foto pra postar. a criatividade recarrega com tempo sem objetivo e com coisa nova entrando, um lugar diferente, uma arte, a mão mexendo em algo que não precisa ficar bom.'},
+  esp:{acontece:'o cansaço espiritual não tem a ver com religião. é a sensação de fazer muito e sentir pouco sentido no que faz, de tocar a vida no automático, como se a rotina não tivesse mais ligação com quem você é ou com o que você acredita. dá pra estar com tudo em dia e mesmo assim sentir um vazio.',
+       sinais:['bater um "pra que tudo isso?" no meio de um dia comum','sentir que você tá vivendo a vida que esperavam de você','fazer, cumprir, entregar, e não sentir nada no fim','não lembrar a última vez que se sentiu parte de algo maior','um vazio que aparece justo quando você para'],
+       porque:'o descanso comum não preenche esse vazio, às vezes até deixa ele mais evidente, porque é quando você para que ele aparece. o que repõe esse âmbito é reconectar com o que importa pra você e com algo maior que a sua agenda, natureza, gente, fé, uma causa, aquilo que te faz sentir que faz parte.'}
+};
+
+/* ============ o que fazer (página do resultado) ============ */
+// conteúdo do guia "os 7 âmbitos da energia" da the relax news (o que repõe, o que drena e a pergunta de check)
+const PLANO = {
+  fis:{comeca:'movimento que não é treino. ir a pé até a padaria, alongar no meio da tarde, deitar no chão cinco minutos e deixar o corpo largar o peso.',
+       repoe:['uma refeição por dia sentada, sem pressa e sem tela','dormir e acordar em horários parecidos na maior parte da semana'],
+       drena:['passar horas na mesma posição e só perceber quando levanta','comer correndo, ou atravessar a tarde sem comer porque "não deu tempo"','segurar tensão sem perceber, mandíbula travada, ombro subido, respiração presa'],
+       check:'no fim do dia, meu corpo tá cansado de ter feito coisa, ou de ter ficado parado e apertado?'},
+  men:{comeca:'tirar a lista da cabeça e colocar no papel. escreve tudo que tá rodando e fecha a gaveta, a cabeça para de repetir quando confia que não vai esquecer.',
+       repoe:['fechar um ciclo, mesmo pequeno, e deixar ele fechado','ter um horário em que você para de resolver, e o que aparecer depois vira assunto de amanhã'],
+       drena:['decidir tudo o dia inteiro, da reunião ao que vai ter no jantar','muitas abas abertas, as do navegador e as da cabeça','tarefa começada e largada no meio, que fica te chamando de longe'],
+       check:'o que tá ocupando espaço na minha cabeça agora que eu não preciso resolver hoje?'},
+  emo:{comeca:'dizer como você tá de verdade pra uma pessoa de confiança. troca o "tô bem" automático por um "olha, hoje não tô muito" e vê o que acontece.',
+       repoe:['escrever o que sentiu, sem reler e sem tirar lição','deixar o choro vir quando ele vem'],
+       drena:['responder "tô bem" pra todo mundo, inclusive pra você','ser a pessoa que segura a onda de todo mundo e não ter onde pôr a sua','se doar demais pra provar que é boa, e chamar isso de dedicação'],
+       check:'tem alguma coisa que eu tô segurando há dias e ainda não disse pra ninguém, nem pra mim?'},
+  soc:{comeca:'cancelar o que você já sabe que vai te esvaziar, sem desculpa elaborada. "não vou conseguir hoje" já basta.',
+       repoe:['tempo com aquela pessoa com quem dá pra ficar quieta','um tempo sozinha escolhido, sem culpa'],
+       drena:['encontros em que você precisa ser "a animada", "a que resolve", "a forte"','responder tudo na hora, sempre','dizer sim quando queria dizer não'],
+       check:'depois de cada encontro dessa semana, eu saí mais cheia ou mais vazia? e com quem foi cada um?'},
+  sen:{comeca:'alguns minutos de silêncio de verdade, sem música nem podcast. quando chegar em casa, antes de ligar qualquer coisa, fica um pouco sem som e sem tela.',
+       repoe:['luz baixa e quente depois que escurece','um cheiro bom, uma textura boa, ficar perto de verde'],
+       drena:['tela de manhã até a noite, de um tamanho de tela pro outro','som de fundo o tempo todo, a tv ligada "pra fazer companhia", fone sem pausa','luz branca forte à noite, roupa que aperta, notificação piscando'],
+       check:'quantos minutos de hoje eu passei sem nenhum estímulo ligado?'},
+  cri:{comeca:'fazer alguma coisa sem plateia e sem resultado. pintar, rabiscar, cozinhar, mexer na terra, só pelo processo, sem precisar virar nada.',
+       repoe:['olhar uma coisa bonita sem fotografar','testar algo novo sem precisar ser boa nisso'],
+       drena:['tudo virar entrega, até o que era pra ser só seu','hobby com meta, contar, postar, ficar boa','consumir ideia o dia inteiro e não fazer nada com as mãos'],
+       check:'qual foi a última coisa que eu fiz só porque deu vontade, sem saber pra que servia?'},
+  esp:{comeca:'ficar perto de natureza, céu, mar, árvore grande, e deixar você ficar pequena um pouco. cinco minutos olhando o céu já contam.',
+       repoe:['fazer uma coisa por alguém sem contar pra ninguém','um ritual pequeno que é só seu, um chá, uma vela, cinco minutos de janela'],
+       drena:['viver no automático, fazer muito e sentir pouco','medir o dia só pelo que rendeu','não sobrar tempo pra olhar pra nada maior que a agenda'],
+       check:'hoje teve algum momento em que eu me senti parte de algo maior que a minha agenda?'}
+};
+
+/* ============ avatar e fotos ============ */
+// pra usar a sua foto no avatar, salve um arquivo "clara.jpg" (quadrado) nesta pasta. sem ele, aparece a letra c
+const AVATAR = 'clara.jpg';
+function avatar(cls){ return `<span class="av ${cls||''}"><img src="${AVATAR}" alt="" onerror="this.remove()">c</span>`; }
+document.querySelectorAll('[data-av]').forEach(el => { el.innerHTML = `<img src="${AVATAR}" alt="" onerror="this.remove()">c`; });
+// perguntas que viram escolha por foto (índice da pergunta → foto de cada âmbito)
+const FOTOS = {
+  2:  {emo:'fotos/q3-emo.jpg', soc:'fotos/q3-soc.jpg', sen:'fotos/q3-sen.jpg', esp:'fotos/q3-esp.jpg'},
+  10: {soc:'fotos/q11-soc.jpg', sen:'fotos/q11-sen.jpg', cri:'fotos/q11-cri.jpg', fis:'fotos/q11-fis.jpg'}
+};
+Object.values(FOTOS).forEach(m => Object.values(m).forEach(src => { const i = new Image(); i.src = src; })); // pré-carrega
+
+/* ============ falas do chat ============ */
+// reações depois de cada resposta, por âmbito da opção escolhida. {nome} vira o nome da pessoa
+const REACOES = {
+  fis:['o corpo sempre avisa antes, né?','anotado. o corpo tá falando alto aí.','ai, conheço esse peso.'],
+  men:['a cabeça que não desliga, conheço bem.','anotado, {nome}. lista rodando cansa mesmo.','hm, faz sentido.'],
+  emo:['segurar tudo sozinha pesa, viu.','obrigada por ser honesta, {nome}.','anotado. isso cansa mais do que parece.'],
+  soc:['tem gente que recarrega e tem gente que drena, né?','anotado. sem culpa nenhuma.','faz todo sentido, {nome}.'],
+  sen:['o mundo anda barulhento demais mesmo.','anotado. respira um pouquinho.','te entendo, {nome}, é muita tela.'],
+  cri:['quando tudo fica igual, a gente apaga um pouco, né?','anotado, {nome}.','hm, isso diz bastante.'],
+  esp:['essa é das grandes, né?','anotado, {nome}. com calma.','faz sentido. às vezes a gente perde o fio.']
+};
+const REACAO_ENERGIA = [
+  'que bom, {nome}! vamos ver onde dá pra cuidar ainda mais.',
+  'entendi. uns dias pesam mais que outros, né?',
+  'meia bateria o tempo todo cansa, viu.',
+  'chegar no fim do dia vazia é puxado. vamos entender isso.',
+  'poxa, {nome}. obrigada por contar. vamos descobrir de onde vem.'
+];
+// a pista que aparece depois da pergunta 10, sobre o âmbito que tá na frente até ali (sem dizer o nome)
+const PISTAS = {
+  fis:'parece que o seu corpo tá carregando mais do que devia.',
+  men:'parece que a sua cabeça quase nunca tem folga.',
+  emo:'parece que você anda guardando muita coisa aí dentro.',
+  soc:'parece que tem gente demais e encontro de menos na sua semana.',
+  sen:'parece que o mundo anda alto demais pra você.',
+  cri:'parece que faz tempo que nada te surpreende.',
+  esp:'parece que você tá procurando um porquê.'
+};
+
+/* ============ estado ============ */
+const NQ = PERGUNTAS.length;          // 14
+const TOTAL = NQ + 2;                 // energia + 14 + final = 16 perguntas
+const st = { nome:'', step:'nome', energia:null, resp:Array(NQ).fill(null), final:null, order:{}, used:{}, result:null, sentOk:null };
+const thread = document.getElementById('thread');
+const composer = document.getElementById('composer');
+const $back = document.getElementById('back');
+const $prog = document.getElementById('progress');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fill = s => s.replace(/\{nome\}/g, st.nome);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rnd = (a,b) => a + Math.random()*(b-a);
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; }
+let busy = false, gen = 0; // gen invalida animações quando a pessoa volta
+
+/* ============ conversa ============ */
+// cada mensagem fica registrada com o passo em que nasceu, pra dar pra voltar
+let log = []; // {who, html, cls, step}
+let lastWho = null;
+function draw(m, animate){
+  const d = document.createElement('div');
+  d.className = 'msg ' + m.who + (m.cls ? ' ' + m.cls : '');
+  if(!animate) d.style.animation = 'none';
+  d.innerHTML = m.html;
+  if(m.who === 'bot'){
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = lastWho === 'bot' ? '<span class="sp"></span>' : avatar('sm');
+    row.appendChild(d); thread.appendChild(row);
+  } else thread.appendChild(d);
+  lastWho = m.who;
+  thread.scrollTop = thread.scrollHeight;
+}
+async function bot(html, step, cls){
+  const my = gen;
+  const t = document.createElement('div'); t.className='row';
+  t.innerHTML = (lastWho === 'bot' ? '<span class="sp"></span>' : avatar('sm')) + '<div class="typing"><i></i><i></i><i></i></div>';
+  thread.appendChild(t); thread.scrollTop = thread.scrollHeight;
+  await sleep(rnd(...CFG.digitando));
+  t.remove();
+  if(my !== gen) return false;
+  const m = {who:'bot', html, cls, step}; log.push(m); draw(m, true);
+  return true;
+}
+function me(text, step, img){
+  const m = img ? {who:'me', cls:'photo', html:`<img src="${img}" alt=""><div>${esc(text)}</div>`, step} : {who:'me', html:esc(text), step};
+  log.push(m); draw(m, true);
+}
+function redraw(){ thread.innerHTML=''; lastWho=null; log.forEach(m=>draw(m,false)); }
+
+function setTop(){
+  const idx = stepIndex();
+  $prog.classList.toggle('on', idx >= 0);
+  $prog.firstElementChild.style.width = idx >= 0 ? (Math.min(idx, TOTAL)/TOTAL*100)+'%' : '0';
+  $back.classList.toggle('on', idx >= 0 && st.step !== 'carregando' && st.step !== 'resultado');
+}
+function stepIndex(){
+  if(st.step==='energia') return 0;
+  if(typeof st.step==='number') return st.step+1;
+  if(st.step==='final') return TOTAL-1;
+  if(st.step==='email') return TOTAL;
+  return -1;
+}
+
+/* ============ roteiro ============ */
+function inicio(){
+  document.getElementById('go').onclick = () => {
+    const w = document.getElementById('welcome');
+    w.style.transition = 'opacity .35s'; w.style.opacity = '0';
+    setTimeout(() => { w.remove(); conversa(); }, 350);
+    track('teste_inicio');
+  };
+}
+async function conversa(){
+  setTop();
+  await bot('oi! que bom que você veio.', 'nome');
+  await bot('vou te fazer umas perguntas rápidas, e você só escolhe a opção que mais tem a ver com você. no final eu te mostro qual tipo de descanso tá faltando aí.', 'nome');
+  await bot('antes, como posso te chamar?', 'nome', 'q');
+  pedirTexto('seu primeiro nome', 'text', 'given-name', async v => {
+    st.nome = v.split(/\s+/)[0].slice(0,30).toLowerCase();
+    me(v, 'nome');
+    composer.innerHTML = '';
+    await bot(fill('prazer, {nome}.'), 'energia');
+    await bot('não tem resposta certa, tá? vai na primeira que vier.', 'energia');
+    perguntar('energia');
+  });
+}
+
+async function perguntar(step){
+  st.step = step; setTop(); composer.innerHTML = '';
+  const my = gen;
+  let q, opts;
+  if(step==='energia'){ q = ENERGIA.q; opts = ENERGIA.opts.map((t,i)=>({v:i,t})); }
+  else if(step==='final'){ q = FINAL.q; opts = ordem('final', FINAL.o).map(i=>({v:i,t:FINAL.o[i][1]})); }
+  else { q = PERGUNTAS[step].q; opts = ordem('p'+step, PERGUNTAS[step].o).map(i=>({v:i,t:PERGUNTAS[step].o[i][1]})); }
+  const ok = await bot(esc(q), step, 'q');
+  if(!ok || my !== gen) return;
+  renderOpts(step, opts);
+}
+function renderOpts(step, opts){
+  const fotos = typeof step === 'number' ? FOTOS[step] : null;
+  if(fotos){
+    // as fotos entram dentro da conversa, logo abaixo da pergunta
+    composer.innerHTML = '';
+    const g = document.createElement('div'); g.className = 'pgrid';
+    g.innerHTML = opts.map((o,k)=>{ const amb = PERGUNTAS[step].o[o.v][0];
+      return `<button class="pcard" style="animation-delay:${k*60}ms" data-v="${o.v}" data-img="${fotos[amb]}"><img src="${fotos[amb]}" alt=""><span>${esc(o.t)}</span></button>`; }).join('');
+    thread.appendChild(g);
+    g.querySelectorAll('.pcard').forEach(b => b.onclick = () => { if(busy) return; g.remove(); lastWho = 'bot'; responder(step, +b.dataset.v, b.textContent, b.dataset.img); });
+    requestAnimationFrame(()=>{ thread.scrollTop = thread.scrollHeight; });
+    return;
+  }
+  const bat = step === 'energia';
+  const niveis = ['var(--ok)','var(--ok)','var(--mid)','var(--low)','var(--low)'], larg = [100,75,50,22,6];
+  composer.innerHTML = `<div class="opts">${opts.map((o,k)=>`<button class="opt${bat?' batopt':''}" style="animation-delay:${k*45}ms" data-v="${o.v}">${bat?`<span class="mini"><i style="width:${larg[o.v]}%;background:${niveis[o.v]}"></i></span>`:''}<span>${esc(o.t)}</span></button>`).join('')}</div>`;
+  composer.querySelectorAll('.opt').forEach(b => b.onclick = () => responder(step, +b.dataset.v, b.textContent));
+}
+function ordem(key, list){ if(!st.order[key]) st.order[key] = shuffle(list.map((_,i)=>i)); return st.order[key]; }
+
+async function responder(step, v, texto, img){
+  if(busy) return; busy = true;
+  composer.innerHTML = '';
+  me(texto, step, img);
+  let amb = null, reacao;
+  if(step==='energia'){ st.energia = v; reacao = REACAO_ENERGIA[v]; }
+  else if(step==='final'){ st.final = v; amb = FINAL.o[v][0]; }
+  else { st.resp[step] = v; amb = PERGUNTAS[step].o[v][0]; }
+  if(amb) reacao = escolherReacao(amb);
+  const next = step==='energia' ? 0 : step==='final' ? 'teaser' : (step+1 < NQ ? step+1 : 'final');
+  track('teste_resposta', {passo:String(step)});
+  if(step !== 'final') await bot(esc(fill(reacao)), next);
+  if(step === 9){ await bot(esc(fill('peraí, {nome}, uma coisa já tá aparecendo por aqui...')), next); await bot(`<small>uma pista</small>${esc(PISTAS[lider()])}`, next, 'pista'); }
+  busy = false;
+  if(next === 'teaser') return teaser();
+  perguntar(next);
+}
+function escolherReacao(amb){
+  const pool = REACOES[amb]; st.used[amb] = ((st.used[amb] ?? Math.floor(Math.random()*pool.length)) + 1) % pool.length;
+  return pool[st.used[amb]];
+}
+function lider(){
+  const c = Object.fromEntries(ORDEM.map(k=>[k,0]));
+  st.resp.forEach((r,i)=>{ if(r!==null) c[PERGUNTAS[i].o[r][0]]++; });
+  return ORDEM.slice().sort((a,b)=>c[b]-c[a])[0];
+}
+
+/* prévia da bateria + email */
+async function teaser(){
+  st.result = calcular();
+  st.step = 'email'; setTop();
+  const my = gen;
+  const r = st.result, v = r.bat[r.principal];
+  if(!await bot(esc(fill('pronto, {nome}. já calculei as suas 7 baterias.')), 'email') || my!==gen) return;
+  const outros = r.rank.slice(1).map(k=>`<div class="bar-row" style="filter:blur(4px)"><span>●●●●●●</span><div class="bar"><i style="width:${r.bat[k]}%;background:${cor(r.bat[k])}"></i></div><b>${r.bat[k]}%</b></div>`).join('');
+  await bot(`<div style="font-weight:500;margin-bottom:10px">a sua bateria mais baixa tá em ${v}%</div>
+    <div class="map" style="gap:10px;margin:0">
+      <div class="bar-row"><span>???</span><div class="bar"><i style="width:${Math.max(v,4)}%;background:${cor(v)}"></i></div><b>${v}%</b></div>
+      ${outros}
+    </div>`, 'email', 'card');
+  if(my!==gen) return;
+  await bot('quer ver qual é, o que fazer com ela e o mapa completo? me passa o seu email que eu te mando o resultado inteiro e já abro a sua página aqui.', 'email', 'q');
+  if(my!==gen) return;
+  pedirEmail();
+}
+
+function pedirTexto(ph, type, ac, done){
+  composer.innerHTML = `<form class="inrow" id="tf"><input class="field" id="tin" type="${type}" placeholder="${ph}" autocomplete="${ac}" required><button class="send" aria-label="enviar">↑</button></form><div class="hint" id="hint"></div>`;
+  const f = document.getElementById('tf'), i = document.getElementById('tin');
+  setTimeout(()=>i.focus(), 50);
+  f.onsubmit = e => { e.preventDefault(); const v = i.value.trim(); if(!v){ document.getElementById('hint').textContent='escreve aqui pra gente continuar.'; return; } done(v); };
+}
+function pedirEmail(){
+  composer.innerHTML = `<form id="ef">
+    <div class="inrow"><input class="field" id="ein" type="email" placeholder="seu melhor email" autocomplete="email" inputmode="email"><button class="send" id="esend" aria-label="enviar" disabled>↑</button></div>
+    <input id="hp" name="site" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
+    <label class="check"><input type="checkbox" id="eok"> <span>pode me mandar o meu resultado e os emails da the relax club. dá pra sair quando quiser.</span></label>
+    <div class="hint" id="hint"></div></form>`;
+  const ein = document.getElementById('ein'), eok = document.getElementById('eok'), btn = document.getElementById('esend');
+  const valido = () => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ein.value.trim());
+  const upd = () => { btn.disabled = !(valido() && eok.checked); };
+  ein.oninput = upd; eok.onchange = upd;
+  document.getElementById('ef').onsubmit = e => {
+    e.preventDefault();
+    if(!valido()){ document.getElementById('hint').textContent='confere o email?'; return; }
+    if(!eok.checked){ document.getElementById('hint').textContent='marca a caixinha pra eu poder te mandar o resultado.'; return; }
+    me(ein.value.trim(), 'email');
+    enviar(ein.value.trim(), document.getElementById('hp').value);
+  };
+}
+
+/* ============ envio + carregando ============ */
+async function enviar(email, hp){
+  st.step = 'carregando'; setTop(); composer.innerHTML = '';
+  await sleep(500);
+  const r = st.result;
+  const params = new URLSearchParams(location.search);
+  const payload = { email, nome:st.nome, site:hp, energia:r.energia, perfil:r.perfil, principal:r.principal, segundo:r.segundo, bat:r.bat,
+    respostas:{ energia:st.energia, perguntas:st.resp.map((x,i)=>PERGUNTAS[i].o[x][0]), final:FINAL.o[st.final][0] },
+    origem: params.get('utm_source') || params.get('ref') || (document.referrer ? document.referrer.replace(/^https?:\/\//,'').split('/')[0] : '') || 'direto' };
+  const envio = PREVIA ? Promise.resolve('previa') :
+    fetch(CFG.api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(x=>x.ok).catch(()=>false);
+  track('teste_email', {ambito:r.principal});
+
+  thread.style.display='none'; composer.style.display='none';
+  const L = document.createElement('div'); L.className='loading';
+  L.innerHTML = `${avatar('lg')}<h2>${esc(fill('só um instante, {nome}'))}</h2><ul class="steps">
+    <li><i></i>enviando os seus dados</li><li><i></i>calculando o seu cansaço</li><li><i></i>escolhendo as recargas pra você</li><li><i></i>preparando o seu resultado</li></ul>`;
+  document.querySelector('.app').appendChild(L);
+  const lis = L.querySelectorAll('li');
+  for(let i=0;i<lis.length;i++){
+    lis[i].classList.add('on');
+    await (i===0 ? Promise.all([envio, sleep(1300)]) : sleep(1150));
+    lis[i].classList.add('done');
+  }
+  st.sentOk = await envio;
+  await sleep(450);
+  L.remove();
+  resultado();
+}
+
+/* ============ cálculo ============ */
+function calcular(){
+  const G = ENERGIA.peso[st.energia];
+  const c = Object.fromEntries(ORDEM.map(k=>[k,0]));
+  st.resp.forEach((r,i)=>{ c[PERGUNTAS[i].o[r][0]]++; });
+  const finalAmb = FINAL.o[st.final][0];
+  c[finalAmb]++;
+  const share = Object.fromEntries(ORDEM.map(k=>[k,c[k]/9]));
+  const max = Math.max(...Object.values(share));
+  const bat = {};
+  ORDEM.forEach(k=>{ const R = share[k]/max; bat[k] = Math.round(100 - G*(0.3+0.7*R)*100); });
+  const corpo = PERGUNTAS[7].o[st.resp[7]][0];
+  const rank = ORDEM.slice().sort((a,b)=>{
+    if(bat[a]!==bat[b]) return bat[a]-bat[b];
+    if(a===finalAmb||b===finalAmb) return a===finalAmb?-1:1;
+    if(a===corpo||b===corpo) return a===corpo?-1:1;
+    return ORDEM.indexOf(a)-ORDEM.indexOf(b);
+  });
+  const vermelhos = ORDEM.filter(k=>bat[k]<40).length;
+  const perfil = st.energia===0 ? 'em_dia' : (vermelhos>=4 ? 'espalhado' : 'normal');
+  return { bat, rank, principal:rank[0], segundo:rank[1], perfil, energia:st.energia, counts:c, finalAmb };
+}
+const faixa = v => v>=70 ? 'ok' : v>=40 ? 'mid' : 'low';
+const cor = v => ({ok:'var(--ok)',mid:'var(--mid)',low:'var(--low)'})[faixa(v)];
+
+/* ============ página de resultado ============ */
+function headline(r){
+  const A = AMB[r.principal], n = st.nome;
+  if(r.perfil==='em_dia') return {h:`${esc(n)}, sua energia <em>tá em dia</em>`, lead:`você tá bem abastecida, e isso é raro. o âmbito que merece um carinho primeiro é o ${A.nome}, só pra continuar assim.`};
+  if(r.perfil==='espalhado') return {h:`${esc(n)}, seu cansaço <em>tá em tudo</em>`, lead:`quando quase todos os âmbitos tão no vermelho, não adianta tentar resolver tudo de uma vez. o mais drenado é o ${A.nome}, então começa por ele, com uma recarga só.`};
+  return {h:`${esc(n)}, o seu cansaço é <em>${A.nome}</em>`, lead:`${A.manchete}. ${A.texto}`};
+}
+// frases que ela mesma escolheu e que apontam pro âmbito principal
+function citacoes(k){
+  const out = [];
+  st.resp.forEach((r,i)=>{ const o = PERGUNTAS[i].o[r]; if(o[0]===k) out.push(o[1]); });
+  return out.slice(0,3);
+}
+function resultado(){
+  st.step = 'resultado'; setTop();
+  document.querySelector('header').style.display = 'none';
+  const r = st.result, A = AMB[r.principal], A2 = AMB[r.segundo], v = r.bat[r.principal], H = headline(r);
+  const cit = citacoes(r.principal);
+  const P = PLANO[r.principal], Cx = CONTEXTO[r.principal];
+  const desejo = FINAL.o[st.final];
+  const R = document.createElement('div'); R.className = 'result';
+  R.innerHTML = `
+    <div class="by">${avatar()}<span>a clara preparou isso pra você</span></div>
+    <h1>${H.h}</h1>
+    <div class="battery"><div class="bat-icon"><i style="background:${cor(v)}"></i></div>
+      <div><b>${v}%</b><span>sua bateria ${A.bat}</span></div></div>
+    <p class="lead">${esc(H.lead)}</p>
+    ${r.perfil==='espalhado' ? `<div class="medico">se o cansaço tá em tudo e já dura semanas, vale conversar com um médico, porque às vezes tem uma causa no corpo.</div>` : ''}
+
+    ${cit.length ? `<p class="sub">o que você me contou</p><div class="quotes">${cit.map(t=>`<p>${esc(t)}</p>`).join('')}</div>` : ''}
+
+    <p class="sub">as suas 7 baterias</p>
+    <div class="map">${r.rank.map(k=>`<div class="bar-row"><span>${AMB[k].nome}</span><div class="bar"><i data-w="${r.bat[k]}" style="background:${cor(r.bat[k])}"></i></div><b>${r.bat[k]}%</b></div>`).join('')}</div>
+    <div class="legend"><span style="--c:var(--ok)">carregada</span><span style="--c:var(--mid)">pedindo recarga</span><span style="--c:var(--low)">no vermelho</span></div>
+
+    <p class="sub">o que tá acontecendo</p>
+    <p class="txt">${esc(Cx.acontece)}</p>
+
+    <p class="sub">como o seu corpo tá te avisando</p>
+    <ul class="sinais">${Cx.sinais.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+    <p class="nota">você não precisa se reconhecer em todos. se dois ou três bateram, é por aqui.</p>
+
+    <p class="sub">por que só dormir não resolve</p>
+    <p class="txt">${esc(Cx.porque)}</p>
+
+    <p class="sub">${r.perfil==='em_dia' ? 'pra continuar assim' : 'por onde começar'}</p>
+    <div class="first"><small>hoje</small>${esc(P.comeca)}</div>
+    ${r.perfil==='espalhado' ? '<p style="margin-top:12px">só essa, por enquanto. quando ela virar costume, a gente pensa na próxima.</p>' : `
+    <p class="mini-t">nessa semana</p>
+    <ul class="recargas">${P.repoe.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+    <div class="menos"><small>e o que vale diminuir</small><ul>${P.drena.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></div>`}
+    <div class="qcheck"><small>uma pergunta pra fazer toda noite</small>${esc(P.check)}</div>
+    <p class="nota">não precisa consertar tudo de uma vez. escolhe uma coisa pra trazer de volta e uma pra diminuir, e repara como o corpo responde nos próximos dias.</p>
+    ${desejo[0]===r.principal ? `<p style="margin-top:14px">${esc(`e quando eu perguntei o que você queria ganhar agora, você escolheu "${desejo[1]}". faz todo sentido, ${st.nome}.`)}</p>` : ''}
+
+    <p class="sub">e o ${A2.nome} vem logo atrás</p>
+    <p>${esc(A2.manchete)}. pra ele, comece por: ${esc(PLANO[r.segundo].comeca)}</p>
+    <a class="guia" href="${CFG.guiaUrl}" target="_blank" rel="noopener"><small>quer ir mais fundo?</small>o mapa completo dos 7 âmbitos, com o que drena e o que repõe em cada um e um ritual pra enxergar o seu padrão, tá no guia "os 7 âmbitos da energia", na the relax news. <b>ler o guia →</b></a>
+
+    <div class="ok-msg">${st.sentOk==='previa' ? 'modo prévia: nada foi enviado. quando estiver no ar, aqui a pessoa recebe o email.' : st.sentOk ? 'o seu resultado completo também tá a caminho do seu email. se não aparecer, dá uma olhada no spam ou em promoções.' : 'não consegui mandar o email agora, mas tá tudo aqui na sua página.'}</div>
+
+    <div class="actions">
+      <button class="btn full" id="share">compartilhar meu resultado</button>
+      <button class="btn ghost full" id="again">refazer o teste</button>
+    </div>
+    <p class="foot">isso aqui é um espelho, não um diagnóstico. se o cansaço tá em tudo e já dura semanas, vale conversar com um médico.</p>`;
+  document.querySelector('.app').appendChild(R);
+  setTimeout(()=>{ R.querySelector('.bat-icon i').style.width = Math.max(v,4)+'%'; R.querySelectorAll('.bar i').forEach(i=>i.style.width=Math.max(+i.dataset.w,3)+'%'); }, 200);
+  R.querySelector('#share').onclick = compartilhar;
+  R.querySelector('#again').onclick = () => location.reload();
+  track('teste_resultado', {ambito:r.principal});
+}
+
+/* ============ voltar ============ */
+$back.onclick = () => {
+  if(busy) return;
+  const order = ['energia', ...Array.from({length:NQ},(_,i)=>i), 'final', 'email'];
+  const pos = order.indexOf(st.step);
+  if(pos <= 0) return; // na primeira pergunta não volta (o nome já foi)
+  const prev = order[pos-1];
+  gen++;
+  // apaga tudo que nasceu a partir da pergunta anterior e pergunta de novo
+  const cut = log.findIndex(m => m.step === prev && m.cls === 'q');
+  if(cut >= 0) log = log.slice(0, cut);
+  if(prev==='energia') st.energia=null; else if(prev==='final') st.final=null; else st.resp[prev]=null;
+  redraw();
+  composer.innerHTML='';
+  // a pergunta volta sem o "digitando"
+  const q = prev==='energia' ? ENERGIA.q : prev==='final' ? FINAL.q : PERGUNTAS[prev].q;
+  st.step = prev; setTop();
+  const m = {who:'bot', html:esc(q), cls:'q', step:prev}; log.push(m); draw(m, false);
+  mostrarOpcoes(prev);
+};
+function mostrarOpcoes(step){
+  let opts;
+  if(step==='energia') opts = ENERGIA.opts.map((t,i)=>({v:i,t}));
+  else if(step==='final') opts = ordem('final', FINAL.o).map(i=>({v:i,t:FINAL.o[i][1]}));
+  else opts = ordem('p'+step, PERGUNTAS[step].o).map(i=>({v:i,t:PERGUNTAS[step].o[i][1]}));
+  renderOpts(step, opts);
+}
+
+/* ============ card de compartilhar (1080x1350) ============ */
+let logoImg = null;
+function loadLogo(){ return new Promise(res=>{ if(logoImg) return res(logoImg); const i=new Image(); i.onload=()=>{logoImg=i;res(i)}; i.onerror=()=>res(null); i.src='logo.svg'; }); }
+async function gerarCard(){
+  await document.fonts.ready;
+  const r = st.result, A = AMB[r.principal], v = r.bat[r.principal];
+  const W=1080,H=1350,c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const serif = '"meno-display-condensed","Meno Display Condensed","Instrument Serif",Georgia,serif';
+  x.fillStyle=css('--paper'); x.fillRect(0,0,W,H);
+  const logo = await loadLogo(); if(logo){ const lw=170, lh=lw*632/751; x.drawImage(logo,(W-lw)/2,70,lw,lh); }
+  x.fillStyle=css('--green-deep'); x.textAlign='left';
+  x.font=`300 92px ${serif}`;
+  const l1 = `minha bateria ${A.bat}`;
+  x.fillText(l1, 90, 390);
+  x.font=`italic 300 92px ${serif}`;
+  x.fillText(`tá em ${v}%`, 90, 490);
+  x.font='400 38px Inter, sans-serif'; x.fillStyle=css('--green');
+  x.fillText('e a sua?', 90, 570);
+  const rows = r.rank; let y=680;
+  rows.forEach(k=>{
+    x.font='400 30px Inter, sans-serif'; x.fillStyle=css('--green-deep');
+    x.fillText(AMB[k].nome, 90, y+11);
+    const bx=330,bw=560,bh=22; x.fillStyle=css('--cream-2'); roundRect(x,bx,y-11,bw,bh,11); x.fill();
+    const val=r.bat[k], col={ok:'#4E614E',mid:'#A89A5B',low:'#B5764F'}[faixa(val)];
+    x.fillStyle=col; roundRect(x,bx,y-11,Math.max(bw*val/100,bh),bh,11); x.fill();
+    x.fillStyle=css('--green-deep'); x.textAlign='right'; x.fillText(val+'%', 990, y+11); x.textAlign='left';
+    y+=74;
+  });
+  x.font='500 30px Inter, sans-serif'; x.fillStyle=css('--green'); x.textAlign='center';
+  x.fillText('faça o teste: '+CFG.shareUrl, W/2, 1270);
+  return new Promise(res=>c.toBlob(res,'image/png'));
+}
+function roundRect(x,X,Y,w,h,r){ x.beginPath(); x.moveTo(X+r,Y); x.arcTo(X+w,Y,X+w,Y+h,r); x.arcTo(X+w,Y+h,X,Y+h,r); x.arcTo(X,Y+h,X,Y,r); x.arcTo(X,Y,X+w,Y,r); x.closePath(); }
+async function compartilhar(){
+  const blob = await gerarCard(); if(!blob) return;
+  const file = new File([blob],'meu-cansaco-the-relax-club.png',{type:'image/png'});
+  const text = `minha bateria ${AMB[st.result.principal].bat} tá em ${st.result.bat[st.result.principal]}%. e a sua? ${CFG.shareUrl}`;
+  track('teste_compartilhar');
+  if(navigator.canShare && navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],text}); return; }catch(_){ return; } }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; a.click();
+}
+
+
+
+/* ============ analytics (vercel) ============ */
+function track(name, data){ try{ window.va && window.va('event',{name,data}); }catch(_){} }
+
+// quando a área de resposta muda de tamanho, a conversa desce junto pra última mensagem ficar visível
+new ResizeObserver(()=>{ thread.scrollTop = thread.scrollHeight; }).observe(composer);
+new ResizeObserver(()=>{ thread.scrollTop = thread.scrollHeight; }).observe(thread);
+inicio();
+
+</script>
+<script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
