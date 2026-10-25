@@ -46,7 +46,7 @@ h1 em{font-style:italic}
 .mix:hover{background:#fff}
 .mix.on{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
 
-.fam{margin-top:20px}
+#fams{margin-top:24px}
 .fam h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--sage);margin-bottom:10px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .snd{position:relative;background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;transition:background .2s,border-color .2s}
@@ -166,23 +166,26 @@ footer i{font-family:var(--serif);font-size:18px;color:var(--green-deep)}
    sons da the relax club: tudo sintetizado com web audio
    ============================================================ */
 const SONS = [
-  {fam:'água', id:'chuva',     nome:'chuva no telhado'},
-  {fam:'água', id:'trovao',    nome:'trovoada de verão'},
-  {fam:'água', id:'praia',     nome:'praia em dia de semana'},
-  {fam:'água', id:'corrego',   nome:'córrego'},
-  {fam:'água', id:'cachoeira', nome:'cachoeirinha'},
-  {fam:'casa', id:'ventilador',nome:'ventilador de teto'},
-  {fam:'casa', id:'fogao',     nome:'fogão a lenha'},
-  {fam:'casa', id:'gato',      nome:'gato no colo'},
-  {fam:'casa', id:'vitrola',   nome:'vitrola chiando'},
-  {fam:'fora', id:'vento',     nome:'vento na serra'},
-  {fam:'fora', id:'bemtevi',   nome:'passarinhos da manhã'},
-  {fam:'fora', id:'cigarra',   nome:'cigarra das cinco'},
-  {fam:'fora', id:'grilo',     nome:'grilo de madrugada'},
-  {fam:'fora', id:'sapos',     nome:'sapos no brejo'},
-  {fam:'fora', id:'cafe',      nome:'café da esquina'},
-  {fam:'pausa',id:'sino',      nome:'sino da matriz'},
-  {fam:'pausa',id:'tigela',    nome:'tigela'},
+  {id:'chuva',     nome:'chuva no telhado'},
+  {id:'trovao',    nome:'trovoada de verão'},
+  {id:'praia',     nome:'praia em dia de semana'},
+  {id:'corrego',   nome:'córrego'},
+  {id:'cachoeira', nome:'cachoeirinha'},
+  {id:'vento',     nome:'vento na serra'},
+  {id:'bemtevi',   nome:'passarinhos da manhã'},
+  {id:'cigarra',   nome:'cigarra das cinco'},
+  {id:'grilo',     nome:'grilo de madrugada'},
+  {id:'sapos',     nome:'sapos no brejo'},
+  {id:'ventilador',nome:'ventilador de teto'},
+  {id:'fogao',     nome:'fogão a lenha'},
+  {id:'gato',      nome:'gato no colo'},
+  {id:'vitrola',   nome:'vitrola chiando'},
+  {id:'cafe',      nome:'café da esquina'},
+  {id:'sininhos',  nome:'sininhos de vento'},
+  {id:'sino',      nome:'sino da matriz'},
+  {id:'tigela',    nome:'tigela'},
+  {id:'cantando',  nome:'tigela cantando'},
+  {id:'gongo',     nome:'gongo suave'},
 ];
 // ilustrações em linha (viewBox 0 0 120 80), stroke currentColor, sem preenchimento
 const ILUS = {
@@ -203,6 +206,9 @@ gato:`<path d="M10 32V16l5 5h10l5-5v16z"/><path d="M16 26h.01M24 26h.01"/><g cla
 relogio:`<circle cx="20" cy="20" r="13"/><path d="M20 20V12"/><g class="a-spin" style="transform-origin:20px 20px"><path d="M20 20l6 4"/></g>`,
 sapos:`<path d="M6 30c4-10 24-10 28 0z"/><circle cx="14" cy="20" r="3"/><circle cx="26" cy="20" r="3"/><g class="a-ring" style="transform-origin:20px 30px"><path d="M15 27c3 2 7 2 10 0"/></g>`,
 vitrola:`<g class="a-spin" style="transform-origin:18px 22px"><circle cx="18" cy="22" r="12"/><circle cx="18" cy="22" r="3"/><path d="M18 13a9 9 0 0 1 9 9"/></g><path d="M34 6v14l-6 6"/>`,
+sininhos:`<path d="M8 7h24"/><g class="a-swing" style="transform-origin:20px 7px"><path d="M12 7v14M18 7v20M24 7v16M30 7v11"/><path d="M10.5 21h3M16.5 27h3M22.5 23h3M28.5 18h3"/></g>`,
+cantando:`<path d="M7 22h26c0 7-6 12-13 12S7 29 7 22z"/><path d="M30 20l6-10"/><g class="a-ring" style="transform-origin:20px 16px"><path d="M10 16c6-4 14-4 20 0"/><path d="M14 11c4-2 8-2 12 0"/></g>`,
+gongo:`<path d="M6 6h28M10 6v28M30 6v28"/><g class="a-bell" style="transform-origin:20px 6px"><path d="M20 6v5"/><circle cx="20" cy="20" r="8"/><circle cx="20" cy="20" r="3"/></g>`,
 cafe:`<path d="M9 18h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M27 21h3a3 3 0 0 1 0 6h-3"/><g class="a-static"><path d="M15 13c-2-2 2-3 0-6M21 13c-2-2 2-3 0-6"/></g>`,
 tigela:`<path d="M7 22h26c0 7-6 12-13 12S7 29 7 22z"/><g class="a-ring" style="transform-origin:20px 16px"><path d="M13 14c4-3 10-3 14 0"/></g>`,
 };
@@ -212,7 +218,8 @@ const MIXES = [
   {nome:'dormir',        s:{praia:55, ventilador:30, grilo:20}},
   {nome:'fim de tarde no interior', s:{cigarra:35, vento:30, sino:30, bemtevi:20}},
   {nome:'noite no sítio', s:{sapos:35, grilo:35, fogao:45}},
-  {nome:'meditar',       s:{tigela:55, cachoeira:25, vento:20}},
+  {nome:'meditar',       s:{cantando:50, sininhos:20, cachoeira:20}},
+  {nome:'yoga',          s:{tigela:45, gongo:30, sininhos:25, vento:20}},
 ];
 
 let ctx=null, master=null, reverb=null, NOISE={};
@@ -257,14 +264,19 @@ function makeHits(secs, perSec, minF, maxF, decay, amp){
 const ARQ = {
   chuva:['audio/chuva.mp3',1], trovao:['audio/trovoada.mp3',1.1], praia:['audio/praia.mp3',1], corrego:['audio/corrego.mp3',1.1], cachoeira:['audio/cachoeira.mp3',.9],
   ventilador:['audio/ventilador.mp3',1], fogao:['audio/fogao.mp3',3], gato:['audio/gato.mp3',.75], vitrola:['audio/vitrola.mp3',1.3],
-  vento:['audio/vento.mp3',1], bemtevi:['audio/passarinhos.mp3',1.6], cigarra:['audio/cigarra.mp3',1.1], grilo:['audio/grilo.mp3',1.1], sapos:['audio/sapos.mp3',.9], cafe:['audio/cafe.mp3',1],
+  vento:['audio/vento.mp3',1], bemtevi:['audio/passarinhos.mp3',1.6], cigarra:['audio/cigarra.mp3',1.1], grilo:['audio/grilo.mp3',1.1], sapos:['audio/sapos.mp3',.9], cafe:['audio/cafe.mp3',1], sininhos:['audio/sininhos.mp3',.8],
+  cantando:['audio/tigela-cantando.mp3',.9,'evento',30,55], gongo:['audio/gongo.mp3',.7,'evento',22,45],
 };
 const BUFS={};
 function loadBuf(url){ if(!BUFS[url]) BUFS[url]=fetch(url).then(r=>r.arrayBuffer()).then(a=>new Promise((ok,err)=>ctx.decodeAudioData(a,ok,err))); return BUFS[url]; }
 function fileSound(id,out){
-  const [url,g,exato]=ARQ[id]; let s=null, alive=true; const gg=gain(g); gg.connect(out);
-  loadBuf(url).then(buf=>{ if(!alive) return; s=src(buf); if(!exato){ s.loopStart=.06; s.loopEnd=buf.duration-.06; } s.connect(gg); s.start(0, Math.random()*(buf.duration-1)); }).catch(()=>{});
-  return ()=>{ alive=false; if(s) try{s.stop();}catch(e){} gg.disconnect(); };
+  const [url,g,modo,a,b]=ARQ[id]; let s=null, alive=true, tm; const gg=gain(g); gg.connect(out);
+  loadBuf(url).then(buf=>{ if(!alive) return;
+    if(modo==='evento'){ // toca inteiro e espera um tempo antes de tocar de novo
+      const play=()=>{ if(!alive) return; s=src(buf,false); s.playbackRate.value=rnd(.97,1.03); s.connect(gg); s.start(); tm=setTimeout(play,(buf.duration+rnd(a,b))*1000); };
+      play(); return; }
+    s=src(buf); if(modo!==1){ s.loopStart=.06; s.loopEnd=buf.duration-.06; } s.connect(gg); s.start(0, Math.random()*(buf.duration-1)); }).catch(()=>{});
+  return ()=>{ alive=false; clearTimeout(tm); if(s) try{s.stop();}catch(e){} gg.disconnect(); };
 }
 const BUILD = {
   chuva(out){
@@ -399,12 +411,11 @@ function setOn(id,on,vol){
 const $=s=>document.querySelector(s);
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let playing=true;
-const fams=[...new Set(SONS.map(s=>s.fam))];
-$('#fams').innerHTML=fams.map(f=>`<section class="fam"><h2>${f}</h2><div class="grid">${SONS.filter(s=>s.fam===f).map(s=>`
+$('#fams').innerHTML=`<div class="grid">${SONS.map(s=>`
   <div class="snd" data-id="${s.id}"><span class="dot"></span>
     <button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true">${ILUS[s.id]||''}</svg><span class="tx"><span class="nm">${esc(s.nome)}</span></span></button>
     <input type="range" min="1" max="100" value="50" aria-label="volume de ${esc(s.nome)}">
-  </div>`).join('')}</div></section>`).join('');
+  </div>`).join('')}</div>`;
 document.querySelectorAll('.snd').forEach(el=>{
   const id=el.dataset.id;
   el.querySelector('button').onclick=()=>{ if(!playing) setPlaying(true); setOn(id,!st[id].on); clearMix(); };
