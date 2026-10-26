@@ -720,6 +720,8 @@ function resultado(){
   st.step = 'resultado'; setTop();
   document.querySelector('header').style.display = 'none';
   const r = st.result, A = AMB[r.principal], A2 = AMB[r.segundo], v = r.bat[r.principal], H = headline(r);
+  // guarda o resultado no navegador: quando a pessoa entrar na conta, ele vai pro "seu cantinho"
+  try{ localStorage.setItem('trc-teste', JSON.stringify({principal:r.principal, segundo:r.segundo, perfil:r.perfil, bat:r.bat, rank:r.rank, data:new Date().toISOString()})); }catch(e){}
   const cit = citacoes(r.principal);
   const P = PLANO[r.principal], Cx = CONTEXTO[r.principal];
   const desejo = FINAL.o[st.final];

@@ -207,6 +207,44 @@ header,main,.fim{position:relative;z-index:1}
   .hero-t h1{font-size:clamp(54px,5vw,74px)}
   .hero-t h1 em{display:block}
 }
+
+/* ===== conta ===== */
+header{position:relative}
+.acct{position:absolute;right:20px;top:24px;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:8px 15px;font-size:13.5px;color:var(--green)}
+.acct.in{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
+@media (min-width:900px){.acct{right:48px;top:42px}}
+body.cm-on{overflow:hidden}
+.conta-modal{position:fixed;inset:0;z-index:20;background:rgba(41,55,41,.35);display:grid;place-items:center;padding:16px}
+.conta-modal[hidden]{display:none}
+.cm-box{position:relative;width:100%;max-width:400px;background:var(--paper);border-radius:24px;padding:28px 24px 22px;box-shadow:0 20px 60px rgba(41,55,41,.25)}
+.cm-box h2{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1;margin-bottom:8px}
+.cm-sub{color:var(--green);font-size:15px;margin-bottom:18px}
+.cm-x{position:absolute;top:12px;right:14px;border:0;background:none;font-size:26px;color:var(--muted);line-height:1}
+.cm-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:13px 16px;font-size:15px;color:var(--green-deep);margin-bottom:10px}
+.cm-btn svg{width:18px;height:18px}
+.cm-dark{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
+.cm-in{display:block;width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;font:inherit;font-size:15px;color:var(--ink);margin-bottom:10px;text-transform:none}
+.cm-ou{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin:6px 0 12px}
+.cm-ou::before,.cm-ou::after{content:"";flex:1;height:1px;background:var(--line)}
+.cm-txt{display:block;margin:2px auto 8px;border:0;background:none;color:var(--green);font-size:13.5px;text-decoration:underline;text-underline-offset:3px}
+.cm-opt{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--green);margin-top:8px}
+.cm-opt input{margin-top:3px;accent-color:var(--green-deep)}
+.cm-msg{font-size:13.5px;color:#9a5b3c;margin-top:8px;min-height:1em}
+.cantinho{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:18px 20px}
+.ct-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+.ct-top h2{font-family:var(--serif);font-weight:300;font-size:26px;line-height:1.05}
+.ct-sair{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline}
+.cantinho small{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-bottom:6px}
+.ct-mixes{margin-bottom:14px}
+.ct-mix{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ct-play{flex:1;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;font-family:var(--serif);font-size:18px;color:var(--green-deep)}
+.ct-play:hover{background:var(--paper)}
+.ct-del{border:0;background:none;color:var(--muted);font-size:20px;padding:0 6px}
+.ct-vazio{font-size:14px;color:var(--green)}
+.ct-teste{border-top:1px solid var(--line);padding-top:12px}
+.ct-teste b{display:block;font-family:var(--serif);font-weight:300;font-size:22px;line-height:1.1;color:var(--green-deep)}
+.ct-teste p{font-size:14px;color:var(--green);margin:4px 0 10px}
+.ct-btn{display:inline-block;background:var(--green-deep);color:var(--paper);text-decoration:none;border-radius:99px;padding:9px 16px;font-size:14px}
 </style>
 </head>
 <body>
@@ -714,6 +752,7 @@ try{ const saved=JSON.parse(localStorage.getItem('trc-mix')||'[]'); if(saved.len
   if(!reduce && touch){ const auto=()=>add(W*(.1+Math.random()*.8),H*(.1+Math.random()*.8),true,7+Math.random()*4); auto(); setInterval(auto,1800); }
 })();
 </script>
+<script type="module" src="/js/conta.js"></script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
