@@ -83,6 +83,7 @@ async function gravar(nome) {
   const user = getUser();
   await addDoc(collection(db, 'users', user.uid, 'mixes'), { nome, sons: atual(), criado: serverTimestamp() });
   toast(`"${nome}" salvo no seu cantinho`); render();
+  try { window.gtag && gtag('event', 'salvar_mix', { nome }); } catch (e) {}
 }
 async function abrirSalvar() {
   const sons = atual();
@@ -139,6 +140,7 @@ shareBtn.onclick = async () => {
   }
   if (!ok) { try { await navigator.clipboard.writeText(url); ok = true; toast('link copiado. é só mandar pra alguém'); } catch (e) {} }
   if (!ok) { window.prompt('copia o link do seu mix:', url); ok = true; }
+  try { window.gtag && gtag('event', 'compartilhar_mix', { sons: k }); } catch (e) {}
   try { await setDoc(doc(db, 'compartilhados', k), { n: increment(1) }, { merge: true }); } catch (e) {}
   contagem();
 };

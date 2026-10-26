@@ -2,6 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKVLJKH0GV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LKVLJKH0GV');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>teste dos 7 tipos de descanso: qual descanso você precisa? · the relax club</title>
 <meta name="description" content="teste gratuito dos 7 tipos de descanso: físico, mental, emocional, social, sensorial, criativo e espiritual. descubra quais tão descarregados em você e por onde começar.">
@@ -725,7 +727,7 @@ function resultado(){
   document.querySelector('header').style.display = 'none';
   const r = st.result, A = AMB[r.principal], A2 = AMB[r.segundo], v = r.bat[r.principal], H = headline(r);
   // guarda o resultado no navegador: quando a pessoa entrar na conta, ele vai pro "seu cantinho"
-  try{ localStorage.setItem('trc-teste', JSON.stringify({principal:r.principal, segundo:r.segundo, perfil:r.perfil, bat:r.bat, rank:r.rank, data:new Date().toISOString()})); }catch(e){} try{ dispatchEvent(new Event('trc-teste')); }catch(e){}
+  try{ localStorage.setItem('trc-teste', JSON.stringify({principal:r.principal, segundo:r.segundo, perfil:r.perfil, bat:r.bat, rank:r.rank, data:new Date().toISOString()})); }catch(e){} try{ dispatchEvent(new Event('trc-teste')); }catch(e){} try{ gtag('event','teste_concluido',{principal:r.principal}); }catch(e){}
   const cit = citacoes(r.principal);
   const P = PLANO[r.principal], Cx = CONTEXTO[r.principal];
   const desejo = FINAL.o[st.final];

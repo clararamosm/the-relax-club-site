@@ -211,6 +211,7 @@ onAuthStateChanged(auth, async u => {
     await darNumero();
     await sincronizarTeste();
     if (novo) {
+      try { window.gtag && gtag('event', 'sign_up', { method: u.providerData[0]?.providerId || 'email' }); } catch (e) {}
       const idToken = await u.getIdToken();
       fetch('/api/clube/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, nome: u.displayName || '', optin: perfil.optin }) }).catch(() => {});
     }

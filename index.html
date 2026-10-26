@@ -2,6 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKVLJKH0GV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LKVLJKH0GV');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>the relax club · sons pra relaxar, meditar e dormir</title>
 <meta name="description" content="um lugar pra parar de propósito. monte o seu som de descanso com chuva no telhado, praia, cachoeira, passarinhos e tigela tibetana, grátis e sem cadastro, e descubra qual dos 7 tipos de descanso você precisa.">
@@ -630,7 +632,7 @@ document.querySelectorAll('.snd').forEach(el=>{
 });
 $('#mixes').insertAdjacentHTML('beforeend',MIXES.map((m,i)=>`<button class="mix" data-m="${i}">${esc(m.nome)}</button>`).join(''));
 document.querySelectorAll('.mix').forEach(b=>b.onclick=()=>{
-  const m=MIXES[+b.dataset.m]; mixBase=m; if(!playing) setPlaying(true);
+  const m=MIXES[+b.dataset.m]; mixBase=m; if(!playing) setPlaying(true); try{ gtag('event','mix_pronto',{nome:m.nome}); }catch(e){}
   SONS.forEach(s=>setOn(s.id, m.s[s.id]!=null, m.s[s.id]));
   document.querySelectorAll('.mix').forEach(x=>x.classList.toggle('on',x===b));
 });
