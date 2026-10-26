@@ -4,8 +4,9 @@
 
 ## o que tem no site
 
-- [sons pra descansar](https://therelax.club/): mixer gratuito e sem cadastro de sons ambiente pra relaxar, meditar, focar e dormir. 20 sons (chuva no telhado, trovoada de verão, praia em dia de semana, córrego, cachoeirinha, vento na serra, passarinhos da manhã, cigarra das cinco, grilo de madrugada, sapos no brejo, ventilador de teto, fogão a lenha, gato no colo, vitrola chiando, café da esquina, sininhos de vento, sino da matriz, tigela, tigela cantando, gongo suave), com volume por som, mixes prontos (chuva em casa, foco, dormir, fim de tarde no interior, noite no sítio, meditar, yoga) e timer.
+- [sons pra descansar](https://therelax.club/): mixer gratuito e sem cadastro de sons ambiente pra relaxar, meditar, focar e dormir. 21 sons (chuva no telhado, trovoada de verão, praia em dia de semana, córrego, cachoeirinha, vento na serra, passarinhos da manhã, cigarra das cinco, grilo de madrugada, sapos no brejo, ventilador de teto, fogão a lenha, gato no colo, vitrola chiando, café da esquina, coruja no quintal, sininhos de vento, sino da matriz, tigela, tigela cantando, gongo suave), com volume por som, mixes prontos (chuva em casa, foco, dormir, fim de tarde no interior, noite no sítio, meditar, yoga) e timer.
 - [teste dos 7 tipos de descanso](https://therelax.club/teste/): teste gratuito de 16 perguntas (uns 3 minutos) em formato de conversa, que mostra a bateria da pessoa em cada um dos 7 tipos de descanso (físico, mental, emocional, social, sensorial, criativo e espiritual) e um plano pra começar a recarregar.
+- [perguntas frequentes](https://therelax.club/perguntas/): o que é a the relax club, os 7 tipos de descanso, sons pra dormir e de onde vêm os sons.
 - [the relax news](https://therelaxclub.substack.com): newsletter que sai toda segunda e quinta, com histórias, guias e o que a ciência diz sobre descansar de verdade.
 
 ## os 7 tipos de descanso
