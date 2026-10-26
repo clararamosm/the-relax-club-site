@@ -649,15 +649,42 @@ $('#mixes').insertAdjacentHTML('beforeend',MIXES.map((m,i)=>`<button class="mix"
 document.querySelectorAll('.mix').forEach(b=>b.onclick=()=>{
   const m=MIXES[+b.dataset.m]; mixBase=m; if(!playing) setPlaying(true); try{ gtag('event','mix_pronto',{nome:m.nome}); }catch(e){}
   SONS.forEach(s=>setOn(s.id, m.s[s.id]!=null, m.s[s.id]));
-  document.querySelectorAll('.mix').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.mix').forEach(x=>x.classList.toggle('on',x===b)); nomeMix=m.nome; atualizarMidia();
 });
 let mixBase=null; // último mix pronto escolhido (pra sugerir nome ao salvar)
-function clearMix(){ document.querySelectorAll('.mix.on').forEach(x=>x.classList.remove('on')); }
+let nomeMix=null; // nome que aparece na tela bloqueada
+function clearMix(){ document.querySelectorAll('.mix.on').forEach(x=>x.classList.remove('on')); nomeMix=null; atualizarMidia(); }
+
+/* tela bloqueada e central de controle (iphone e android): nome do mix, sons, capa da marca e botões */
+function atualizarMidia(){
+  if(!('mediaSession' in navigator)) return;
+  const on=SONS.filter(s=>st[s.id].on).map(s=>s.nome);
+  try{
+    const falta=tEnd?tEnd-Date.now():0, min=falta>0?Math.max(1,Math.ceil(falta/60000)):0;
+    navigator.mediaSession.metadata=new MediaMetadata({
+      title: nomeMix || (on.length ? 'seu mix' : 'the relax club'),
+      artist: (on.length ? on.join(' · ') : 'liga um som pra começar') + (min ? ` · desliga em ${min} min` : ''),
+      album: 'the relax club',
+      artwork:[{src:'/capa-player-512.png',sizes:'512x512',type:'image/png'},{src:'/capa-player-256.png',sizes:'256x256',type:'image/png'}]
+    });
+    navigator.mediaSession.playbackState=playing&&on.length?'playing':'paused';
+  }catch(e){}
+}
+function mixVizinho(d){
+  const atual=document.querySelector('.mix.on'); const i=atual?(+atual.dataset.m+d+MIXES.length)%MIXES.length:(d>0?0:MIXES.length-1);
+  document.querySelector(`.mix[data-m="${i}"]`).click();
+}
+if('mediaSession' in navigator){
+  const h=(a,f)=>{ try{ navigator.mediaSession.setActionHandler(a,f); }catch(e){} };
+  h('play',()=>setPlaying(true)); h('pause',()=>setPlaying(false)); h('stop',()=>setPlaying(false));
+  h('nexttrack',()=>mixVizinho(1)); h('previoustrack',()=>mixVizinho(-1));
+  h('seekbackward',null); h('seekforward',null); h('seekto',null);
+}
 
 const IC_PAUSE='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
 const IC_PLAY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>';
 function setPlaying(p){
-  playing=p; if(mudo){ p?mudo.play().catch(()=>{}):mudo.pause(); } document.body.classList.toggle('paused',!p); $('#play').innerHTML=p?IC_PAUSE:IC_PLAY; $('#play').setAttribute('aria-label',p?'pausar tudo':'tocar');
+  playing=p; setTimeout(atualizarMidia,0); if(mudo){ p?mudo.play().catch(()=>{}):mudo.pause(); } document.body.classList.toggle('paused',!p); $('#play').innerHTML=p?IC_PAUSE:IC_PLAY; $('#play').setAttribute('aria-label',p?'pausar tudo':'tocar');
   SONS.forEach(s=>{ if(st[s.id].on){ p?start(s.id):stop(s.id); } });
 }
 $('#play').onclick=()=>{ const any=SONS.some(s=>st[s.id].on); if(!any){ document.querySelector('.mix').click(); return; } setPlaying(!playing); };
@@ -677,7 +704,7 @@ $('#timer').onclick=()=>{
   tIdx=(tIdx+1)%TIMERS.length; const m=TIMERS[tIdx]; clearInterval(tInt);
   if(!m){ tEnd=0; $('#timer').textContent='timer'; $('#timer').classList.remove('on'); toast('timer desligado'); return; }
   tEnd=Date.now()+m*60000; $('#timer').classList.add('on'); toast(`desliga sozinho em ${m} minutos`);
-  const tick=()=>{ const left=tEnd-Date.now(); if(left<=0){ clearInterval(tInt); fadeAllOut(); tIdx=0; $('#timer').textContent='timer'; $('#timer').classList.remove('on'); return; }
+  const tick=()=>{ const left=tEnd-Date.now(); if(Math.floor(left/1000)%60===0) atualizarMidia(); if(left<=0){ clearInterval(tInt); fadeAllOut(); tIdx=0; $('#timer').textContent='timer'; $('#timer').classList.remove('on'); return; }
     const mm=Math.floor(left/60000), ss=Math.floor(left/1000)%60; $('#timer').textContent=`${mm}:${String(ss).padStart(2,'0')}`; };
   tick(); tInt=setInterval(tick,1000);
 };
@@ -685,7 +712,7 @@ function fadeAllOut(){ if(!master) return; const t=ctx.currentTime; master.gain.
 
 /* salvar (protótipo: fica no navegador; depois vira conta) */
 function save(){ try{ localStorage.setItem('trc-mix',JSON.stringify(SONS.filter(s=>st[s.id].on).map(s=>[s.id,st[s.id].vol]))); }catch(e){} }
-function onChange(){ save(); if(!SONS.some(s=>st[s.id].on)) mixBase=null; $('#waves').classList.toggle('on',SONS.some(s=>st[s.id].on)); }
+function onChange(){ atualizarMidia(); save(); if(!SONS.some(s=>st[s.id].on)) mixBase=null; $('#waves').classList.toggle('on',SONS.some(s=>st[s.id].on)); }
 $('#save').onclick=()=>toast('em breve: crie sua conta pra salvar e dar nome aos seus mixes');
 let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); }
 /* links de mix: /?mix=dormir abre um mix pronto; /?mix=chuva-65,trovao-30 abre qualquer combinação */

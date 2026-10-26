@@ -56,7 +56,7 @@ async function render() {
 function tocarMix(m) {
   if (!playing) setPlaying(true);
   SONS.forEach(s => setOn(s.id, m.sons[s.id] != null, m.sons[s.id]));
-  clearMix(); toast(`tocando ${m.nome}`);
+  clearMix(); nomeMix = m.nome; atualizarMidia(); toast(`tocando ${m.nome}`);
 }
 async function listarMixes() {
   const user = getUser(); if (!user) return [];
