@@ -69,7 +69,7 @@ const atual = () => Object.fromEntries(SONS.filter(s => st[s.id].on).map(s => [s
 $('#save').onclick = () => {
   const sons = atual();
   if (!Object.keys(sons).length) return toast('liga pelo menos um som pra salvar');
-  if (!getUser()) { pendingSave = true; abrir(); msg('#cm-msg', 'entra rapidinho que eu salvo o seu mix.'); return; }
+  if (!getUser()) { pendingSave = true; abrir('inicio', 'salvar mix'); msg('#cm-msg', 'entra rapidinho que eu salvo o seu mix.'); return; }
   abrirSalvar();
 };
 const mesmoMix = (a, b) => { const ka = Object.keys(a), kb = Object.keys(b || {}); return ka.length === kb.length && ka.every(k => a[k] === b[k]); };

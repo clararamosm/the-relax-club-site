@@ -34,6 +34,8 @@ header img{height:48px;display:block}
 .voltar{position:absolute;left:0;top:28px;font-size:14px;color:var(--green);text-decoration:none}
 @media (min-width:900px){.voltar{top:52px}}
 main{max-width:760px;margin:28px auto 0}
+.cols{display:block}
+@media (min-width:960px){main{max-width:1080px}header{max-width:1080px}.cols{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:start}.col-b{position:sticky;top:20px}}
 h1{font-family:var(--serif);font-weight:300;font-size:clamp(40px,7vw,58px);line-height:1;color:var(--green-deep);text-align:center;margin-bottom:6px}
 .lead{text-align:center;color:var(--green);margin-bottom:28px}
 

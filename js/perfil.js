@@ -1,5 +1,5 @@
 /* página de perfil do membro: carteirinha, dados, foto, mixes, histórico de testes, emails, instalar no celular e excluir conta */
-import { auth, db, $, esc, AMB, DIAS_REFAZER, FUNDADORES_ATE, primeiro, abrir, fechar, msg, quandoMudar, atualizarPerfil, fotoDe, sair } from '/js/clube.js';
+import { auth, db, $, esc, AMB, DIAS_REFAZER, FUNDADORES_ATE, primeiro, abrir, fechar, msg, quandoMudar, atualizarPerfil, fotoDe, sair, sincronizarBrevo } from '/js/clube.js';
 import * as clube from '/js/clube.js';
 import { updateProfile, verifyBeforeUpdateEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { doc, setDoc, collection, getDocs, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -41,7 +41,7 @@ async function carregarListas(u) {
 
 function telaFora() {
   app.innerHTML = `<h1>seu perfil</h1><div class="fora"><p>entra no clube pra ver a sua carteirinha de membro, os seus mixes e o histórico do teste.</p><button class="btn dark" id="entrar" type="button">entrar no clube</button></div>`;
-  $('#entrar').onclick = () => abrir();
+  $('#entrar').onclick = () => abrir('inicio', 'perfil');
 }
 
 function desenhar(u, p) {
@@ -60,13 +60,15 @@ function desenhar(u, p) {
     <p class="cart-dica">${p?.teste ? 'a pétala acesa é o tipo de descanso que mais pediu atenção no seu último teste.' : 'faça o teste e a sua carteirinha ganha o tipo de descanso que mais pede atenção em você.'}</p>
   </div>
 
+  <div class="cols">
+  <div class="col-a">
   <section class="sec"><h2>seus dados</h2>
     <div class="campo"><label for="f-nome">nome</label><div class="linha"><input class="in" id="f-nome" maxlength="60" value="${esc(nome)}"><button class="btn" id="s-nome" type="button">salvar</button></div><p class="ok" id="m-nome"></p></div>
     <div class="campo"><label for="f-email">email</label>
       ${senha ? `<div class="linha"><input class="in" id="f-email" type="email" value="${esc(u.email || '')}"><button class="btn" id="s-email" type="button">trocar</button></div><p class="nota">pra trocar, eu mando um link de confirmação pro email novo.</p>`
         : `<input class="in" id="f-email" value="${esc(u.email || '')}" readonly><p class="nota">você entrou com o google, então o email é o da sua conta google.</p>`}
       <p class="ok" id="m-email"></p></div>
-    <div class="campo"><label>foto</label><div class="foto-linha"><div class="foto-prev">${f ? `<img src="${esc(f)}" alt="" referrerpolicy="no-referrer">` : esc((nome || '?')[0].toUpperCase())}</div>
+    <div class="campo"><label>foto</label><div class="foto-linha"><div class="foto-prev">${f ? `<img src="${esc(fotoCart(f))}" alt="" onerror="this.replaceWith(document.createTextNode('${esc((nome || '?')[0])}'))">` : esc((nome || '?')[0].toUpperCase())}</div>
       <label class="btn" for="f-foto" style="cursor:pointer">escolher foto</label><input id="f-foto" type="file" accept="image/*" hidden>
       ${p?.foto ? '<button class="mini" id="r-foto" type="button">tirar foto</button>' : ''}</div><p class="ok" id="m-foto"></p></div>
   </section>
@@ -75,19 +77,6 @@ function desenhar(u, p) {
     ${mixes.length ? `<div class="lista">${mixes.map(m => `<div class="item" data-id="${m.id}"><div class="t"><b>${esc(m.nome)}</b><span>${esc(Object.keys(m.sons || {}).map(k => NOMES[k] || k).join(', '))}</span></div>
       <a class="mini play" href="${esc(linkMix(m.sons || {}))}">tocar</a><button class="mini" data-acao="link" type="button">link</button><button class="mini" data-acao="nome" type="button">renomear</button><button class="mini" data-acao="apagar" type="button" aria-label="apagar">apagar</button></div>`).join('')}</div>`
       : `<p class="vazio">ainda nenhum. na sede, liga uns sons e toca em salvar.</p>`}
-  </section>
-
-  <section class="sec"><h2>seus testes</h2>
-    ${ult ? `<p class="sub">${dias >= DIAS_REFAZER ? `o último foi há ${dias} dias. bora ver o que mudou?` : `dá pra refazer em ${DIAS_REFAZER - dias} ${DIAS_REFAZER - dias === 1 ? 'dia' : 'dias'}.`}</p>` : ''}
-    ${testes.length ? `<div class="lista">${testes.map(t => `<div class="item"><div class="t"><b>cansaço ${esc(AMB[t.principal] || t.principal)}${t.bat?.[t.principal] != null ? ` · ${t.bat[t.principal]}%` : ''}</b><span>${esc(dataCurta(t.data))}${t.segundo ? ` · depois vem o ${esc(AMB[t.segundo] || t.segundo)}` : ''}</span></div></div>`).join('')}</div>`
-      : `<p class="vazio">você ainda não fez o teste com a conta aberta.</p>`}
-    <p style="margin-top:12px"><a class="btn ${!ult || dias >= DIAS_REFAZER ? 'dark' : ''}" href="/teste/">${ult ? 'refazer o teste' : 'fazer o teste'}</a></p>
-  </section>
-
-  <section class="sec"><h2>emails do clube</h2>
-    <p class="sub">novidades do clube, lembrete de refazer o teste e conteúdos sobre o seu tipo de descanso. a the relax news é assinada à parte, no <a href="https://therelaxclub.substack.com" target="_blank" rel="noopener">substack</a>.</p>
-    <label class="switch"><input type="checkbox" id="f-optin" ${p?.optin ? 'checked' : ''}> <span>quero receber os emails do clube</span></label>
-    <p class="ok" id="m-optin"></p>
   </section>
 
   <section class="sec"><h2>o clube no seu celular</h2>
@@ -102,7 +91,23 @@ function desenhar(u, p) {
   <section class="sec"><h2>conta</h2>
     <div class="linha"><button class="btn" id="sair" type="button">sair</button><button class="mini perigo" id="excluir" type="button">excluir minha conta</button></div>
     <p class="ok" id="m-conta"></p>
-  </section>`;
+  </section>
+  </div>
+  <aside class="col-b">
+  <section class="sec"><h2>seus testes</h2>
+    ${ult ? `<p class="sub">${dias >= DIAS_REFAZER ? `o último foi há ${dias} dias. bora ver o que mudou?` : `dá pra refazer em ${DIAS_REFAZER - dias} ${DIAS_REFAZER - dias === 1 ? 'dia' : 'dias'}.`}</p>` : ''}
+    ${testes.length ? `<div class="lista">${testes.map(t => `<div class="item"><div class="t"><b>cansaço ${esc(AMB[t.principal] || t.principal)}${t.bat?.[t.principal] != null ? ` · ${t.bat[t.principal]}%` : ''}</b><span>${esc(dataCurta(t.data))}${t.segundo ? ` · depois vem o ${esc(AMB[t.segundo] || t.segundo)}` : ''}</span></div></div>`).join('')}</div>`
+      : `<p class="vazio">você ainda não fez o teste com a conta aberta.</p>`}
+    <p style="margin-top:12px"><a class="btn ${!ult || dias >= DIAS_REFAZER ? 'dark' : ''}" href="/teste/">${ult ? 'refazer o teste' : 'fazer o teste'}</a></p>
+  </section>
+
+  <section class="sec"><h2>emails do clube</h2>
+    <p class="sub">novidades do clube, lembrete de refazer o teste e conteúdos sobre o seu tipo de descanso. a the relax news é assinada à parte, no <a href="https://therelaxclub.substack.com" target="_blank" rel="noopener">substack</a>.</p>
+    <label class="switch"><input type="checkbox" id="f-optin" ${p?.optin ? 'checked' : ''}> <span>quero receber os emails do clube</span></label>
+    <p class="ok" id="m-optin"></p>
+  </section>
+  </aside>
+  </div>`;
   ligar(u, p);
   cartao3d();
 }
@@ -133,7 +138,7 @@ function cartao3d() {
 function ligar(u, p) {
   $('#s-nome').onclick = async () => {
     const v = $('#f-nome').value.trim(); if (!v) return msg('#m-nome', 'escreve um nome.');
-    try { await updateProfile(auth.currentUser, { displayName: v }); await setDoc(doc(db, 'users', u.uid), { nome: v }, { merge: true }); atualizarPerfil({ nome: v }); toast('nome salvo'); }
+    try { await updateProfile(auth.currentUser, { displayName: v }); await setDoc(doc(db, 'users', u.uid), { nome: v }, { merge: true }); atualizarPerfil({ nome: v }); toast('nome salvo'); sincronizarBrevo(); }
     catch (e) { msg('#m-nome', 'não consegui salvar agora.'); }
   };
   $('#f-nome').onkeydown = e => { if (e.key === 'Enter') $('#s-nome').click(); };
@@ -169,8 +174,7 @@ function ligar(u, p) {
     const optin = e.target.checked;
     try {
       await setDoc(doc(db, 'users', u.uid), { optin }, { merge: true }); atualizarPerfil({ optin });
-      const idToken = await auth.currentUser.getIdToken();
-      await fetch('/api/clube/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, nome: p?.nome || u.displayName || '', optin, acao: optin ? 'entrar' : 'sair' }) });
+      await sincronizarBrevo(optin ? 'sync' : 'sair');
       toast(optin ? 'pronto, você vai receber os emails' : 'pronto, não mando mais emails');
     } catch (err) { msg('#m-optin', 'não consegui salvar agora.'); }
   };
@@ -242,8 +246,7 @@ async function excluir(u) {
   }
   try {
     msg('#m-conta', 'apagando…');
-    const idToken = await auth.currentUser.getIdToken();
-    await fetch('/api/clube/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, optin: false, acao: 'sair' }) }).catch(() => {});
+    await sincronizarBrevo('excluir');
     for (const sub of ['mixes', 'testes']) {
       const q = await getDocs(collection(db, 'users', u.uid, sub)); for (const d of q.docs) await deleteDoc(d.ref);
     }

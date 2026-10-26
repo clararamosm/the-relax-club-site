@@ -22,6 +22,17 @@ export const DIAS_REFAZER = 30;
 export const PRIMEIRO_NUMERO = 100, FUNDADORES_ATE = 199;
 export const primeiro = n => (n || '').trim().split(/\s+/)[0] || '';
 export const dataBR = iso => new Date(iso).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
+/* de onde a pessoa veio (primeira visita): utm, site que mandou e página de entrada */
+const ls = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } };
+(() => {
+  if (ls('trc-origem')) return;
+  const q = new URLSearchParams(location.search);
+  let ref = ''; try { if (document.referrer) { const h = new URL(document.referrer).hostname; if (h !== location.hostname) ref = h; } } catch (e) {}
+  ls('trc-origem', JSON.stringify({ source: q.get('utm_source') || '', medium: q.get('utm_medium') || '', campaign: q.get('utm_campaign') || '', ref,
+    landing: location.pathname + (q.get('mix') ? '?mix=' + q.get('mix') : ''), data: new Date().toISOString() }));
+})();
+const origem = () => { try { return JSON.parse(ls('trc-origem') || '{}'); } catch (e) { return {}; } };
+
 const avisar = m => (window.toast ? window.toast(m) : console.log(m));
 const toast = avisar;
 
@@ -68,7 +79,7 @@ modal.innerHTML = `
 </div>`;
 document.body.appendChild(modal);
 const step = s => { modal.querySelectorAll('.cm-step').forEach(e => e.hidden = e.dataset.step !== s); };
-const abrir = (s = 'inicio') => { step(s); modal.hidden = false; document.body.classList.add('cm-on'); setTimeout(() => modal.querySelector(`[data-step="${s}"] input`)?.focus(), 50); };
+const abrir = (s = 'inicio', motivo) => { if (s === 'inicio') { ls('trc-gatilho', motivo || 'entrar'); ls('trc-pagina', location.pathname); } step(s); modal.hidden = false; document.body.classList.add('cm-on'); setTimeout(() => modal.querySelector(`[data-step="${s}"] input`)?.focus(), 50); };
 const fechar = () => { modal.hidden = true; document.body.classList.remove('cm-on'); aoFechar.forEach(f => f()); };
 const aoFechar = [];
 modal.querySelector('.cm-x').onclick = fechar;
@@ -92,12 +103,14 @@ $('#cm-optin').onchange = () => { try { localStorage.setItem('trc-optin', optin(
 modal.querySelector('.cm-google').onclick = async () => {
   msg('#cm-msg', '');
   try { localStorage.setItem('trc-optin', optin() ? '1' : '0'); } catch (e) {}
+  ls('trc-metodo', 'google');
   try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (e) { msg('#cm-msg', erro(e)); }
 };
 $('#cm-link').onclick = async () => {
   const email = $('#cm-email').value.trim(); msg('#cm-msg', '');
   if (!email.includes('@')) return msg('#cm-msg', 'escreve o seu email primeiro.');
   try {
+    ls('trc-metodo', 'link');
     await sendSignInLinkToEmail(auth, email, { url: location.origin + '/?entrar=link', handleCodeInApp: true });
     localStorage.setItem('trc-login-email', email);
     localStorage.setItem('trc-optin', optin() ? '1' : '0');
@@ -107,10 +120,12 @@ $('#cm-link').onclick = async () => {
 $('#cm-ir-senha').onclick = () => { $('#cm-email2').value = $('#cm-email').value; step('senha'); };
 $('#cm-voltar').onclick = $('#cm-voltar2').onclick = () => step('inicio');
 $('#cm-entrar').onclick = async () => {
+  ls('trc-metodo', 'senha');
   msg('#cm-msg2', '');
   try { await signInWithEmailAndPassword(auth, $('#cm-email2').value.trim(), $('#cm-senha').value); } catch (e) { msg('#cm-msg2', erro(e)); }
 };
 $('#cm-criar').onclick = async () => {
+  ls('trc-metodo', 'senha');
   msg('#cm-msg2', '');
   try { localStorage.setItem('trc-optin', optin() ? '1' : '0'); } catch (e) {}
   try {
@@ -138,13 +153,15 @@ export { abrir, fechar, aoFechar, msg, erro };
 /* ---------- avatar com menu (perfil e sair) ---------- */
 const IC_AV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.2-3.6 4.1-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg>';
 export function fotoDe(u, p) { return (p && p.foto) || (u && u.photoURL) || ''; }
+/* foto do google passa pelo nosso domínio (o google às vezes bloqueia a imagem direta) */
+export const fotoUrl = f => !f ? '' : f.startsWith('data:') ? f : '/api/foto/?u=' + encodeURIComponent(f);
 export function criarAvatar(onde, { abreParaBaixo = false } = {}) {
   const w = document.createElement('div'); w.className = 'av-wrap';
   w.innerHTML = `<button class="av" type="button" aria-label="entrar no clube" aria-haspopup="menu">${IC_AV}</button>
     <div class="av-menu${abreParaBaixo ? ' down' : ''}" role="menu" hidden><small></small><a href="/perfil/" role="menuitem">perfil e carteirinha</a><button type="button" role="menuitem" data-sair>sair</button></div>`;
   onde.appendChild(w);
   const b = w.querySelector('.av'), menu = w.querySelector('.av-menu');
-  b.onclick = e => { e.stopPropagation(); if (!user) return abrir(); menu.hidden = !menu.hidden; };
+  b.onclick = e => { e.stopPropagation(); if (!user) return abrir('inicio', 'avatar'); menu.hidden = !menu.hidden; };
   document.addEventListener('click', e => { if (!w.contains(e.target)) menu.hidden = true; });
   addEventListener('keydown', e => { if (e.key === 'Escape') menu.hidden = true; });
   menu.querySelector('[data-sair]').onclick = () => { menu.hidden = true; sair(); };
@@ -152,7 +169,9 @@ export function criarAvatar(onde, { abreParaBaixo = false } = {}) {
     if (!user) { b.className = 'av'; b.innerHTML = IC_AV; b.setAttribute('aria-label', 'entrar no clube'); return; }
     const f = fotoDe(user, perfil), nome = perfil?.nome || user.displayName || '';
     b.className = 'av in'; b.setAttribute('aria-label', 'abrir menu da conta');
-    b.innerHTML = f ? `<img src="${esc(f)}" alt="" referrerpolicy="no-referrer">` : esc((nome || user.email || '?').trim()[0].toUpperCase());
+    const ini = esc((nome || user.email || '?').trim()[0].toUpperCase());
+    b.innerHTML = f ? `<img src="${esc(fotoUrl(f))}" alt="">` : ini;
+    const im = b.querySelector('img'); if (im) im.onerror = () => { b.textContent = ini; };
     menu.querySelector('small').textContent = perfil?.membro ? `membro nº ${perfil.membro}` : (user.email || '');
   };
   quandoMudar(pinta); pinta();
@@ -177,7 +196,18 @@ async function sincronizarTeste() {
     if (!perfil?.teste || new Date(t.data) > new Date(perfil.teste.data)) { await setDoc(doc(db, 'users', user.uid), { teste: t }, { merge: true }); perfil = { ...(perfil || {}), teste: t }; }
   } catch (e) { console.error('teste', e); }
 }
-addEventListener('trc-teste', async () => { await sincronizarTeste(); avisa(); });
+addEventListener('trc-teste', async () => { await sincronizarTeste(); avisa(); sincronizarBrevo(); });
+
+/* manda o membro pro Brevo (o servidor lê o perfil direto do Firestore). roda no cadastro, quando muda o teste e uma vez pra quem já existia */
+const BREVO_VERSAO = 2;
+export async function sincronizarBrevo(acao = 'sync') {
+  if (!user) return;
+  try {
+    const idToken = await user.getIdToken();
+    const r = await fetch('/api/clube/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, acao }) });
+    if (r.ok && perfil?.brevo !== BREVO_VERSAO) { await setDoc(doc(db, 'users', user.uid), { brevo: BREVO_VERSAO }, { merge: true }); perfil = { ...(perfil || {}), brevo: BREVO_VERSAO }; }
+  } catch (e) { console.error('brevo', e); }
+}
 
 async function darNumero() {
   if (!user || perfil?.membro) return;
@@ -205,16 +235,16 @@ onAuthStateChanged(auth, async u => {
     perfil = snap.exists() ? snap.data() : null;
     const novo = !perfil;
     if (novo) {
-      const upd = { nome: u.displayName || '', email: u.email || '', criado: serverTimestamp(), optin: localStorage.getItem('trc-optin') === '1' };
+      const prov = u.providerData[0]?.providerId || '';
+      const metodo = ls('trc-metodo') || (prov === 'google.com' ? 'google' : 'email');
+      const upd = { nome: u.displayName || '', email: u.email || '', criado: serverTimestamp(), optin: ls('trc-optin') === '1',
+        origem: origem(), cadastro: { metodo, pagina: ls('trc-pagina') || location.pathname, gatilho: ls('trc-gatilho') || '' } };
       await setDoc(ref, upd, { merge: true }); perfil = upd;
     }
     await darNumero();
     await sincronizarTeste();
-    if (novo) {
-      try { window.gtag && gtag('event', 'sign_up', { method: u.providerData[0]?.providerId || 'email' }); } catch (e) {}
-      const idToken = await u.getIdToken();
-      fetch('/api/clube/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, nome: u.displayName || '', optin: perfil.optin }) }).catch(() => {});
-    }
+    if (novo) { try { window.gtag && gtag('event', 'sign_up', { method: perfil.cadastro?.metodo || 'email' }); } catch (e) {} }
+    if (novo || perfil.brevo !== BREVO_VERSAO) await sincronizarBrevo();
   } catch (e) { console.error('perfil', e); }
   avisa();
 });
