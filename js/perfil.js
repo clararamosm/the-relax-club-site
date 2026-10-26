@@ -10,6 +10,7 @@ const PETALAS = [[60,36,0],[78.8,45,51.43],[83.4,65.3,102.86],[70.4,81.6,154.29]
 const app = $('#app');
 const mesAno = iso => iso ? new Date(iso).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) : '';
 const dataCurta = iso => new Date(iso).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }).replace('.', '');
+const fotoCart = f => !f ? '' : f.startsWith('data:') ? f : '/api/foto/?u=' + encodeURIComponent(f);
 const linkMix = sons => location.origin + '/?mix=' + Object.entries(sons).map(([k, v]) => `${k}-${v}`).join(',');
 let mixes = [], testes = [], instalar = null;
 
@@ -23,9 +24,9 @@ function carteirinha(u, p) {
   const amb = p?.teste?.principal;
   const flor = `<svg class="flor" viewBox="0 0 120 120" aria-hidden="true">${PETALAS.map(([x, y, r], i) => `<ellipse cx="${x}" cy="${y}" rx="9.5" ry="27" transform="rotate(${r} ${x} ${y})" fill="${ORDEM[i] === amb ? 'rgba(241,235,220,.3)' : 'none'}" stroke="${ORDEM[i] === amb ? '#F1EBDC' : 'rgba(241,235,220,.6)'}" stroke-width="1"/>`).join('')}</svg>`;
   const linhas = `<svg class="lines" viewBox="0 0 440 278" preserveAspectRatio="none" aria-hidden="true">${[40, 80, 120, 160, 200, 240].map((y, i) => `<path d="M0 ${y} C 110 ${y - 14 + i * 2}, 220 ${y + 16}, 330 ${y - 6} S 440 ${y + 8}, 440 ${y}" fill="none" stroke="#F1EBDC" stroke-width="1"/>`).join('')}</svg>`;
-  return `<div class="cart">${linhas}
+  return `<div class="cart">${linhas}<span class="brilho" aria-hidden="true"></span>
     <div class="cart-top"><img src="/logo-claro.svg" alt="the relax club"><small>carteirinha<br>de membro</small></div>
-    <div class="cart-mid"><div class="cart-foto">${f ? `<img src="${esc(f)}" alt="" crossorigin="anonymous" referrerpolicy="no-referrer">` : esc((nome || '?')[0].toUpperCase())}</div>
+    <div class="cart-mid"><div class="cart-foto">${f ? `<img src="${esc(fotoCart(f))}" alt="" onerror="this.replaceWith(document.createTextNode('${esc((nome || '?')[0])}'))">` : esc((nome || '?')[0].toUpperCase())}</div>
       <div><div class="cart-nome">${esc(nome)}</div>${n && n <= FUNDADORES_ATE ? '<span class="cart-fund">membro fundador</span>' : ''}</div></div>
     ${flor}
     <div class="cart-bot"><div>membro nº<b>${n ? n : '...'}</b></div><div style="text-align:right">${amb ? `descanso que mais pede atenção<b>${esc(AMB[amb])}</b>` : `membro desde<b>${esc(mesAno(p?.membroDesde) || mesAno(new Date().toISOString()))}</b>`}</div></div>
@@ -54,8 +55,8 @@ function desenhar(u, p) {
   <p class="lead">essa é a sua ficha no clube.</p>
 
   <div class="cart-wrap">
-    ${carteirinha(u, p)}
-    <div class="cart-acoes"><button class="btn dark" id="baixar" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5"/><path d="M5 19h14"/></svg>baixar pra postar</button></div>
+    <div class="palco">${carteirinha(u, p)}</div>
+    <div class="cart-acoes" style="margin-top:6px"><button class="btn dark" id="baixar" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5"/><path d="M5 19h14"/></svg>baixar pra postar</button></div>
     <p class="cart-dica">${p?.teste ? 'a pétala acesa é o tipo de descanso que mais pediu atenção no seu último teste.' : 'faça o teste e a sua carteirinha ganha o tipo de descanso que mais pede atenção em você.'}</p>
   </div>
 
@@ -84,7 +85,8 @@ function desenhar(u, p) {
   </section>
 
   <section class="sec"><h2>emails do clube</h2>
-    <label class="switch"><input type="checkbox" id="f-optin" ${p?.optin ? 'checked' : ''}> <span>quero receber os emails da the relax club</span></label>
+    <p class="sub">novidades do clube, lembrete de refazer o teste e conteúdos sobre o seu tipo de descanso. a the relax news é assinada à parte, no <a href="https://therelaxclub.substack.com" target="_blank" rel="noopener">substack</a>.</p>
+    <label class="switch"><input type="checkbox" id="f-optin" ${p?.optin ? 'checked' : ''}> <span>quero receber os emails do clube</span></label>
     <p class="ok" id="m-optin"></p>
   </section>
 
@@ -102,6 +104,30 @@ function desenhar(u, p) {
     <p class="ok" id="m-conta"></p>
   </section>`;
   ligar(u, p);
+  cartao3d();
+}
+
+/* carteirinha 3d: inclina seguindo o mouse; no celular, vai virando conforme a rolagem */
+let rolagem3d = null;
+function cartao3d() {
+  const c = document.querySelector('.palco .cart'); if (!c) return;
+  const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches; if (reduz) return;
+  const aplica = (rx, ry) => {
+    c.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+    c.style.setProperty('--bx', `${50 + ry * 2.4}%`); c.style.setProperty('--by', `${50 - rx * 2.4}%`);
+  };
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const palco = c.parentElement;
+    palco.onmousemove = e => { const r = c.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.classList.add('vivo'); aplica(-y * 16, x * 20); };
+    palco.onmouseleave = () => { c.classList.remove('vivo'); aplica(0, 0); };
+  } else {
+    if (rolagem3d) removeEventListener('scroll', rolagem3d);
+    let pedido = false;
+    rolagem3d = () => { if (pedido) return; pedido = true; requestAnimationFrame(() => { pedido = false;
+      const r = c.getBoundingClientRect(), meio = (r.top + r.height / 2) / innerHeight - .5; // -0.5 (topo) a 0.5 (embaixo)
+      aplica(Math.max(-1, Math.min(1, meio * 2)) * 14, Math.max(-1, Math.min(1, meio * 2)) * -22); }); };
+    addEventListener('scroll', rolagem3d, { passive: true }); rolagem3d();
+  }
 }
 
 function ligar(u, p) {
@@ -177,6 +203,7 @@ async function baixar(u, p) {
     if (!window.html2canvas) await new Promise((ok, falha) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload = ok; s.onerror = falha; document.head.appendChild(s); });
     await document.fonts.ready;
     const el = document.querySelector('.cart-wrap .cart');
+    const tr = el.style.transform; el.style.transform = 'none'; el.classList.add('parado');
     const k = 880 / el.offsetWidth;
     const card = await window.html2canvas(el, { scale: k, useCORS: true, backgroundColor: null, ignoreElements: n => n.classList && n.classList.contains('flor') });
     // a flor é desenhada à mão (o html2canvas não lida bem com ela)
@@ -198,6 +225,7 @@ async function baixar(u, p) {
     g.save(); g.shadowColor = 'rgba(41,55,41,.25)'; g.shadowBlur = 60; g.shadowOffsetY = 24;
     g.drawImage(card, 100, cy, 880, ch); g.restore();
     g.fillStyle = '#3C4D3E'; g.font = `400 40px ${getComputedStyle(document.body).fontFamily}`; g.fillText('therelax.club', W / 2, cy + ch + 150);
+    el.style.transform = tr; el.classList.remove('parado');
     const a = document.createElement('a'); a.download = `carteirinha-the-relax-club${p?.membro ? '-' + p.membro : ''}.png`; a.href = c.toDataURL('image/png'); a.click();
   } catch (e) { console.error(e); toast('não consegui gerar a imagem agora. tira um print da carteirinha?'); }
   b.disabled = false; b.innerHTML = txt;
