@@ -199,7 +199,7 @@ async function sincronizarTeste() {
 addEventListener('trc-teste', async () => { await sincronizarTeste(); avisa(); sincronizarBrevo(); });
 
 /* manda o membro pro Brevo (o servidor lê o perfil direto do Firestore). roda no cadastro, quando muda o teste e uma vez pra quem já existia */
-const BREVO_VERSAO = 2;
+const BREVO_VERSAO = 3;
 export async function sincronizarBrevo(acao = 'sync') {
   if (!user) return;
   try {

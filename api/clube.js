@@ -13,6 +13,17 @@
 const FIREBASE_API_KEY = 'AIzaSyDwhk7BcD59scuOpUYbGBEmoWepLA-rR7E'; // chave pública do app web
 const PROJETO = 'the-relax-club';
 const FUNDADORES_ATE = 199;
+const TEMPLATE_BOAS_VINDAS = 11; // "clube · boas-vindas" no Brevo, vai pra todo membro novo
+const LISTA_SEM_OPTIN = 'clube sem opt-in'; // membros que não aceitaram os emails: ficam aqui, fora das cadências
+
+// acha (ou cria) a lista dos membros sem opt-in, na mesma pasta da lista principal
+async function listaSemOptin(listId) {
+  const r = await brevo('/contacts/lists?limit=50', 'GET');
+  try { const l = (JSON.parse(r.text).lists || []).find(x => x.name === LISTA_SEM_OPTIN); if (l) return l.id; } catch (e) {}
+  let folderId = 1;
+  try { folderId = JSON.parse((await brevo(`/contacts/lists/${listId}`, 'GET')).text).folderId || 1; } catch (e) {}
+  try { return JSON.parse((await brevo('/contacts/lists', 'POST', { name: LISTA_SEM_OPTIN, folderId })).text).id; } catch (e) { return null; }
+}
 
 const ATRIBUTOS = [
   ['ORIGEM', 'text'], ['NOME', 'text'],
@@ -70,6 +81,8 @@ export default async function handler(req, res) {
 
   if (acao === 'excluir') {
     await brevo(`/contacts/lists/${listId}/contacts/remove`, 'POST', { emails: [email] });
+    const semId = await listaSemOptin(listId);
+    if (semId) await brevo(`/contacts/lists/${semId}/contacts/remove`, 'POST', { emails: [email] });
     await brevo(`/contacts/${encodeURIComponent(email)}`, 'PUT', { attributes: { CLUBE_OPTIN: false } });
     return res.status(200).json({ ok: true });
   }
@@ -112,10 +125,26 @@ export default async function handler(req, res) {
   };
   Object.keys(attributes).forEach(k => attributes[k] === undefined && delete attributes[k]);
 
-  const payload = { email, attributes, updateEnabled: true };
-  if (optin) payload.listIds = [listId];
+  // quem aceitou vai pra lista principal (cadências); quem não aceitou fica na lista "clube sem opt-in"
+  const semId = await listaSemOptin(listId);
+  const payload = { email, attributes, updateEnabled: true, listIds: optin ? [listId] : (semId ? [semId] : []) };
+  if (!payload.listIds.length) delete payload.listIds;
   const r = await brevo('/contacts', 'POST', payload);
   if (!r.ok) { console.error('brevo clube', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
-  if (acao === 'sair') await brevo(`/contacts/lists/${listId}/contacts/remove`, 'POST', { emails: [email] });
-  return res.status(200).json({ ok: true, lista: optin });
+  const tirarDe = optin ? semId : (acao === 'sair' ? listId : null);
+  if (tirarDe) await brevo(`/contacts/lists/${tirarDe}/contacts/remove`, 'POST', { emails: [email] });
+
+  // boas-vindas: uma vez só, pra todo membro (com ou sem opt-in)
+  let boasVindas = !!p.boasVindas;
+  if (!boasVindas && p.membro) {
+    const env = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_BOAS_VINDAS, to: [{ email, name: String(nome).trim() || undefined }] });
+    if (env.ok) {
+      boasVindas = true;
+      await fetch(`https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents/users/${u.localId}?updateMask.fieldPaths=boasVindas`, {
+        method: 'PATCH', headers: { authorization: `Bearer ${idToken}`, 'content-type': 'application/json' },
+        body: JSON.stringify({ fields: { boasVindas: { timestampValue: new Date().toISOString() } } })
+      }).catch(() => null);
+    } else console.error('boas-vindas', env.status, env.text);
+  }
+  return res.status(200).json({ ok: true, lista: optin ? 'principal' : 'sem opt-in', boasVindas });
 }
