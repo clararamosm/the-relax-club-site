@@ -3,7 +3,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink,
   signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, deleteDoc, query, orderBy, serverTimestamp, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const app = initializeApp({
   apiKey: 'AIzaSyDwhk7BcD59scuOpUYbGBEmoWepLA-rR7E',
@@ -222,3 +222,38 @@ onAuthStateChanged(auth, async u => {
   else if (!modal.hidden) { fechar(); toast(`que bom te ver${primeiro(u.displayName) ? ', ' + primeiro(u.displayName) : ''}`); }
   render();
 });
+
+
+/* ---------- compartilhar mix + contador de quantas vezes aquela combinação foi compartilhada ---------- */
+const shareBtn = $('#share');
+const MOSTRAR_A_PARTIR = 3; // abaixo disso o número não aparece, pra não ficar "1" solitário
+const chaveMix = () => SONS.filter(s => st[s.id].on).map(s => s.id).sort().join('+');
+let tCont;
+async function contagem() {
+  const k = chaveMix(), b = shareBtn.querySelector('b');
+  if (!k) { b.textContent = ''; shareBtn.title = ''; return; }
+  try {
+    const d = await getDoc(doc(db, 'compartilhados', k));
+    const n = d.exists() ? d.data().n : 0;
+    if (chaveMix() !== k) return;
+    b.textContent = n >= MOSTRAR_A_PARTIR ? String(n) : '';
+    shareBtn.title = n ? `essa combinação já foi compartilhada ${n} ${n > 1 ? 'vezes' : 'vez'}` : '';
+  } catch (e) {}
+}
+const _onChange = window.onChange;
+window.onChange = function () { _onChange && _onChange(); clearTimeout(tCont); tCont = setTimeout(contagem, 500); };
+shareBtn.onclick = async () => {
+  const k = chaveMix();
+  if (!k) { toast('liga pelo menos um som pra compartilhar'); return; }
+  const url = linkDoMix();
+  let ok = false;
+  if (navigator.share && matchMedia('(pointer:coarse)').matches) {
+    try { await navigator.share({ title: 'um mix da the relax club', text: 'liga esse som e para um pouquinho', url }); ok = true; }
+    catch (e) { if (e.name === 'AbortError') return; }
+  }
+  if (!ok) { try { await navigator.clipboard.writeText(url); ok = true; toast('link copiado. é só mandar pra alguém'); } catch (e) {} }
+  if (!ok) { window.prompt('copia o link do seu mix:', url); ok = true; }
+  try { await setDoc(doc(db, 'compartilhados', k), { n: increment(1) }, { merge: true }); } catch (e) {}
+  contagem();
+};
+contagem();

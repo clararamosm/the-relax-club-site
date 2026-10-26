@@ -125,8 +125,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .vol input::-moz-range-track{background:var(--cream-2)}
 .vol input::-moz-range-thumb{background:var(--green-deep)}
 .chip{flex:none;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:9px 13px;font-size:13.5px;color:var(--green)}
+.chip.share{display:inline-flex;align-items:center;gap:6px}.chip.share svg{width:15px;height:15px}.chip.share b{font-weight:500;font-size:12px;opacity:.75}.chip.share b:empty{display:none}
+@media(max-width:640px){.chip.share span{display:none}.chip.share{padding:9px 11px}}
 .chip.on{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
-.save{display:none}
+.save{display:inline-flex;align-items:center;gap:6px}.save svg{width:15px;height:15px}
+@media(max-width:640px){.save span{display:none}.save{padding:9px 11px}.vol>span{display:none}}
 .toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(10px);background:var(--green-deep);color:var(--paper);font-size:14px;padding:10px 16px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:6;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -135,7 +138,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 
 @media (min-width:720px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .save{display:inline-block}
 }
 @media (min-width:900px){
   header{padding-top:32px}
@@ -202,6 +204,7 @@ header,main,.fim{position:relative;z-index:1}
   .layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:40px;align-items:start}
   .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .side{margin-top:0;position:sticky;top:24px}
+  .mixer>.mh:first-child{margin-top:0}
   .waves{margin:14px calc(50% - 50vw) 0;height:230px}
   .mixes{margin-top:0}
   .hero-t h1{font-size:clamp(54px,5vw,74px)}
@@ -308,7 +311,8 @@ body.cm-on{overflow:hidden}
   <div class="vol"><span>volume</span><input type="range" id="master" min="0" max="100" value="80" aria-label="volume geral"></div>
   <button class="chip" id="zerar">zerar</button>
   <button class="chip" id="timer">timer</button>
-  <button class="chip save" id="save">salvar mix</button>
+  <button class="chip save" id="save" aria-label="salvar mix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12v17l-6-4.2-6 4.2z"/></svg><span>salvar mix</span></button>
+  <button class="chip share" id="share" aria-label="compartilhar mix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span>compartilhar</span><b></b></button>
 </div></div>
 <div class="toast" id="toast"></div>
 <script>
@@ -666,10 +670,19 @@ function save(){ try{ localStorage.setItem('trc-mix',JSON.stringify(SONS.filter(
 function onChange(){ save(); $('#waves').classList.toggle('on',SONS.some(s=>st[s.id].on)); }
 $('#save').onclick=()=>toast('em breve: crie sua conta pra salvar e dar nome aos seus mixes');
 let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); }
+/* links de mix: /?mix=dormir abre um mix pronto; /?mix=chuva-65,trovao-30 abre qualquer combinação */
+const slug=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function mixDaUrl(){ const p=new URLSearchParams(location.search).get('mix'); if(!p) return null;
+  const i=MIXES.findIndex(m=>slug(m.nome)===p); if(i>=0) return {i, s:Object.entries(MIXES[i].s)};
+  const s=p.split(',').map(x=>x.split('-')).filter(([id])=>st[id]).map(([id,v])=>[id,Math.max(5,Math.min(100,+v||50))]);
+  return s.length?{s}:null; }
+function linkDoMix(){ const on=SONS.filter(s=>st[s.id].on); const b=document.querySelector('.mix.on');
+  if(b){ const m=MIXES[+b.dataset.m]; if(on.every(s=>m.s[s.id]===st[s.id].vol) && on.length===Object.keys(m.s).length) return location.origin+'/?mix='+slug(m.nome); }
+  return location.origin+'/?mix='+on.map(s=>s.id+'-'+st[s.id].vol).join(','); }
 // volta com o último mix marcado (só toca quando a pessoa tocar na página, regra do navegador)
-try{ const saved=JSON.parse(localStorage.getItem('trc-mix')||'[]'); if(saved.length){ playing=false; document.body.classList.add('paused'); $('#play').innerHTML=IC_PLAY;
+try{ const daUrl=mixDaUrl(); const saved=daUrl?daUrl.s:JSON.parse(localStorage.getItem('trc-mix')||'[]'); if(saved.length){ if(daUrl){ SONS.forEach(s=>st[s.id].on=false); if(daUrl.i!=null) document.querySelector(`.mix[data-m="${daUrl.i}"]`).classList.add('on'); history.replaceState(null,'','/'); } playing=false; document.body.classList.add('paused'); $('#play').innerHTML=IC_PLAY;
   saved.forEach(([id,v])=>{ if(st[id]){ st[id].on=true; st[id].vol=v; const el=document.querySelector(`[data-id="${id}"]`); el.classList.add('on'); el.querySelector('input').value=v; } });
-  $('#waves').classList.add('on'); toast('o seu último mix tá aqui. aperta o play'); } }catch(e){}
+  $('#waves').classList.add('on'); if(daUrl) save(); toast(daUrl?'te mandaram esse mix. aperta o play':'o seu último mix tá aqui. aperta o play'); } }catch(e){}
 
 /* ---------- ondas: uma linha por som ligado, mexendo com o próprio áudio ---------- */
 (()=>{
