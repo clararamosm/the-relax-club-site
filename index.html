@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Organization", "name": "The Relax Club", "url": "https://therelax.club/", "logo": "https://therelax.club/email/logo.png", "email": "clara@therelax.club", "founder": {"@type": "Person", "name": "Clara Ramos"}, "sameAs": ["https://www.instagram.com/therelax.club/", "https://www.pinterest.com/therelaxclubbr/", "https://therelaxclub.substack.com"]}, {"@context": "https://schema.org", "@type": "WebSite", "name": "The Relax Club", "url": "https://therelax.club/", "inLanguage": "pt-BR", "description": "um lugar pra parar de propósito: sons pra descansar, teste dos 7 tipos de descanso e newsletter sobre descanso, presença e bem-estar."}, {"@context": "https://schema.org", "@type": "WebApplication", "name": "sons pra descansar da The Relax Club", "url": "https://therelax.club/", "applicationCategory": "LifestyleApplication", "operatingSystem": "qualquer navegador", "inLanguage": "pt-BR", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "description": "mixer gratuito de sons ambiente pra relaxar, meditar, focar e dormir: chuva no telhado, praia, córrego, cachoeira, vento, passarinhos, cigarra, grilo, ventilador de teto, fogão a lenha, gato ronronando, tigela tibetana, sino e outros.", "featureList": ["chuva no telhado", "trovoada de verão", "praia em dia de semana", "córrego", "cachoeirinha", "vento na serra", "passarinhos da manhã", "cigarra das cinco", "grilo de madrugada", "batuque leve", "sapos no brejo", "ventilador de teto", "fogão a lenha", "gato no colo", "vitrola chiando", "café da esquina", "sininhos de vento", "sino da matriz", "tigela", "tigela cantando", "gongo suave", "mixes prontos", "timer", "volume por som"]}]</script>
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Organization", "name": "The Relax Club", "url": "https://therelax.club/", "logo": "https://therelax.club/email/logo.png", "email": "clara@therelax.club", "founder": {"@type": "Person", "name": "Clara Ramos"}, "sameAs": ["https://www.instagram.com/therelax.club/", "https://www.pinterest.com/therelaxclubbr/", "https://therelaxclub.substack.com"]}, {"@context": "https://schema.org", "@type": "WebSite", "name": "The Relax Club", "url": "https://therelax.club/", "inLanguage": "pt-BR", "description": "um lugar pra parar de propósito: sons pra descansar, teste dos 7 tipos de descanso e newsletter sobre descanso, presença e bem-estar."}, {"@context": "https://schema.org", "@type": "WebApplication", "name": "sons pra descansar da The Relax Club", "url": "https://therelax.club/", "applicationCategory": "LifestyleApplication", "operatingSystem": "qualquer navegador", "inLanguage": "pt-BR", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "description": "mixer gratuito de sons pra relaxar, meditar, focar e dormir: chuva, praia, córrego, cachoeira, vento, passarinhos, cigarra, grilos, lareira, gato ronronando, tigela tibetana, sino, gongo, batuque, kalimba, flauta e pau de chuva.", "featureList": ["chuva", "trovoada", "praia", "córrego", "cachoeira", "vento", "passarinhos", "cigarra", "grilos", "batuque", "pau de chuva", "kalimba", "flauta", "sapos", "ventilador", "lareira", "gato ronronando", "vitrola", "cafeteria", "sininhos", "sino", "tigela", "tigela cantando", "gongo", "mixes prontos", "timer", "volume por som"]}]</script>
 <style>
 :root{
   --paper:#F1EBDC; --cream:#F7F3EA; --cream-2:#DED3BB;
@@ -53,6 +53,9 @@ h1 em{font-style:italic}
 .mixes::-webkit-scrollbar{display:none}
 .mixes small{flex:none;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-right:6px}
 .mix{flex:none;white-space:nowrap}
+.mh{font-family:var(--serif);font-weight:300;font-size:26px;line-height:1;color:var(--green-deep);text-align:center;margin:26px 0 12px}
+.mixes{justify-content:center;margin-top:0!important}
+#fams{margin-top:0}
 .mix{border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:8px 14px;font-size:14px;color:var(--green)}
 .mix:hover{background:#fff}
 .mix.on{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
@@ -217,30 +220,35 @@ header,main,.fim{position:relative;z-index:1}
   <div class="waves" id="waves"><canvas></canvas><div class="hint">liga um som pra começar</div></div>
   <div class="layout">
     <section class="mixer" aria-label="sons pra descansar">
-      <div class="mixes" id="mixes"><small>mixes prontos</small></div>
-      <h2 class="sr">sons pra descansar</h2>
+      <h2 class="mh">mixes prontos</h2>
+      <div class="mixes" id="mixes"></div>
+      <h2 class="mh">ou monte o seu</h2>
+      
       <div id="fams"><div class="grid" id="grid">
-    <div class="snd" data-id="chuva"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 18l12-8 12 8"/><g class="a-drops"><path d="M13 24l-2 4M20 23l-2 4M27 24l-2 4M16 30l-2 4M24 30l-2 4"/></g></svg><span class="tx"><span class="nm">chuva no telhado</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de chuva no telhado"></div>
-    <div class="snd" data-id="trovao"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path class="a-bolt" d="M23 5l-9 16h7l-4 14 11-18h-7l4-12z"/></svg><span class="tx"><span class="nm">trovoada de verão</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de trovoada de verão"></div>
-    <div class="snd" data-id="praia"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-waves"><path d="M2 17c4-3 8-3 12 0s8 3 12 0 8-3 12 0"/><path d="M2 25c4-3 8-3 12 0s8 3 12 0 8-3 12 0"/></g></svg><span class="tx"><span class="nm">praia em dia de semana</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de praia em dia de semana"></div>
+    <div class="snd" data-id="chuva"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 18l12-8 12 8"/><g class="a-drops"><path d="M13 24l-2 4M20 23l-2 4M27 24l-2 4M16 30l-2 4M24 30l-2 4"/></g></svg><span class="tx"><span class="nm">chuva</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de chuva"></div>
+    <div class="snd" data-id="trovao"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path class="a-bolt" d="M23 5l-9 16h7l-4 14 11-18h-7l4-12z"/></svg><span class="tx"><span class="nm">trovoada</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de trovoada"></div>
+    <div class="snd" data-id="praia"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-waves"><path d="M2 17c4-3 8-3 12 0s8 3 12 0 8-3 12 0"/><path d="M2 25c4-3 8-3 12 0s8 3 12 0 8-3 12 0"/></g></svg><span class="tx"><span class="nm">praia</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de praia"></div>
     <div class="snd" data-id="corrego"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-flow"><path d="M4 14c8 0 10 5 18 5s10-4 14-4"/><path d="M4 24c8 0 10 5 18 5s10-4 14-4"/></g><circle cx="13" cy="19" r="2.2"/></svg><span class="tx"><span class="nm">córrego</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de córrego"></div>
-    <div class="snd" data-id="cachoeira"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 10h24"/><g class="a-flow"><path d="M13 10v20M20 10v22M27 10v20"/></g><path d="M8 34c4-2 8-2 12 0s8 2 12 0"/></svg><span class="tx"><span class="nm">cachoeirinha</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de cachoeirinha"></div>
-    <div class="snd" data-id="vento"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-leaf" style="transform-origin:20px 20px"><path d="M4 15h20a4 4 0 1 0-4-4"/><path d="M4 23h26a4 4 0 1 1-4 4"/></g></svg><span class="tx"><span class="nm">vento na serra</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de vento na serra"></div>
-    <div class="snd" data-id="bemtevi"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-bob" style="transform-origin:20px 22px"><path d="M6 20c4-5 8-5 14 0 6-5 10-5 14 0"/></g></svg><span class="tx"><span class="nm">passarinhos da manhã</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de passarinhos da manhã"></div>
-    <div class="snd" data-id="cigarra"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 28h28"/><g class="a-ring" style="transform-origin:20px 28px"><path d="M11 28a9 9 0 0 1 18 0"/></g><path d="M20 12v-4M10 16l-3-3M30 16l3-3"/></svg><span class="tx"><span class="nm">cigarra das cinco</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de cigarra das cinco"></div>
-    <div class="snd" data-id="grilo"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-stars"><path d="M26 8a11 11 0 1 0 6 18 9 9 0 1 1-6-18z"/></g></svg><span class="tx"><span class="nm">grilo de madrugada</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de grilo de madrugada"></div>
-    <div class="snd" data-id="batuque"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="11" rx="11" ry="4"/><path d="M9 11v14c0 3 5 6 11 6s11-3 11-6V11"/><g class="a-bob" style="transform-origin:20px 11px"><path d="M14 18l3 9M26 18l-3 9"/></g></svg><span class="tx"><span class="nm">batuque leve</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de batuque leve"></div>
-    <div class="snd" data-id="sapos"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30c4-10 24-10 28 0z"/><circle cx="14" cy="20" r="3"/><circle cx="26" cy="20" r="3"/><g class="a-ring" style="transform-origin:20px 30px"><path d="M15 27c3 2 7 2 10 0"/></g></svg><span class="tx"><span class="nm">sapos no brejo</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de sapos no brejo"></div>
-    <div class="snd" data-id="ventilador"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-spin" style="transform-origin:20px 20px"><circle cx="20" cy="20" r="2.4"/><path d="M22 18c4-4 9-6 13-6M18 22c-4 4-9 6-13 6M22 22c4 4 6 9 6 13M18 18c-4-4-6-9-6-13"/></g></svg><span class="tx"><span class="nm">ventilador de teto</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de ventilador de teto"></div>
-    <div class="snd" data-id="fogao"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-flame" style="transform-origin:20px 34px"><path d="M20 34c-7 0-9-6-6-11 1 2 3 3 4 3-1-5 2-10 6-13-1 5 2 8 4 11 2 4 0 10-8 10z"/></g></svg><span class="tx"><span class="nm">fogão a lenha</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de fogão a lenha"></div>
-    <div class="snd" data-id="gato"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M10 32V16l5 5h10l5-5v16z"/><path d="M16 26h.01M24 26h.01"/><g class="a-ring" style="transform-origin:20px 32px"><path d="M14 36c4 2 8 2 12 0"/></g></svg><span class="tx"><span class="nm">gato no colo</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de gato no colo"></div>
-    <div class="snd" data-id="vitrola"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-spin" style="transform-origin:18px 22px"><circle cx="18" cy="22" r="12"/><circle cx="18" cy="22" r="3"/><path d="M18 13a9 9 0 0 1 9 9"/></g><path d="M34 6v14l-6 6"/></svg><span class="tx"><span class="nm">vitrola chiando</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de vitrola chiando"></div>
-    <div class="snd" data-id="cafe"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M9 18h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M27 21h3a3 3 0 0 1 0 6h-3"/><g class="a-static"><path d="M15 13c-2-2 2-3 0-6M21 13c-2-2 2-3 0-6"/></g></svg><span class="tx"><span class="nm">café da esquina</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de café da esquina"></div>
-    <div class="snd" data-id="sininhos"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 7h24"/><g class="a-swing" style="transform-origin:20px 7px"><path d="M12 7v14M18 7v20M24 7v16M30 7v11"/><path d="M10.5 21h3M16.5 27h3M22.5 23h3M28.5 18h3"/></g></svg><span class="tx"><span class="nm">sininhos de vento</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de sininhos de vento"></div>
-    <div class="snd" data-id="sino"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-bell" style="transform-origin:20px 8px"><path d="M12 28c0-12 3-18 8-18s8 6 8 18z"/><path d="M10 28h20"/><path d="M18 32h4"/></g><path d="M20 10V6"/></svg><span class="tx"><span class="nm">sino da matriz</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de sino da matriz"></div>
+    <div class="snd" data-id="cachoeira"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 10h24"/><g class="a-flow"><path d="M13 10v20M20 10v22M27 10v20"/></g><path d="M8 34c4-2 8-2 12 0s8 2 12 0"/></svg><span class="tx"><span class="nm">cachoeira</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de cachoeira"></div>
+    <div class="snd" data-id="vento"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-leaf" style="transform-origin:20px 20px"><path d="M4 15h20a4 4 0 1 0-4-4"/><path d="M4 23h26a4 4 0 1 1-4 4"/></g></svg><span class="tx"><span class="nm">vento</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de vento"></div>
+    <div class="snd" data-id="bemtevi"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-bob" style="transform-origin:20px 22px"><path d="M6 20c4-5 8-5 14 0 6-5 10-5 14 0"/></g></svg><span class="tx"><span class="nm">passarinhos</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de passarinhos"></div>
+    <div class="snd" data-id="cigarra"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 28h28"/><g class="a-ring" style="transform-origin:20px 28px"><path d="M11 28a9 9 0 0 1 18 0"/></g><path d="M20 12v-4M10 16l-3-3M30 16l3-3"/></svg><span class="tx"><span class="nm">cigarra</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de cigarra"></div>
+    <div class="snd" data-id="grilo"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-stars"><path d="M26 8a11 11 0 1 0 6 18 9 9 0 1 1-6-18z"/></g></svg><span class="tx"><span class="nm">grilos</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de grilos"></div>
+    <div class="snd" data-id="sapos"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30c4-10 24-10 28 0z"/><circle cx="14" cy="20" r="3"/><circle cx="26" cy="20" r="3"/><g class="a-ring" style="transform-origin:20px 30px"><path d="M15 27c3 2 7 2 10 0"/></g></svg><span class="tx"><span class="nm">sapos</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de sapos"></div>
+    <div class="snd" data-id="ventilador"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-spin" style="transform-origin:20px 20px"><circle cx="20" cy="20" r="2.4"/><path d="M22 18c4-4 9-6 13-6M18 22c-4 4-9 6-13 6M22 22c4 4 6 9 6 13M18 18c-4-4-6-9-6-13"/></g></svg><span class="tx"><span class="nm">ventilador</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de ventilador"></div>
+    <div class="snd" data-id="fogao"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-flame" style="transform-origin:20px 34px"><path d="M20 34c-7 0-9-6-6-11 1 2 3 3 4 3-1-5 2-10 6-13-1 5 2 8 4 11 2 4 0 10-8 10z"/></g></svg><span class="tx"><span class="nm">lareira</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de lareira"></div>
+    <div class="snd" data-id="gato"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M10 32V16l5 5h10l5-5v16z"/><path d="M16 26h.01M24 26h.01"/><g class="a-ring" style="transform-origin:20px 32px"><path d="M14 36c4 2 8 2 12 0"/></g></svg><span class="tx"><span class="nm">gato ronronando</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de gato ronronando"></div>
+    <div class="snd" data-id="vitrola"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-spin" style="transform-origin:18px 22px"><circle cx="18" cy="22" r="12"/><circle cx="18" cy="22" r="3"/><path d="M18 13a9 9 0 0 1 9 9"/></g><path d="M34 6v14l-6 6"/></svg><span class="tx"><span class="nm">vitrola</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de vitrola"></div>
+    <div class="snd" data-id="cafe"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M9 18h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M27 21h3a3 3 0 0 1 0 6h-3"/><g class="a-static"><path d="M15 13c-2-2 2-3 0-6M21 13c-2-2 2-3 0-6"/></g></svg><span class="tx"><span class="nm">cafeteria</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de cafeteria"></div>
+    <div class="snd" data-id="sininhos"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 7h24"/><g class="a-swing" style="transform-origin:20px 7px"><path d="M12 7v14M18 7v20M24 7v16M30 7v11"/><path d="M10.5 21h3M16.5 27h3M22.5 23h3M28.5 18h3"/></g></svg><span class="tx"><span class="nm">sininhos</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de sininhos"></div>
+    <div class="snd" data-id="sino"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><g class="a-bell" style="transform-origin:20px 8px"><path d="M12 28c0-12 3-18 8-18s8 6 8 18z"/><path d="M10 28h20"/><path d="M18 32h4"/></g><path d="M20 10V6"/></svg><span class="tx"><span class="nm">sino</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de sino"></div>
     <div class="snd" data-id="tigela"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 22h26c0 7-6 12-13 12S7 29 7 22z"/><g class="a-ring" style="transform-origin:20px 16px"><path d="M13 14c4-3 10-3 14 0"/></g></svg><span class="tx"><span class="nm">tigela</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de tigela"></div>
     <div class="snd" data-id="cantando"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 22h26c0 7-6 12-13 12S7 29 7 22z"/><path d="M30 20l6-10"/><g class="a-ring" style="transform-origin:20px 16px"><path d="M10 16c6-4 14-4 20 0"/><path d="M14 11c4-2 8-2 12 0"/></g></svg><span class="tx"><span class="nm">tigela cantando</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de tigela cantando"></div>
-    <div class="snd" data-id="gongo"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 6h28M10 6v28M30 6v28"/><g class="a-bell" style="transform-origin:20px 6px"><path d="M20 6v5"/><circle cx="20" cy="20" r="8"/><circle cx="20" cy="20" r="3"/></g></svg><span class="tx"><span class="nm">gongo suave</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de gongo suave"></div>
+    <div class="snd" data-id="gongo"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 6h28M10 6v28M30 6v28"/><g class="a-bell" style="transform-origin:20px 6px"><path d="M20 6v5"/><circle cx="20" cy="20" r="8"/><circle cx="20" cy="20" r="3"/></g></svg><span class="tx"><span class="nm">gongo</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de gongo"></div>
+    <div class="snd" data-id="batuque"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="11" rx="11" ry="4"/><path d="M9 11v14c0 3 5 6 11 6s11-3 11-6V11"/><g class="a-bob" style="transform-origin:20px 11px"><path d="M14 18l3 9M26 18l-3 9"/></g></svg><span class="tx"><span class="nm">batuque</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de batuque"></div>
+    <div class="snd" data-id="paudechuva"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 32L32 8"/><g class="a-drops"><path d="M14 22l-2 2M19 17l-2 2M24 12l-2 2M17 26l-1 1M22 21l-1 1M27 16l-1 1"/></g></svg><span class="tx"><span class="nm">pau de chuva</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de pau de chuva"></div>
+    <div class="snd" data-id="kalimba"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="12" width="26" height="22" rx="5"/><g class="a-bob" style="transform-origin:20px 12px"><path d="M14 6v12M18 6v14M22 6v14M26 6v12"/></g><circle cx="20" cy="27" r="2.5"/></svg><span class="tx"><span class="nm">kalimba</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de kalimba"></div>
+    <div class="snd" data-id="flauta"><span class="dot"></span><button type="button" aria-pressed="false"><svg class="il" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30L30 6l4 4L10 34z"/><path d="M15 25l1 1M19 21l1 1M23 17l1 1"/><g class="a-static"><path d="M33 16c2 1 3 3 2 5M29 20c2 1 3 3 2 5"/></g></svg><span class="tx"><span class="nm">flauta</span></span></button><input type="range" min="1" max="100" value="50" aria-label="volume de flauta"></div>
   </div></div>
     </section>
     <aside class="side">
@@ -270,27 +278,30 @@ header,main,.fim{position:relative;z-index:1}
    sons da the relax club: tudo sintetizado com web audio
    ============================================================ */
 const SONS = [
-  {id:'chuva',     nome:'chuva no telhado'},
-  {id:'trovao',    nome:'trovoada de verão'},
-  {id:'praia',     nome:'praia em dia de semana'},
+  {id:'chuva',     nome:'chuva'},
+  {id:'trovao',    nome:'trovoada'},
+  {id:'praia',     nome:'praia'},
   {id:'corrego',   nome:'córrego'},
-  {id:'cachoeira', nome:'cachoeirinha'},
-  {id:'vento',     nome:'vento na serra'},
-  {id:'bemtevi',   nome:'passarinhos da manhã'},
-  {id:'cigarra',   nome:'cigarra das cinco'},
-  {id:'grilo',     nome:'grilo de madrugada'},
-  {id:'batuque',   nome:'batuque leve'},
-  {id:'sapos',     nome:'sapos no brejo'},
-  {id:'ventilador',nome:'ventilador de teto'},
-  {id:'fogao',     nome:'fogão a lenha'},
-  {id:'gato',      nome:'gato no colo'},
-  {id:'vitrola',   nome:'vitrola chiando'},
-  {id:'cafe',      nome:'café da esquina'},
-  {id:'sininhos',  nome:'sininhos de vento'},
-  {id:'sino',      nome:'sino da matriz'},
+  {id:'cachoeira', nome:'cachoeira'},
+  {id:'vento',     nome:'vento'},
+  {id:'bemtevi',   nome:'passarinhos'},
+  {id:'cigarra',   nome:'cigarra'},
+  {id:'grilo',     nome:'grilos'},
+  {id:'sapos',     nome:'sapos'},
+  {id:'ventilador',nome:'ventilador'},
+  {id:'fogao',     nome:'lareira'},
+  {id:'gato',      nome:'gato ronronando'},
+  {id:'vitrola',   nome:'vitrola'},
+  {id:'cafe',      nome:'cafeteria'},
+  {id:'sininhos',  nome:'sininhos'},
+  {id:'sino',      nome:'sino'},
   {id:'tigela',    nome:'tigela'},
   {id:'cantando',  nome:'tigela cantando'},
-  {id:'gongo',     nome:'gongo suave'},
+  {id:'gongo',     nome:'gongo'},
+  {id:'batuque',   nome:'batuque'},
+  {id:'paudechuva', nome:'pau de chuva'},
+  {id:'kalimba', nome:'kalimba'},
+  {id:'flauta', nome:'flauta'},
 ];
 // ilustrações em linha (viewBox 0 0 120 80), stroke currentColor, sem preenchimento
 const ILUS = {
@@ -315,6 +326,9 @@ sininhos:`<path d="M8 7h24"/><g class="a-swing" style="transform-origin:20px 7px
 cantando:`<path d="M7 22h26c0 7-6 12-13 12S7 29 7 22z"/><path d="M30 20l6-10"/><g class="a-ring" style="transform-origin:20px 16px"><path d="M10 16c6-4 14-4 20 0"/><path d="M14 11c4-2 8-2 12 0"/></g>`,
 gongo:`<path d="M6 6h28M10 6v28M30 6v28"/><g class="a-bell" style="transform-origin:20px 6px"><path d="M20 6v5"/><circle cx="20" cy="20" r="8"/><circle cx="20" cy="20" r="3"/></g>`,
 batuque:`<ellipse cx="20" cy="11" rx="11" ry="4"/><path d="M9 11v14c0 3 5 6 11 6s11-3 11-6V11"/><g class="a-bob" style="transform-origin:20px 11px"><path d="M14 18l3 9M26 18l-3 9"/></g>`,
+paudechuva:`<path d="M8 32L32 8"/><g class="a-drops"><path d="M14 22l-2 2M19 17l-2 2M24 12l-2 2M17 26l-1 1M22 21l-1 1M27 16l-1 1"/></g>`,
+kalimba:`<rect x="7" y="12" width="26" height="22" rx="5"/><g class="a-bob" style="transform-origin:20px 12px"><path d="M14 6v12M18 6v14M22 6v14M26 6v12"/></g><circle cx="20" cy="27" r="2.5"/>`,
+flauta:`<path d="M6 30L30 6l4 4L10 34z"/><path d="M15 25l1 1M19 21l1 1M23 17l1 1"/><g class="a-static"><path d="M33 16c2 1 3 3 2 5M29 20c2 1 3 3 2 5"/></g>`,
 cafe:`<path d="M9 18h18v8a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z"/><path d="M27 21h3a3 3 0 0 1 0 6h-3"/><g class="a-static"><path d="M15 13c-2-2 2-3 0-6M21 13c-2-2 2-3 0-6"/></g>`,
 tigela:`<path d="M7 22h26c0 7-6 12-13 12S7 29 7 22z"/><g class="a-ring" style="transform-origin:20px 16px"><path d="M13 14c4-3 10-3 14 0"/></g>`,
 };
@@ -325,6 +339,9 @@ const MIXES = [
   {nome:'fim de tarde no interior', s:{cigarra:35, vento:30, sino:30, bemtevi:20}},
   {nome:'noite no sítio', s:{sapos:35, grilo:35, fogao:45}},
   {nome:'roda', s:{batuque:40, fogao:35, vento:20}},
+  {nome:'varanda', s:{kalimba:45, cigarra:20, vento:25}},
+  {nome:'serra', s:{flauta:40, cachoeira:30, bemtevi:25}},
+  {nome:'chuva musical', s:{paudechuva:40, kalimba:35, chuva:30}},
   {nome:'meditar',       s:{cantando:50, sininhos:20, cachoeira:20}},
   {nome:'yoga',          s:{tigela:45, gongo:30, sininhos:25, vento:20}},
 ];
@@ -371,7 +388,7 @@ function makeHits(secs, perSec, minF, maxF, decay, amp){
 const ARQ = {
   chuva:['/sons/audio/chuva.mp3',1], trovao:['/sons/audio/trovoada.mp3',1.1], praia:['/sons/audio/praia.mp3',1], corrego:['/sons/audio/corrego.mp3',1.1], cachoeira:['/sons/audio/cachoeira.mp3',.9],
   ventilador:['/sons/audio/ventilador.mp3',1], fogao:['/sons/audio/fogao.mp3',3], gato:['/sons/audio/gato.mp3',.75], vitrola:['/sons/audio/vitrola.mp3',1.3],
-  vento:['/sons/audio/vento.mp3',1], bemtevi:['/sons/audio/passarinhos.mp3',1.6], cigarra:['/sons/audio/cigarra.mp3',1.1], grilo:['/sons/audio/grilo.mp3',1.1], sapos:['/sons/audio/sapos.mp3',.9], cafe:['/sons/audio/cafe.mp3',1], sininhos:['/sons/audio/sininhos.mp3',.8],
+  vento:['/sons/audio/vento.mp3',1], bemtevi:['/sons/audio/passarinhos.mp3',1.6], cigarra:['/sons/audio/cigarra.mp3',1.1], grilo:['/sons/audio/grilo.mp3',1.1], sapos:['/sons/audio/sapos.mp3',.9], cafe:['/sons/audio/cafe.mp3',1], sininhos:['/sons/audio/sininhos.mp3',.8], paudechuva:['/sons/audio/paudechuva.mp3',.9],
   cantando:['/sons/audio/tigela-cantando.mp3',.9,'evento',30,55], gongo:['/sons/audio/gongo.mp3',.7,'evento',22,45],
 };
 const BUFS={};
@@ -386,6 +403,36 @@ function fileSound(id,out){
   return ()=>{ alive=false; clearTimeout(tm); if(s) try{s.stop();}catch(e){} gg.disconnect(); };
 }
 /* batuque leve: djembe tocado ao vivo, devagar, nunca igual (golpes gravados CC0) */
+/* kalimba: notas gravadas (CC0), tocadas ao vivo em frases curtas e espaçadas */
+function kalimbaSound(out){
+  const urls=['2285','2286','2287','2288','2289'].map(n=>'/sons/audio/kalimba/k'+n+'.mp3');
+  let alive=true, tm, bufs=null; const dry=gain(1.3), wet=gain(.45); dry.connect(out); dry.connect(wet); wet.connect(reverb);
+  const note=(t,i,v,r)=>{ const s=ctx.createBufferSource(); s.buffer=bufs[i]; s.playbackRate.value=r; const g=gain(v); s.connect(g); g.connect(dry); s.start(t); };
+  const phrase=()=>{ if(!alive) return; let t=ctx.currentTime+.05, i=Math.floor(Math.random()*5); const n=3+Math.floor(Math.random()*5);
+    for(let k=0;k<n;k++){ i=Math.max(0,Math.min(4,i+Math.floor(rnd(-2,3)))); note(t,i,rnd(.35,.8),Math.random()<.15?.5:1); if(Math.random()<.15) note(t+.02,Math.max(0,i-2),rnd(.2,.4),1); t+=rnd(.45,1.3); }
+    tm=setTimeout(phrase,((t-ctx.currentTime)+rnd(3,8))*1000); };
+  Promise.all(urls.map(loadBuf)).then(b=>{ if(!alive) return; bufs=b; phrase(); }).catch(()=>{});
+  return ()=>{ alive=false; clearTimeout(tm); setTimeout(()=>{dry.disconnect();wet.disconnect();},4000); };
+}
+/* flauta: sopro sintetizado ao vivo, frases lentas numa escala pentatônica */
+function flautaSound(out){
+  let alive=true, tm; const dry=gain(.5), wet=gain(.8); dry.connect(out); dry.connect(wet); wet.connect(reverb);
+  const F=[293.66,349.23,392,440,523.25,587.33];
+  const blow=(t,f,d,v)=>{ const e=gain(0); e.connect(dry);
+    const o=ctx.createOscillator(); o.type='sine'; const o2=ctx.createOscillator(); o2.type='sine'; const g2=gain(.14); const o3=ctx.createOscillator(); o3.type='sine'; const g3=gain(.04);
+    o.frequency.setValueAtTime(f*.97,t); o.frequency.linearRampToValueAtTime(f,t+.12); o2.frequency.setValueAtTime(f*2*.97,t); o2.frequency.linearRampToValueAtTime(f*2,t+.12); o3.frequency.value=f*3;
+    const vib=ctx.createOscillator(); vib.frequency.value=rnd(4.6,5.4); const vg=gain(0); vib.connect(vg); vg.connect(o.frequency); vg.gain.setValueAtTime(0,t+.4); vg.gain.linearRampToValueAtTime(f*.007,t+.9);
+    const n=src(NOISE.white,false); const bp=filt('bandpass',f*2,1.5); const ng=gain(0); n.connect(bp); bp.connect(ng); ng.connect(e);
+    o.connect(e); o2.connect(g2); g2.connect(e); o3.connect(g3); g3.connect(e);
+    e.gain.setValueAtTime(0,t); e.gain.linearRampToValueAtTime(v,t+.18); e.gain.setValueAtTime(v*.9,t+d-.3); e.gain.linearRampToValueAtTime(0,t+d);
+    ng.gain.setValueAtTime(0,t); ng.gain.linearRampToValueAtTime(.5,t+.08); ng.gain.linearRampToValueAtTime(.12,t+.4);
+    [o,o2,o3,vib].forEach(x=>{x.start(t);x.stop(t+d+.05);}); n.start(t); n.stop(t+d+.05); };
+  const phrase=()=>{ if(!alive) return; let t=ctx.currentTime+.05, i=Math.floor(rnd(1,5)); const n=2+Math.floor(Math.random()*3);
+    for(let k=0;k<n;k++){ i=Math.max(0,Math.min(5,i+Math.floor(rnd(-2,3)))); const d=rnd(1.2,2.8); blow(t,F[i],d,rnd(.28,.42)); t+=d+rnd(.05,.25); }
+    tm=setTimeout(phrase,((t-ctx.currentTime)+rnd(4,10))*1000); };
+  phrase();
+  return ()=>{ alive=false; clearTimeout(tm); setTimeout(()=>{dry.disconnect();wet.disconnect();},4000); };
+}
 function batuqueSound(out){
   const urls=[1,2,3,4].map(i=>'/sons/audio/batuque/grave'+i+'.wav').concat([1,2,3,4].map(i=>'/sons/audio/batuque/borda'+i+'.wav'));
   let alive=true, timer, bufs=null, step=0, next=0, bar=0, pat;
@@ -500,6 +547,8 @@ const BUILD = {
 /* ---------- liga/desliga ---------- */
 Object.keys(ARQ).forEach(k=>{ BUILD[k]=out=>fileSound(k,out); });
 BUILD.batuque=out=>batuqueSound(out);
+BUILD.kalimba=out=>kalimbaSound(out);
+BUILD.flauta=out=>flautaSound(out);
 function ensureCtx(){
   if(ctx) return;
   ctx=new (window.AudioContext||window.webkitAudioContext)();
