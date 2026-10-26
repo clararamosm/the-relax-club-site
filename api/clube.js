@@ -134,17 +134,19 @@ export default async function handler(req, res) {
   const tirarDe = optin ? semId : (acao === 'sair' ? listId : null);
   if (tirarDe) await brevo(`/contacts/lists/${tirarDe}/contacts/remove`, 'POST', { emails: [email] });
 
-  // boas-vindas: uma vez só, pra todo membro (com ou sem opt-in)
+  // boas-vindas: uma vez só, pra todo membro (com ou sem opt-in).
+  // primeiro "reserva" o envio no perfil com trava de versão: se dois pedidos chegam juntos, só um passa.
   let boasVindas = !!p.boasVindas;
-  if (!boasVindas && p.membro) {
-    const env = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_BOAS_VINDAS, to: [{ email, name: String(nome).trim() || undefined }] });
-    if (env.ok) {
-      boasVindas = true;
-      await fetch(`https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents/users/${u.localId}?updateMask.fieldPaths=boasVindas`, {
-        method: 'PATCH', headers: { authorization: `Bearer ${idToken}`, 'content-type': 'application/json' },
-        body: JSON.stringify({ fields: { boasVindas: { timestampValue: new Date().toISOString() } } })
-      }).catch(() => null);
-    } else console.error('boas-vindas', env.status, env.text);
+  if (!boasVindas && p.membro && doc && doc.updateTime) {
+    const reserva = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents/users/${u.localId}?updateMask.fieldPaths=boasVindas&currentDocument.updateTime=${encodeURIComponent(doc.updateTime)}`, {
+      method: 'PATCH', headers: { authorization: `Bearer ${idToken}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ fields: { boasVindas: { timestampValue: new Date().toISOString() } } })
+    }).catch(() => null);
+    if (reserva && reserva.ok) {
+      const env = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_BOAS_VINDAS, to: [{ email, name: String(nome).trim() || undefined }] });
+      boasVindas = env.ok;
+      if (!env.ok) console.error('boas-vindas', env.status, env.text);
+    }
   }
   return res.status(200).json({ ok: true, lista: optin ? 'principal' : 'sem opt-in', boasVindas });
 }

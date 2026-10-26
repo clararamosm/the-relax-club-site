@@ -111,7 +111,10 @@ $('#cm-link').onclick = async () => {
   if (!email.includes('@')) return msg('#cm-msg', 'escreve o seu email primeiro.');
   try {
     ls('trc-metodo', 'link');
-    await sendSignInLinkToEmail(auth, email, { url: location.origin + '/?entrar=link', handleCodeInApp: true });
+    // email bonito, nosso, pelo Brevo; se o servidor ainda não estiver configurado, usa o email padrão do Firebase
+    const r = await fetch('/api/link/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => null);
+    if (r && r.status === 429) return msg('#cm-msg', 'acabei de mandar um link. dá uma olhada no seu email (e no spam).');
+    if (!r || !r.ok) await sendSignInLinkToEmail(auth, email, { url: location.origin + '/?entrar=link', handleCodeInApp: true });
     localStorage.setItem('trc-login-email', email);
     localStorage.setItem('trc-optin', optin() ? '1' : '0');
     $('#cm-mail-show').textContent = email; step('enviado');
@@ -200,7 +203,13 @@ addEventListener('trc-teste', async () => { await sincronizarTeste(); avisa(); s
 
 /* manda o membro pro Brevo (o servidor lê o perfil direto do Firestore). roda no cadastro, quando muda o teste e uma vez pra quem já existia */
 const BREVO_VERSAO = 3;
-export async function sincronizarBrevo(acao = 'sync') {
+const emCurso = {};
+export function sincronizarBrevo(acao = 'sync') {
+  // um pedido por vez pra cada ação (evita email repetido quando duas partes do site pedem ao mesmo tempo)
+  if (!emCurso[acao]) emCurso[acao] = _sincronizar(acao).finally(() => { delete emCurso[acao]; });
+  return emCurso[acao];
+}
+async function _sincronizar(acao) {
   if (!user) return;
   try {
     const idToken = await user.getIdToken();
