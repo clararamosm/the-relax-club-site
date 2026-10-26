@@ -1,22 +1,44 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // cada pessoa só lê e escreve o próprio perfil e os próprios mixes
+    function dono(uid) { return request.auth != null && request.auth.uid == uid; }
+
+    // perfil do membro: só a própria pessoa lê e escreve. o número de membro só pode ser o próximo do contador e nunca muda.
     match /users/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      function numeroOk() {
+        return !('membro' in request.resource.data)
+          || (resource != null && 'membro' in resource.data && request.resource.data.membro == resource.data.membro)
+          || ((resource == null || !('membro' in resource.data)) && request.resource.data.membro == getAfter(/databases/$(database)/documents/contadores/membros).data.n);
+      }
+      function fotoOk() { return !('foto' in request.resource.data) || request.resource.data.foto.size() < 200000; }
+      allow read, delete: if dono(uid);
+      allow create, update: if dono(uid) && numeroOk() && fotoOk();
       match /mixes/{mixId} {
-        allow read, delete: if request.auth != null && request.auth.uid == uid;
-        allow create, update: if request.auth != null && request.auth.uid == uid
+        allow read, delete: if dono(uid);
+        allow create, update: if dono(uid)
           && request.resource.data.nome is string && request.resource.data.nome.size() <= 60
           && request.resource.data.sons is map && request.resource.data.sons.size() <= 30;
       }
+      match /testes/{testeId} {
+        allow read, delete: if dono(uid);
+        allow create, update: if dono(uid) && request.resource.data.principal is string;
+      }
     }
+
+    // contador dos números de membro (começa no 100 e só anda de 1 em 1)
+    match /contadores/membros {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.n == 100;
+      allow update: if request.auth != null && request.resource.data.n == resource.data.n + 1;
+    }
+
     // contador público de quantas vezes cada combinação de sons foi compartilhada (só soma de 1 em 1)
     match /compartilhados/{chave} {
       allow read: if true;
       allow create: if chave.size() <= 300 && request.resource.data.keys().hasOnly(['n']) && request.resource.data.n == 1;
       allow update: if request.resource.data.keys().hasOnly(['n']) && request.resource.data.n == resource.data.n + 1;
     }
+
     // todo o resto fechado
     match /{document=**} {
       allow read, write: if false;

@@ -17,8 +17,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#F1EBDC">
 <link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icone-180.png">
+<meta name="apple-mobile-web-app-title" content="Relax Club">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="/css/clube.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Organization", "name": "The Relax Club", "url": "https://therelax.club/", "logo": "https://therelax.club/email/logo.png", "email": "clara@therelax.club", "founder": {"@type": "Person", "name": "Clara Ramos"}, "sameAs": ["https://www.instagram.com/therelax.club/", "https://www.pinterest.com/therelaxclubbr/", "https://therelaxclub.substack.com"]}, {"@context": "https://schema.org", "@type": "WebSite", "name": "The Relax Club", "url": "https://therelax.club/", "inLanguage": "pt-BR", "description": "um lugar pra parar de propósito: sons pra descansar, teste dos 7 tipos de descanso e newsletter sobre descanso, presença e bem-estar."}, {"@context": "https://schema.org", "@type": "WebApplication", "name": "sons pra descansar da The Relax Club", "url": "https://therelax.club/", "applicationCategory": "LifestyleApplication", "operatingSystem": "qualquer navegador", "inLanguage": "pt-BR", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "description": "mixer gratuito de sons pra relaxar, meditar, focar e dormir: chuva, praia, córrego, cachoeira, vento, passarinhos, cigarra, grilos, lareira, gato ronronando, tigela tibetana, sino, gongo, batuque, kalimba, flauta e pau de chuva.", "featureList": ["chuva", "trovoada", "praia", "córrego", "cachoeira", "vento", "passarinhos", "cigarra", "grilos", "batuque", "pau de chuva", "kalimba", "flauta", "sapos", "ventilador", "lareira", "gato ronronando", "vitrola", "cafeteria", "sininhos", "sino", "tigela", "tigela cantando", "gongo", "mixes prontos", "timer", "volume por som"]}]</script>
 <style>
@@ -108,6 +112,15 @@ body.paused .snd .il *{animation-play-state:paused!important}
 .snd.on input{display:block}
 .snd .tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-top:3px}
 .snd.on .tag{color:rgba(241,235,220,.6)}
+@media (max-width:719px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .snd{padding:10px 8px 9px;border-radius:14px}
+  .snd > button{grid-template-columns:1fr;justify-items:center;gap:5px;padding-right:0;text-align:center}
+  .snd .il{width:26px;height:26px}
+  .snd .nm{font-size:15.5px;line-height:1.05}
+  .snd .dot{top:8px;right:8px;width:6px;height:6px}
+  .snd input{margin-top:6px}
+}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent}
 input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:rgba(241,235,220,.35)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--paper);margin-top:-7.5px;border:0}
@@ -129,7 +142,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 @media(max-width:640px){.chip.share span{display:none}.chip.share{padding:9px 11px}}
 .chip.on{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
 .save{display:inline-flex;align-items:center;gap:6px}.save svg{width:15px;height:15px}
-@media(max-width:640px){.save span{display:none}.save{padding:9px 11px}.vol>span{display:none}}
+@media(max-width:640px){.save span{display:none}.save{padding:9px 11px}.vol>span{display:none}
+  .bar{padding-left:14px;padding-right:14px}.bar .in{gap:8px}.vol{min-width:40px}
+  #timer:not(.on){font-size:0;width:38px;height:38px;padding:0;background:var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233C4D3E' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2.5 2M9.5 2.5h5'/%3E%3C/svg%3E") center/17px no-repeat}
+  .av{width:38px;height:38px}}
 .toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(10px);background:var(--green-deep);color:var(--paper);font-size:14px;padding:10px 16px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:6;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -145,7 +161,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .waves{height:clamp(260px,38dvh,380px)}
   .lead{max-width:720px}
 }
-@media (max-width:719px){.snd .ds{display:none}.snd > button{grid-template-columns:28px 1fr;gap:10px}.snd .il{width:28px;height:28px}.snd .nm{font-size:18px}}
+@media (max-width:719px){.snd .ds{display:none}}
 
 /* ===== home ===== */
 #mare{position:fixed;inset:0;z-index:0;pointer-events:none}
@@ -213,26 +229,6 @@ header,main,.fim{position:relative;z-index:1}
 
 /* ===== conta ===== */
 header{position:relative}
-.acct{position:absolute;right:20px;top:24px;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:8px 15px;font-size:13.5px;color:var(--green)}
-.acct.in{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
-@media (min-width:900px){.acct{right:48px;top:42px}}
-body.cm-on{overflow:hidden}
-.conta-modal{position:fixed;inset:0;z-index:20;background:rgba(41,55,41,.35);display:grid;place-items:center;padding:16px}
-.conta-modal[hidden]{display:none}
-.cm-box{position:relative;width:100%;max-width:400px;background:var(--paper);border-radius:24px;padding:28px 24px 22px;box-shadow:0 20px 60px rgba(41,55,41,.25)}
-.cm-box h2{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1;margin-bottom:8px}
-.cm-sub{color:var(--green);font-size:15px;margin-bottom:18px}
-.cm-x{position:absolute;top:12px;right:14px;border:0;background:none;font-size:26px;color:var(--muted);line-height:1}
-.cm-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:13px 16px;font-size:15px;color:var(--green-deep);margin-bottom:10px}
-.cm-btn svg{width:18px;height:18px}
-.cm-dark{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
-.cm-in{display:block;width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;font:inherit;font-size:15px;color:var(--ink);margin-bottom:10px;text-transform:none}
-.cm-ou{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin:6px 0 12px}
-.cm-ou::before,.cm-ou::after{content:"";flex:1;height:1px;background:var(--line)}
-.cm-txt{display:block;margin:2px auto 8px;border:0;background:none;color:var(--green);font-size:13.5px;text-decoration:underline;text-underline-offset:3px}
-.cm-opt{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--green);margin-top:8px}
-.cm-opt input{margin-top:3px;accent-color:var(--green-deep)}
-.cm-msg{font-size:13.5px;color:#9a5b3c;margin-top:8px;min-height:1em}
 .cantinho{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:18px 20px}
 .ct-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
 .ct-top h2{font-family:var(--serif);font-weight:300;font-size:26px;line-height:1.05}
@@ -648,7 +644,11 @@ function setPlaying(p){
   SONS.forEach(s=>{ if(st[s.id].on){ p?start(s.id):stop(s.id); } });
 }
 $('#play').onclick=()=>{ const any=SONS.some(s=>st[s.id].on); if(!any){ document.querySelector('.mix').click(); return; } setPlaying(!playing); };
-$('#master').oninput=e=>{ if(master) master.gain.setTargetAtTime(+e.target.value/100,ctx.currentTime,.1); };
+$('#master').oninput=e=>{ if(master) master.gain.setTargetAtTime(+e.target.value/100,ctx.currentTime,.1); try{ localStorage.setItem('trc-vol',e.target.value); }catch(_){} };
+try{ const v=localStorage.getItem('trc-vol'); if(v!=null) $('#master').value=v; }catch(e){}
+/* barra de espaço: pausa e toca (menos quando a pessoa está digitando) */
+addEventListener('keydown',e=>{ if(e.code!=='Space'||e.repeat) return; const t=e.target; if(t.closest&&t.closest('input:not([type=range]),textarea,select,[contenteditable],.conta-modal')) return; e.preventDefault(); $('#play').click(); });
+addEventListener('keyup',e=>{ if(e.code==='Space'&&e.target.tagName==='BUTTON'&&!e.target.closest('.conta-modal')) e.preventDefault(); });
 $('#play').innerHTML=IC_PAUSE;
 
 /* zerar: desliga todos os sons e limpa o mix */
@@ -769,5 +769,6 @@ try{ const daUrl=mixDaUrl(); const saved=daUrl?daUrl.s:JSON.parse(localStorage.g
 <script type="module" src="/js/conta.js"></script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script>if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script>
 </body>
 </html>

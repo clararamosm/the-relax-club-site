@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>seu perfil · the relax club</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F1EBDC">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icone-180.png">
+<meta name="apple-mobile-web-app-title" content="Relax Club">
+<link rel="stylesheet" href="/css/clube.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1EBDC; --cream:#F7F3EA; --cream-2:#DED3BB;
+  --green-deep:#293729; --green:#3C4D3E; --sage:#8B9479;
+  --ink:#293729; --muted:#5d6b5d; --line:rgba(41,55,41,.14);
+  --serif:"meno-display-condensed","Meno Display Condensed","Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;text-transform:lowercase;padding:0 16px 80px}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+header{display:flex;justify-content:center;align-items:center;padding:16px 0 0;position:relative;max-width:760px;margin:0 auto}
+header img{height:48px;display:block}
+@media (min-width:900px){header{padding-top:32px} header img{height:64px}}
+.voltar{position:absolute;left:0;top:28px;font-size:14px;color:var(--green);text-decoration:none}
+@media (min-width:900px){.voltar{top:52px}}
+main{max-width:760px;margin:28px auto 0}
+h1{font-family:var(--serif);font-weight:300;font-size:clamp(40px,7vw,58px);line-height:1;color:var(--green-deep);text-align:center;margin-bottom:6px}
+.lead{text-align:center;color:var(--green);margin-bottom:28px}
+
+/* carteirinha */
+.cart-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:34px}
+.cart{position:relative;width:100%;max-width:440px;aspect-ratio:1.586;background:var(--green-deep);color:var(--paper);border-radius:22px;padding:22px 24px;overflow:hidden;box-shadow:0 18px 50px rgba(41,55,41,.22);text-transform:lowercase}
+.cart .lines{position:absolute;inset:0;width:100%;height:100%;opacity:.16;pointer-events:none}
+.cart-top{position:relative;display:flex;justify-content:space-between;align-items:flex-start}
+.cart-top img{height:46px;display:block}
+.cart-top small{font-size:11px;letter-spacing:.12em;font-weight:600;opacity:.75;text-align:right;line-height:1.4}
+.cart-mid{position:relative;display:flex;align-items:center;gap:14px;margin-top:16px}
+.cart-foto{flex:none;width:68px;height:68px;border-radius:50%;border:1.5px solid rgba(241,235,220,.6);display:grid;place-items:center;overflow:hidden;font-family:var(--serif);font-size:34px;background:rgba(241,235,220,.08)}
+.cart-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.cart-nome{font-family:var(--serif);font-weight:300;font-size:30px;line-height:1}
+.cart-fund{display:inline-block;margin-top:6px;font-size:10.5px;letter-spacing:.1em;font-weight:600;border:1px solid rgba(241,235,220,.55);border-radius:99px;padding:3px 9px}
+.cart-bot{position:absolute;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.cart-bot div{font-size:12px;opacity:.85;line-height:1.35}
+.cart-bot b{display:block;font-family:var(--serif);font-weight:300;font-size:26px;line-height:1;opacity:1}
+.cart .flor{position:absolute;right:16px;top:50%;width:92px;height:92px;transform:translateY(-58%);overflow:visible}
+.cart .flor ellipse{fill:none;stroke:rgba(241,235,220,.6);stroke-width:1}
+.cart .flor ellipse.on{fill:rgba(241,235,220,.28);stroke:var(--paper)}
+@media (max-width:420px){.cart{padding:18px 18px}.cart-top img{height:38px}.cart-foto{width:56px;height:56px;font-size:28px}.cart-nome{font-size:25px}.cart .flor{width:72px;height:72px}.cart-bot{left:18px;right:18px;bottom:16px}.cart-bot b{font-size:22px}}
+.cart-acoes{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:10px 16px;font-size:14px;color:var(--green-deep);text-decoration:none}
+.btn.dark{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
+.btn svg{width:16px;height:16px}
+.cart-dica{font-size:13px;color:var(--muted);text-align:center;max-width:440px}
+
+/* seções */
+.sec{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:20px 22px;margin-bottom:16px}
+.sec h2{font-family:var(--serif);font-weight:300;font-size:28px;line-height:1.05;color:var(--green-deep);margin-bottom:12px}
+.sec p.sub{font-size:14px;color:var(--green);margin:-6px 0 12px}
+.campo{margin-bottom:14px}
+.campo label:not(.btn){display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--sage);margin-bottom:6px}
+.linha{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.in{flex:1;min-width:180px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 14px;font:inherit;font-size:15px;color:var(--ink);text-transform:none}
+.in[readonly]{background:transparent;color:var(--green)}
+.nota{font-size:13px;color:var(--muted);margin-top:6px}
+.ok{font-size:13px;color:var(--green);margin-top:6px;min-height:1em}
+.foto-linha{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.foto-prev{width:64px;height:64px;border-radius:50%;background:var(--paper);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;font-family:var(--serif);font-size:30px;color:var(--green)}
+.foto-prev img{width:100%;height:100%;object-fit:cover}
+.lista{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.item .t{flex:1;min-width:0}
+.item .t b{display:block;font-family:var(--serif);font-weight:300;font-size:20px;line-height:1.1;color:var(--green-deep);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .t span{font-size:12.5px;color:var(--muted)}
+.mini{border:0;background:none;color:var(--green);font-size:13px;text-decoration:underline;text-underline-offset:3px;padding:4px}
+.mini.play{text-decoration:none;border:1px solid var(--line);background:var(--cream);border-radius:99px;padding:6px 12px;color:var(--green-deep)}
+.vazio{font-size:14px;color:var(--green)}
+.switch{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--green-deep)}
+.switch input{appearance:none;width:44px;height:26px;border-radius:99px;background:var(--cream-2);position:relative;cursor:pointer;transition:background .2s;flex:none}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.switch input:checked{background:var(--green-deep)}
+.switch input:checked::after{left:21px}
+.passos{font-size:14.5px;color:var(--green);padding-left:18px}
+.passos li{margin-bottom:6px}
+.perigo{color:#9a5b3c}
+.fora{text-align:center;margin-top:30px}
+.fora p{color:var(--green);margin-bottom:16px}
+footer{text-align:center;margin-top:40px;font-size:13px;color:var(--muted)}
+footer a{color:var(--green)}
+</style>
+</head>
+<body>
+<header><a class="voltar" href="/">← sede</a><a href="/" aria-label="the relax club, ir pra home"><img src="/logo.svg" alt="the relax club"></a></header>
+<main id="app">
+  <p class="fora" id="carregando">carregando…</p>
+</main>
+<footer><a href="/">sede</a> · <a href="/teste/">teste</a> · <a href="/perguntas/">perguntas frequentes</a></footer>
+<div class="toast" id="toast"></div>
+<style>.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(10px);background:var(--green-deep);color:var(--paper);font-size:14px;padding:10px 16px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:30;max-width:calc(100% - 32px);text-align:center}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}</style>
+<script>
+let tt; function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2800); }
+</script>
+<script type="module" src="/js/perfil.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script>if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script>
+</body>
+</html>

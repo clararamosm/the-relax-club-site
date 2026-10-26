@@ -9,7 +9,10 @@
 <meta property="og:description" content="um teste rápido pra entender quais dos 7 tipos de descanso tão descarregados em você agora.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#F1EBDC">
-<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icone-180.png">
+<meta name="apple-mobile-web-app-title" content="Relax Club">
 <link rel="canonical" href="https://therelax.club/teste/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://therelax.club/teste/">
@@ -25,6 +28,7 @@
      enquanto não tiver, a página usa a Instrument Serif como reserva. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="/css/clube.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
 <style>
@@ -721,7 +725,7 @@ function resultado(){
   document.querySelector('header').style.display = 'none';
   const r = st.result, A = AMB[r.principal], A2 = AMB[r.segundo], v = r.bat[r.principal], H = headline(r);
   // guarda o resultado no navegador: quando a pessoa entrar na conta, ele vai pro "seu cantinho"
-  try{ localStorage.setItem('trc-teste', JSON.stringify({principal:r.principal, segundo:r.segundo, perfil:r.perfil, bat:r.bat, rank:r.rank, data:new Date().toISOString()})); }catch(e){}
+  try{ localStorage.setItem('trc-teste', JSON.stringify({principal:r.principal, segundo:r.segundo, perfil:r.perfil, bat:r.bat, rank:r.rank, data:new Date().toISOString()})); }catch(e){} try{ dispatchEvent(new Event('trc-teste')); }catch(e){}
   const cit = citacoes(r.principal);
   const P = PLANO[r.principal], Cx = CONTEXTO[r.principal];
   const desejo = FINAL.o[st.final];
@@ -873,6 +877,8 @@ inicio();
 
 </script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
+<script type="module" src="/js/clube.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script>if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script>
 </body>
 </html>

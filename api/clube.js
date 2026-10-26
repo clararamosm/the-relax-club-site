@@ -2,6 +2,7 @@
 // chamada pelo site quando alguém cria conta no clube (login pelo Firebase).
 // confere o token do Firebase e, se a pessoa marcou que quer receber emails,
 // grava (ou atualiza) o contato no Brevo com ORIGEM=clube.
+// com acao:'sair' e optin falso, tira a pessoa da lista (desligou os emails no perfil ou excluiu a conta).
 //
 // variáveis de ambiente na vercel: BREVO_API_KEY, BREVO_LIST_ID (já existem)
 
@@ -29,8 +30,15 @@ export default async function handler(req, res) {
   const u = look && look.users && look.users[0];
   if (!u || !u.email) return res.status(401).json({ ok: false, error: 'auth' });
 
-  if (!optin) return res.status(200).json({ ok: true, brevo: false });
-  if (!process.env.BREVO_API_KEY) return res.status(500).json({ ok: false, error: 'brevo_key' });
+  if (!process.env.BREVO_API_KEY) return res.status(optin ? 500 : 200).json({ ok: !optin, error: 'brevo_key' });
+  const listId = Number(process.env.BREVO_LIST_ID || 3);
+
+  // a pessoa desligou os emails no perfil (ou excluiu a conta): tira da lista
+  if (!optin) {
+    if (body.acao !== 'sair') return res.status(200).json({ ok: true, brevo: false });
+    const r = await brevo(`/contacts/lists/${listId}/contacts/remove`, 'POST', { emails: [u.email.toLowerCase()] });
+    return res.status(200).json({ ok: true, brevo: r.ok || r.status === 400 });
+  }
 
   for (const [name, type] of [['ORIGEM', 'text'], ['NOME', 'text'], ['CLUBE_AT', 'date']]) {
     await brevo(`/contacts/attributes/normal/${name}`, 'POST', { type }).catch(() => null);
@@ -39,7 +47,7 @@ export default async function handler(req, res) {
   const n = (typeof nome === 'string' && nome.trim()) || u.displayName;
   if (n) attributes.NOME = String(n).trim().split(/\s+/)[0].slice(0, 60);
   const r = await brevo('/contacts', 'POST', {
-    email: u.email.toLowerCase(), attributes, listIds: [Number(process.env.BREVO_LIST_ID || 3)], updateEnabled: true
+    email: u.email.toLowerCase(), attributes, listIds: [listId], updateEnabled: true
   });
   if (!r.ok) { console.error('brevo clube', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
   return res.status(200).json({ ok: true, brevo: true });

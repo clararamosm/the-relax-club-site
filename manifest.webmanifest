@@ -1,0 +1,16 @@
+{
+  "name": "The Relax Club",
+  "short_name": "Relax Club",
+  "description": "um lugar pra parar de propósito: mixer de sons pra relaxar, meditar e dormir, e o teste dos 7 tipos de descanso.",
+  "lang": "pt-BR",
+  "start_url": "/?origem=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F1EBDC",
+  "theme_color": "#F1EBDC",
+  "icons": [
+    { "src": "/icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icone-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icone-mask-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
