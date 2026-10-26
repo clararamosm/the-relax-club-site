@@ -197,7 +197,8 @@ header,main,.fim{position:relative;z-index:1}
   .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .side{margin-top:0;position:sticky;top:24px}
   .mixes{margin:18px 0 0;padding:2px 0;flex-wrap:nowrap;-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}
-  .waves{margin:0;height:210px}
+  .waves{margin:14px calc(50% - 50vw) 0;height:230px}
+  .mixes{margin-top:0}
   .hero-t h1{font-size:clamp(54px,5vw,74px)}
   .hero-t h1 em{display:block}
 }
@@ -211,9 +212,9 @@ header,main,.fim{position:relative;z-index:1}
     <h1>um lugar pra parar <em>de propósito</em></h1>
     <p class="lead"><b>se escutar é o caminho mais curto pro descanso.</b> liga os sons que te acalmam, ajusta cada um e deixa tocando enquanto você <b>trabalha, lê, medita ou dorme</b>. cada som vira uma onda.</p>
   </div>
+  <div class="waves" id="waves"><canvas></canvas><div class="hint">liga um som pra começar</div></div>
   <div class="layout">
     <section class="mixer" aria-label="sons pra descansar">
-      <div class="waves" id="waves"><canvas></canvas><div class="hint">liga um som pra começar</div></div>
       <div class="mixes" id="mixes"><small>mixes prontos</small></div>
       <h2 class="sr">sons pra descansar</h2>
       <div id="fams"><div class="grid" id="grid">
