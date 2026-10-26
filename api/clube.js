@@ -13,7 +13,7 @@
 const FIREBASE_API_KEY = 'AIzaSyDwhk7BcD59scuOpUYbGBEmoWepLA-rR7E'; // chave pública do app web
 const PROJETO = 'the-relax-club';
 const FUNDADORES_ATE = 199;
-const TEMPLATE_BOAS_VINDAS = 11; // "clube · boas-vindas" no Brevo, vai pra todo membro novo
+const TEMPLATE_BOAS_VINDAS = 10; // "welcome sede · carteirinha" no Brevo, vai pra todo membro novo
 const LISTA_SEM_OPTIN = 'clube sem opt-in'; // membros que não aceitaram os emails: ficam aqui, fora das cadências
 
 // acha (ou cria) a lista dos membros sem opt-in, na mesma pasta da lista principal
