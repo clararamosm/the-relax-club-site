@@ -1,3 +1,15 @@
 {
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/sons",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sons/",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
 }
