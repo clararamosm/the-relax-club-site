@@ -186,14 +186,31 @@ $('#save').onclick = () => {
   if (!user) { pendingSave = true; abrir(); msg('#cm-msg', 'entra rapidinho que eu salvo o seu mix.'); return; }
   abrirSalvar();
 };
-function abrirSalvar() {
-  const nomes = SONS.filter(s => st[s.id].on).map(s => s.nome);
-  $('#cm-mix-desc').textContent = nomes.join(', ');
-  $('#cm-mix-nome').value = ''; msg('#cm-msg3', ''); abrir('salvar');
+const mesmoMix = (a, b) => { const ka = Object.keys(a), kb = Object.keys(b || {}); return ka.length === kb.length && ka.every(k => a[k] === b[k]); };
+function nomeSugerido() {
+  if (mixBase) return mixBase.nome + ' do meu jeito';
+  const n = SONS.filter(s => st[s.id].on).map(s => s.nome);
+  if (n.length <= 1) return n[0] || 'meu mix';
+  return n.length > 3 ? n.slice(0, 3).join(', ') + ' e mais' : n.slice(0, -1).join(', ') + ' e ' + n[n.length - 1];
+}
+async function gravar(nome) {
+  await addDoc(collection(db, 'users', user.uid, 'mixes'), { nome, sons: atual(), criado: serverTimestamp() });
+  toast(`"${nome}" salvo no seu cantinho`); render();
+}
+async function abrirSalvar() {
+  const sons = atual();
+  // já salvou esse mesmo mix? não duplica
+  const ja = (await listarMixes()).find(m => mesmoMix(sons, m.sons));
+  if (ja) { fechar(); toast(`esse mix já tá no seu cantinho como "${ja.nome}"`); return; }
+  // mix pronto sem nenhuma mudança: salva direto com o nome dele
+  if (mixBase && mesmoMix(sons, mixBase.s)) { fechar(); try { await gravar(mixBase.nome); } catch (e) { toast('não consegui salvar agora. tenta de novo?'); } return; }
+  $('#cm-mix-desc').textContent = SONS.filter(s => st[s.id].on).map(s => s.nome).join(', ');
+  const campo = $('#cm-mix-nome'); campo.value = nomeSugerido(); msg('#cm-msg3', ''); abrir('salvar');
+  setTimeout(() => campo.select(), 60);
 }
 $('#cm-mix-ok').onclick = async () => {
   const nome = $('#cm-mix-nome').value.trim() || 'meu mix';
-  try { await addDoc(collection(db, 'users', user.uid, 'mixes'), { nome, sons: atual(), criado: serverTimestamp() }); fechar(); toast(`"${nome}" salvo no seu cantinho`); render(); }
+  try { await gravar(nome); fechar(); }
   catch (e) { msg('#cm-msg3', 'não consegui salvar agora. tenta de novo?'); }
 };
 $('#cm-mix-nome').addEventListener('keydown', e => { if (e.key === 'Enter') $('#cm-mix-ok').click(); });

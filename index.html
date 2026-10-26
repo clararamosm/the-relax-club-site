@@ -634,10 +634,11 @@ document.querySelectorAll('.snd').forEach(el=>{
 });
 $('#mixes').insertAdjacentHTML('beforeend',MIXES.map((m,i)=>`<button class="mix" data-m="${i}">${esc(m.nome)}</button>`).join(''));
 document.querySelectorAll('.mix').forEach(b=>b.onclick=()=>{
-  const m=MIXES[+b.dataset.m]; if(!playing) setPlaying(true);
+  const m=MIXES[+b.dataset.m]; mixBase=m; if(!playing) setPlaying(true);
   SONS.forEach(s=>setOn(s.id, m.s[s.id]!=null, m.s[s.id]));
   document.querySelectorAll('.mix').forEach(x=>x.classList.toggle('on',x===b));
 });
+let mixBase=null; // último mix pronto escolhido (pra sugerir nome ao salvar)
 function clearMix(){ document.querySelectorAll('.mix.on').forEach(x=>x.classList.remove('on')); }
 
 const IC_PAUSE='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
@@ -651,7 +652,7 @@ $('#master').oninput=e=>{ if(master) master.gain.setTargetAtTime(+e.target.value
 $('#play').innerHTML=IC_PAUSE;
 
 /* zerar: desliga todos os sons e limpa o mix */
-$('#zerar').onclick=()=>{ SONS.forEach(s=>{ if(st[s.id].on) setOn(s.id,false); }); clearMix(); toast('mixer zerado'); };
+$('#zerar').onclick=()=>{ SONS.forEach(s=>{ if(st[s.id].on) setOn(s.id,false); }); clearMix(); mixBase=null; toast('mixer zerado'); };
 
 /* timer */
 const TIMERS=[0,15,30,60]; let tIdx=0, tEnd=0, tInt;
@@ -667,7 +668,7 @@ function fadeAllOut(){ if(!master) return; const t=ctx.currentTime; master.gain.
 
 /* salvar (protótipo: fica no navegador; depois vira conta) */
 function save(){ try{ localStorage.setItem('trc-mix',JSON.stringify(SONS.filter(s=>st[s.id].on).map(s=>[s.id,st[s.id].vol]))); }catch(e){} }
-function onChange(){ save(); $('#waves').classList.toggle('on',SONS.some(s=>st[s.id].on)); }
+function onChange(){ save(); if(!SONS.some(s=>st[s.id].on)) mixBase=null; $('#waves').classList.toggle('on',SONS.some(s=>st[s.id].on)); }
 $('#save').onclick=()=>toast('em breve: crie sua conta pra salvar e dar nome aos seus mixes');
 let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); }
 /* links de mix: /?mix=dormir abre um mix pronto; /?mix=chuva-65,trovao-30 abre qualquer combinação */
@@ -680,7 +681,7 @@ function linkDoMix(){ const on=SONS.filter(s=>st[s.id].on); const b=document.que
   if(b){ const m=MIXES[+b.dataset.m]; if(on.every(s=>m.s[s.id]===st[s.id].vol) && on.length===Object.keys(m.s).length) return location.origin+'/?mix='+slug(m.nome); }
   return location.origin+'/?mix='+on.map(s=>s.id+'-'+st[s.id].vol).join(','); }
 // volta com o último mix marcado (só toca quando a pessoa tocar na página, regra do navegador)
-try{ const daUrl=mixDaUrl(); const saved=daUrl?daUrl.s:JSON.parse(localStorage.getItem('trc-mix')||'[]'); if(saved.length){ if(daUrl){ SONS.forEach(s=>st[s.id].on=false); if(daUrl.i!=null) document.querySelector(`.mix[data-m="${daUrl.i}"]`).classList.add('on'); history.replaceState(null,'','/'); } playing=false; document.body.classList.add('paused'); $('#play').innerHTML=IC_PLAY;
+try{ const daUrl=mixDaUrl(); const saved=daUrl?daUrl.s:JSON.parse(localStorage.getItem('trc-mix')||'[]'); if(saved.length){ if(daUrl){ SONS.forEach(s=>st[s.id].on=false); if(daUrl.i!=null){ document.querySelector(`.mix[data-m="${daUrl.i}"]`).classList.add('on'); mixBase=MIXES[daUrl.i]; } history.replaceState(null,'','/'); } playing=false; document.body.classList.add('paused'); $('#play').innerHTML=IC_PLAY;
   saved.forEach(([id,v])=>{ if(st[id]){ st[id].on=true; st[id].vol=v; const el=document.querySelector(`[data-id="${id}"]`); el.classList.add('on'); el.querySelector('input').value=v; } });
   $('#waves').classList.add('on'); if(daUrl) save(); toast(daUrl?'te mandaram esse mix. aperta o play':'o seu último mix tá aqui. aperta o play'); } }catch(e){}
 
