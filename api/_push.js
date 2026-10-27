@@ -90,17 +90,4 @@ export async function marcarEnvio(chave) {
   return true;
 }
 
-// confere se quem chamou é a clara logada no clube (token do firebase), sem precisar de chave secreta no servidor
-const FIREBASE_WEB_KEY = 'AIzaSyDwhk7BcD59scuOpUYbGBEmoWepLA-rR7E'; // pública, a mesma do js/clube.js
-const ADMINS = ['clara@therelax.club'];
-export async function ehAdmin(req) {
-  const m = String(req.headers.authorization || '').match(/^Bearer (.+)$/);
-  if (!m) return false;
-  const r = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' + FIREBASE_WEB_KEY, {
-    method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken: m[1] })
-  }).then(r => r.json()).catch(() => null);
-  const u = r && r.users && r.users[0];
-  return !!(u && u.emailVerified && ADMINS.includes(String(u.email || '').toLowerCase()));
-}
-
 export const corpo = req => { try { return typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); } catch (e) { return {}; } };

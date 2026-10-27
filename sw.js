@@ -4,7 +4,7 @@ self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', () => {});
 
-/* notificação chegando (mandada por /api/avisos, /api/notificar ou /api/news-aviso).
+/* notificação chegando (mandada por /api/avisos, /api/fila ou /api/news-aviso).
    dados: { titulo, texto, url, tag } */
 self.addEventListener('push', e => {
   let d = {};

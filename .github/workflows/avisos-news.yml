@@ -1,18 +1,21 @@
-# notificação de news nova: de hora em hora, nos dias de news (e no dia seguinte, caso saia tarde),
-# chama /api/news-aviso, que confere o feed do substack e avisa quem aceitou notificação no app.
-# cada edição só é avisada uma vez (o controle fica no servidor), então rodar a mais não repete nada.
-# não precisa de secret.
-name: avisos-news
+# notificações automáticas, de hora em hora das 7h41 às 21h41 de brasília:
+# 1. /api/news-aviso/ confere o feed do substack e avisa quando sai edição nova da the relax news (paga ou gratuita).
+# 2. /api/fila/ manda as notificações que a clara decidiu mandar (lista em api/_fila.js) quando chega o horário.
+# cada envio só acontece uma vez (o controle fica no servidor), então rodar a mais não repete nada. não precisa de secret.
+name: avisos
 
 on:
   schedule:
-    - cron: '41 9-23 * * 1,2,4,5'   # seg, ter, qui e sex, das 6h41 às 20h41 de brasília
+    - cron: '41 10-23,0 * * *'
   workflow_dispatch:
 
 jobs:
   conferir:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 4
     steps:
-      - name: confere se saiu news nova
+      - name: news nova
         run: curl -sS --fail-with-body --max-time 120 https://therelax.club/api/news-aviso/
+      - name: fila de notificações
+        if: always()
+        run: curl -sS --fail-with-body --max-time 120 https://therelax.club/api/fila/
