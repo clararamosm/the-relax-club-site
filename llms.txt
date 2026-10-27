@@ -4,8 +4,8 @@
 
 ## o que tem no site
 
-- [sons pra descansar](https://therelax.club/): mixer gratuito e sem cadastro de sons ambiente pra relaxar, meditar, focar e dormir. 24 sons (chuva, trovoada, praia, córrego, cachoeira, vento, passarinhos, cigarra, grilos, sapos, ventilador, lareira, gato ronronando, vitrola, cafeteria, sininhos, sino, tigela, tigela cantando, gongo, batuque, pau de chuva, kalimba, flauta), com volume por som, mixes prontos (chuva em casa, foco, dormir, fim de tarde no interior, noite no sítio, roda, varanda, serra, chuva musical, meditar, yoga) e timer.
-- [teste dos 7 tipos de descanso](https://therelax.club/teste/): teste gratuito de 16 perguntas (uns 3 minutos) em formato de conversa, que mostra a bateria da pessoa em cada um dos 7 tipos de descanso (físico, mental, emocional, social, sensorial, criativo e espiritual) e um plano pra começar a recarregar.
+- [barulho pra descansar](https://therelax.club/): mixer gratuito e sem cadastro de barulho de chuva, mar, natureza e sons ambiente pra relaxar, meditar, focar e dormir. 24 sons (chuva, trovoada, praia, córrego, cachoeira, vento, passarinhos, cigarra, grilos, sapos, ventilador, lareira, gato ronronando, vitrola, cafeteria, sininhos, sino, tigela, tigela cantando, gongo, batuque, pau de chuva, kalimba, flauta), com volume por som, mixes prontos (chuva em casa, foco, dormir, fim de tarde no interior, noite no sítio, roda, varanda, serra, chuva musical, meditar, yoga) e timer.
+- [que tipo de cansaço é o seu?](https://therelax.club/teste/): teste gratuito de 16 perguntas (uns 3 minutos) em formato de conversa, pra descobrir se o cansaço é mental, emocional, físico ou outro. mostra a bateria da pessoa em cada um dos 7 tipos de descanso (físico, mental, emocional, social, sensorial, criativo e espiritual) e um plano pra começar a recarregar.
 - [perguntas frequentes](https://therelax.club/perguntas/): o que é a the relax club, os 7 tipos de descanso, sons pra dormir e de onde vêm os sons.
 - [the relax news](https://therelaxclub.substack.com): newsletter que sai toda segunda e quinta, com histórias, guias e o que a ciência diz sobre descansar de verdade.
 
