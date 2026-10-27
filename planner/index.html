@@ -31,23 +31,15 @@
 .lp-top{display:flex;justify-content:center;padding:22px 0 0}
 .lp-top img{height:52px;display:block}
 .lp-hero{display:grid;gap:36px;align-items:center;padding:36px 0 18px}
-@media(min-width:900px){.lp-hero{grid-template-columns:1.15fr .85fr;gap:56px;padding-top:56px}}
+@media(min-width:900px){.lp-hero{grid-template-columns:minmax(0,640px) 1fr;padding-top:56px}}
 .lp-eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--sage);text-transform:lowercase;margin:0 0 12px}
 .lp h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,6.2vw,68px);line-height:1;color:var(--green-deep);margin:0 0 18px;text-wrap:balance}
 .lp h1 em{font-style:italic}
 .lp-lead{font-size:17px;line-height:1.6;color:var(--green);margin:0 0 26px;max-width:540px}
-/* livro */
-.livro-palco{perspective:1200px;display:flex;justify-content:center;padding:10px 0 20px}
-.livro{position:relative;width:min(300px,72vw);aspect-ratio:148/210;border-radius:6px 16px 16px 6px;background:var(--green-deep);color:var(--paper);
-  box-shadow:inset 10px 0 0 rgba(0,0,0,.18),inset 12px 0 0 rgba(241,235,220,.06),0 30px 60px rgba(41,55,41,.28),14px 16px 0 -4px #E7DFCC,16px 18px 0 -4px rgba(41,55,41,.18);
-  transform:rotateY(-14deg) rotateX(4deg);transition:transform .7s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:34px 24px 26px;overflow:hidden}
-.livro:hover{transform:rotateY(-4deg) rotateX(2deg)}
-.livro .ln{position:absolute;inset:0;width:100%;height:100%;opacity:.14}
-.livro img{width:46%;position:relative}
-.livro svg.fl{width:46%;position:relative;overflow:visible}
-.livro svg.fl ellipse{fill:none;stroke:rgba(241,235,220,.75);stroke-width:1}
-.livro .tt{position:relative;text-align:center;font-family:var(--serif);font-size:26px;line-height:1.05}
-.livro .tt small{display:block;font-family:var(--sans);font-size:9.5px;letter-spacing:.14em;font-weight:600;opacity:.75;margin-top:8px}
+
+#mare-d{position:absolute;left:0;top:0;width:100%;height:1100px;z-index:0;pointer-events:none;display:block}
+.lp,.fim{position:relative;z-index:1}
+body{position:relative;overflow-x:hidden}
 /* formulário */
 .form{background:var(--cream);border:1px solid var(--line);border-radius:24px;padding:22px 22px 18px;max-width:540px}
 .form h2{font-family:var(--serif);font-weight:300;font-size:28px;line-height:1.05;color:var(--green-deep);margin:0 0 6px}
@@ -70,15 +62,43 @@
 .dentro{padding:46px 0 10px}
 .dentro h2{font-family:var(--serif);font-weight:300;font-size:clamp(32px,4vw,44px);line-height:1.05;color:var(--green-deep);margin:0 0 8px}
 .dentro > p{font-size:16px;color:var(--green);margin:0 0 22px;max-width:620px;line-height:1.6}
-.caps{display:grid;gap:12px}
-@media(min-width:720px){.caps{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.caps{grid-template-columns:repeat(3,1fr)}}
-.cap{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:18px 18px 16px}
-.cap small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.06em;color:var(--sage);margin-bottom:6px}
-.cap b{display:block;font-family:var(--serif);font-weight:300;font-size:24px;line-height:1.1;color:var(--green-deep);margin-bottom:6px}
-.cap span{font-size:14.5px;line-height:1.55;color:var(--green)}
-.cap.escuro{background:var(--green-deep);border-color:var(--green-deep)}
-.cap.escuro small{color:#A8B0A0}.cap.escuro b{color:var(--paper)}.cap.escuro span{color:#D9D3C3}
+
+/* universo */
+.uni-wrap{display:grid;gap:18px;align-items:start}
+@media(min-width:900px){.uni-wrap{grid-template-columns:1fr 1fr;gap:48px;align-items:center}}
+.uni-palco{position:sticky;top:8px;z-index:2;background:linear-gradient(var(--paper) 82%,rgba(241,235,220,0));padding:6px 0 10px}
+@media(min-width:900px){.uni-palco{position:static;background:none;padding:0}}
+.uni{width:min(420px,78vw);display:block;margin:0 auto;overflow:visible}
+.uni .L{transition:opacity .5s ease}
+.uni.foco .L{opacity:.16}
+.uni.foco .L.on{opacity:1}
+.uni circle,.uni ellipse,.uni line{fill:none;stroke:var(--green-deep);stroke-width:1}
+.L-dias circle{fill:var(--green-deep);stroke:none;opacity:.25;animation:dia 9s linear infinite;animation-delay:calc(var(--i)*.05s)}
+@keyframes dia{0%,100%{opacity:.18}6%{opacity:1}22%{opacity:.4}}
+.L-orbitas circle{stroke-opacity:.45}
+.L-orbitas .pl{fill:var(--green-deep);stroke:none}
+.orb{transform-origin:200px 200px;animation:gira var(--d) linear infinite;transform:rotate(calc(var(--r)*1deg))}
+@keyframes gira{from{transform:rotate(calc(var(--r)*1deg))}to{transform:rotate(calc(var(--r)*1deg + 360deg))}}
+.L-pilares line{stroke-width:1.4;stroke-dasharray:3 4}
+.L-ambitos ellipse{stroke-opacity:.8}
+.L-ambitos > g{transform-origin:200px 200px}
+.uni:not(.foco) .L-ambitos > g,.L-ambitos.on > g{animation:respira 6s ease-in-out infinite}
+@keyframes respira{0%,100%{transform:translate(140px,140px) scale(1)}50%{transform:translate(140px,140px) scale(1.06)}}
+.L-centro .cc{fill:var(--green-deep);stroke:none}
+.L-centro .halo{stroke-opacity:.4;animation:halo 3.2s ease-out infinite;transform-origin:200px 200px}
+@keyframes halo{0%{transform:scale(.7);opacity:.9}100%{transform:scale(2.2);opacity:0}}
+.L.on circle,.L.on ellipse,.L.on line{stroke-opacity:1}
+.itens{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.it{display:flex;gap:14px;align-items:flex-start;background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:16px 16px 14px;cursor:pointer;transition:background .35s,border-color .35s,transform .35s}
+.it:hover,.it.on{background:var(--green-deep);border-color:var(--green-deep);transform:translateX(4px)}
+.it .bol,.colinha .bol{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--green-deep);background:var(--paper);transition:all .35s}
+.it .bol svg,.colinha .bol svg{width:22px;height:22px}
+.it.on .bol,.it:hover .bol{background:transparent;border-color:rgba(241,235,220,.4);color:var(--paper)}
+.it .tx b{display:block;font-family:var(--serif);font-weight:300;font-size:23px;line-height:1.1;color:var(--green-deep);margin-bottom:4px;transition:color .35s}
+.it .tx span{font-size:14.5px;line-height:1.55;color:var(--green);transition:color .35s}
+.it.on .tx b,.it:hover .tx b{color:var(--paper)}.it.on .tx span,.it:hover .tx span{color:#D9D3C3}
+.colinha{display:flex;gap:14px;align-items:center;margin:18px 0 0;font-size:15px;color:var(--green);max-width:620px}
+@media (prefers-reduced-motion:reduce){.uni *{animation:none!important}}
 .por-que{display:grid;gap:22px;align-items:center;padding:46px 0 20px}
 @media(min-width:900px){.por-que{grid-template-columns:auto 1fr;gap:34px}}
 .por-que img{width:96px;height:96px;border-radius:50%;object-fit:cover}
@@ -89,6 +109,7 @@
 </style>
 </head>
 <body>
+<canvas id="mare-d" aria-hidden="true"></canvas>
 <div class="lp">
 <header class="lp-top"><a href="/" aria-label="the relax club, ir pra sede"><img src="/logo.svg" alt="the relax club" width="62" height="52"></a></header>
 
@@ -117,32 +138,27 @@
       </div>
     </form>
   </div>
-  <div class="livro-palco" aria-hidden="true">
-    <div class="livro">
-      <svg class="ln" viewBox="0 0 148 210" preserveAspectRatio="none"><path d="M0 24 C 40 18, 80 31, 148 22" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 46 C 40 40, 80 53, 148 44" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 68 C 40 62, 80 75, 148 66" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 90 C 40 84, 80 97, 148 88" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 112 C 40 106, 80 119, 148 110" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 134 C 40 128, 80 141, 148 132" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 156 C 40 150, 80 163, 148 154" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 178 C 40 172, 80 185, 148 176" fill="none" stroke="#F1EBDC" stroke-width=".6"/><path d="M0 200 C 40 194, 80 207, 148 198" fill="none" stroke="#F1EBDC" stroke-width=".6"/></svg>
-      <img src="/logo-claro.svg" alt="">
-      <svg class="fl" viewBox="0 0 120 120"><ellipse cx="60" cy="36" rx="9.5" ry="27" transform="rotate(0 60 36)"/><ellipse cx="78.8" cy="45" rx="9.5" ry="27" transform="rotate(51.43 78.8 45)"/><ellipse cx="83.4" cy="65.3" rx="9.5" ry="27" transform="rotate(102.86 83.4 65.3)"/><ellipse cx="70.4" cy="81.6" rx="9.5" ry="27" transform="rotate(154.29 70.4 81.6)"/><ellipse cx="49.6" cy="81.6" rx="9.5" ry="27" transform="rotate(205.71 49.6 81.6)"/><ellipse cx="36.6" cy="65.3" rx="9.5" ry="27" transform="rotate(257.14 36.6 65.3)"/><ellipse cx="41.2" cy="45" rx="9.5" ry="27" transform="rotate(308.57 41.2 45)"/></svg>
-      <div class="tt">planner<small>AUTOCONHECIMENTO, INTENÇÃO E DESCANSO</small></div>
-    </div>
-  </div>
 </section>
 
-<section class="dentro">
+<section class="dentro" id="dentro">
   <h2>o que tem dentro</h2>
-  <p>primeiro uma fundação, pra você entender o seu cenário de vida hoje e desenhar o que quer. depois o dia a dia, que vai alimentando essa fundação.</p>
-  <div class="caps">
-    <div class="cap"><small>01</small><b>o centro</b><span>as histórias que te contaram sobre quem você deveria ser, os papéis que você exerce, o que você sente e do que precisa.</span></div>
-    <div class="cap"><small>02</small><b>as órbitas</b><span>trabalho, família, casa, o que te ocupa. o que cada coisa faz de bom e de ruim pra você.</span></div>
-    <div class="cap"><small>03</small><b>os pilares</b><span>o que sustenta a sua vida de verdade, e por que cada coisa importa.</span></div>
-    <div class="cap"><small>04</small><b>os 7 âmbitos da energia</b><span>físico, mental, emocional, social, sensorial, criativo e espiritual. o que te cansa e o que te recarrega em cada um.</span></div>
-    <div class="cap escuro"><small>todo dia</small><b>seis meses, uma página por dia</b><span>com páginas de mês e de semana, pra registrar o que drenou, o que deu energia e o que te deixou mais feliz.</span></div>
-    <div class="cap"><small>pra não travar</small><b>colinhas em todo exercício</b><span>exemplos e opções pra você nunca ficar olhando pra página em branco.</span></div>
+  <p>o planner funciona como um universo. você no centro, o que gira ao seu redor, o que te sustenta e a sua energia. passa o dedo (ou o mouse) em cada parte pra ver.</p>
+  <div class="uni-wrap">
+    <div class="uni-palco"><svg class="uni" viewBox="0 0 400 400" role="img" aria-label="o universo do planner: o centro, as órbitas, os pilares, os 7 âmbitos da energia e os dias">
+  <g class="L L-dias"><circle cx="200.0" cy="24.0" r="1.7" style="--i:0"/><circle cx="206.1" cy="24.1" r="1.7" style="--i:1"/><circle cx="212.3" cy="24.4" r="1.7" style="--i:2"/><circle cx="218.4" cy="25.0" r="1.7" style="--i:3"/><circle cx="224.5" cy="25.7" r="1.7" style="--i:4"/><circle cx="230.6" cy="26.7" r="1.7" style="--i:5"/><circle cx="236.6" cy="27.8" r="1.7" style="--i:6"/><circle cx="242.6" cy="29.2" r="1.7" style="--i:7"/><circle cx="248.5" cy="30.8" r="1.7" style="--i:8"/><circle cx="254.4" cy="32.6" r="1.7" style="--i:9"/><circle cx="260.2" cy="34.6" r="1.7" style="--i:10"/><circle cx="265.9" cy="36.8" r="1.7" style="--i:11"/><circle cx="271.6" cy="39.2" r="1.7" style="--i:12"/><circle cx="277.2" cy="41.8" r="1.7" style="--i:13"/><circle cx="282.6" cy="44.6" r="1.7" style="--i:14"/><circle cx="288.0" cy="47.6" r="1.7" style="--i:15"/><circle cx="293.3" cy="50.7" r="1.7" style="--i:16"/><circle cx="298.4" cy="54.1" r="1.7" style="--i:17"/><circle cx="303.5" cy="57.6" r="1.7" style="--i:18"/><circle cx="308.4" cy="61.3" r="1.7" style="--i:19"/><circle cx="313.1" cy="65.2" r="1.7" style="--i:20"/><circle cx="317.8" cy="69.2" r="1.7" style="--i:21"/><circle cx="322.3" cy="73.4" r="1.7" style="--i:22"/><circle cx="326.6" cy="77.7" r="1.7" style="--i:23"/><circle cx="330.8" cy="82.2" r="1.7" style="--i:24"/><circle cx="334.8" cy="86.9" r="1.7" style="--i:25"/><circle cx="338.7" cy="91.6" r="1.7" style="--i:26"/><circle cx="342.4" cy="96.5" r="1.7" style="--i:27"/><circle cx="345.9" cy="101.6" r="1.7" style="--i:28"/><circle cx="349.3" cy="106.7" r="1.7" style="--i:29"/><circle cx="352.4" cy="112.0" r="1.7" style="--i:30"/><circle cx="355.4" cy="117.4" r="1.7" style="--i:31"/><circle cx="358.2" cy="122.8" r="1.7" style="--i:32"/><circle cx="360.8" cy="128.4" r="1.7" style="--i:33"/><circle cx="363.2" cy="134.1" r="1.7" style="--i:34"/><circle cx="365.4" cy="139.8" r="1.7" style="--i:35"/><circle cx="367.4" cy="145.6" r="1.7" style="--i:36"/><circle cx="369.2" cy="151.5" r="1.7" style="--i:37"/><circle cx="370.8" cy="157.4" r="1.7" style="--i:38"/><circle cx="372.2" cy="163.4" r="1.7" style="--i:39"/><circle cx="373.3" cy="169.4" r="1.7" style="--i:40"/><circle cx="374.3" cy="175.5" r="1.7" style="--i:41"/><circle cx="375.0" cy="181.6" r="1.7" style="--i:42"/><circle cx="375.6" cy="187.7" r="1.7" style="--i:43"/><circle cx="375.9" cy="193.9" r="1.7" style="--i:44"/><circle cx="376.0" cy="200.0" r="1.7" style="--i:45"/><circle cx="375.9" cy="206.1" r="1.7" style="--i:46"/><circle cx="375.6" cy="212.3" r="1.7" style="--i:47"/><circle cx="375.0" cy="218.4" r="1.7" style="--i:48"/><circle cx="374.3" cy="224.5" r="1.7" style="--i:49"/><circle cx="373.3" cy="230.6" r="1.7" style="--i:50"/><circle cx="372.2" cy="236.6" r="1.7" style="--i:51"/><circle cx="370.8" cy="242.6" r="1.7" style="--i:52"/><circle cx="369.2" cy="248.5" r="1.7" style="--i:53"/><circle cx="367.4" cy="254.4" r="1.7" style="--i:54"/><circle cx="365.4" cy="260.2" r="1.7" style="--i:55"/><circle cx="363.2" cy="265.9" r="1.7" style="--i:56"/><circle cx="360.8" cy="271.6" r="1.7" style="--i:57"/><circle cx="358.2" cy="277.2" r="1.7" style="--i:58"/><circle cx="355.4" cy="282.6" r="1.7" style="--i:59"/><circle cx="352.4" cy="288.0" r="1.7" style="--i:60"/><circle cx="349.3" cy="293.3" r="1.7" style="--i:61"/><circle cx="345.9" cy="298.4" r="1.7" style="--i:62"/><circle cx="342.4" cy="303.5" r="1.7" style="--i:63"/><circle cx="338.7" cy="308.4" r="1.7" style="--i:64"/><circle cx="334.8" cy="313.1" r="1.7" style="--i:65"/><circle cx="330.8" cy="317.8" r="1.7" style="--i:66"/><circle cx="326.6" cy="322.3" r="1.7" style="--i:67"/><circle cx="322.3" cy="326.6" r="1.7" style="--i:68"/><circle cx="317.8" cy="330.8" r="1.7" style="--i:69"/><circle cx="313.1" cy="334.8" r="1.7" style="--i:70"/><circle cx="308.4" cy="338.7" r="1.7" style="--i:71"/><circle cx="303.5" cy="342.4" r="1.7" style="--i:72"/><circle cx="298.4" cy="345.9" r="1.7" style="--i:73"/><circle cx="293.3" cy="349.3" r="1.7" style="--i:74"/><circle cx="288.0" cy="352.4" r="1.7" style="--i:75"/><circle cx="282.6" cy="355.4" r="1.7" style="--i:76"/><circle cx="277.2" cy="358.2" r="1.7" style="--i:77"/><circle cx="271.6" cy="360.8" r="1.7" style="--i:78"/><circle cx="265.9" cy="363.2" r="1.7" style="--i:79"/><circle cx="260.2" cy="365.4" r="1.7" style="--i:80"/><circle cx="254.4" cy="367.4" r="1.7" style="--i:81"/><circle cx="248.5" cy="369.2" r="1.7" style="--i:82"/><circle cx="242.6" cy="370.8" r="1.7" style="--i:83"/><circle cx="236.6" cy="372.2" r="1.7" style="--i:84"/><circle cx="230.6" cy="373.3" r="1.7" style="--i:85"/><circle cx="224.5" cy="374.3" r="1.7" style="--i:86"/><circle cx="218.4" cy="375.0" r="1.7" style="--i:87"/><circle cx="212.3" cy="375.6" r="1.7" style="--i:88"/><circle cx="206.1" cy="375.9" r="1.7" style="--i:89"/><circle cx="200.0" cy="376.0" r="1.7" style="--i:90"/><circle cx="193.9" cy="375.9" r="1.7" style="--i:91"/><circle cx="187.7" cy="375.6" r="1.7" style="--i:92"/><circle cx="181.6" cy="375.0" r="1.7" style="--i:93"/><circle cx="175.5" cy="374.3" r="1.7" style="--i:94"/><circle cx="169.4" cy="373.3" r="1.7" style="--i:95"/><circle cx="163.4" cy="372.2" r="1.7" style="--i:96"/><circle cx="157.4" cy="370.8" r="1.7" style="--i:97"/><circle cx="151.5" cy="369.2" r="1.7" style="--i:98"/><circle cx="145.6" cy="367.4" r="1.7" style="--i:99"/><circle cx="139.8" cy="365.4" r="1.7" style="--i:100"/><circle cx="134.1" cy="363.2" r="1.7" style="--i:101"/><circle cx="128.4" cy="360.8" r="1.7" style="--i:102"/><circle cx="122.8" cy="358.2" r="1.7" style="--i:103"/><circle cx="117.4" cy="355.4" r="1.7" style="--i:104"/><circle cx="112.0" cy="352.4" r="1.7" style="--i:105"/><circle cx="106.7" cy="349.3" r="1.7" style="--i:106"/><circle cx="101.6" cy="345.9" r="1.7" style="--i:107"/><circle cx="96.5" cy="342.4" r="1.7" style="--i:108"/><circle cx="91.6" cy="338.7" r="1.7" style="--i:109"/><circle cx="86.9" cy="334.8" r="1.7" style="--i:110"/><circle cx="82.2" cy="330.8" r="1.7" style="--i:111"/><circle cx="77.7" cy="326.6" r="1.7" style="--i:112"/><circle cx="73.4" cy="322.3" r="1.7" style="--i:113"/><circle cx="69.2" cy="317.8" r="1.7" style="--i:114"/><circle cx="65.2" cy="313.1" r="1.7" style="--i:115"/><circle cx="61.3" cy="308.4" r="1.7" style="--i:116"/><circle cx="57.6" cy="303.5" r="1.7" style="--i:117"/><circle cx="54.1" cy="298.4" r="1.7" style="--i:118"/><circle cx="50.7" cy="293.3" r="1.7" style="--i:119"/><circle cx="47.6" cy="288.0" r="1.7" style="--i:120"/><circle cx="44.6" cy="282.6" r="1.7" style="--i:121"/><circle cx="41.8" cy="277.2" r="1.7" style="--i:122"/><circle cx="39.2" cy="271.6" r="1.7" style="--i:123"/><circle cx="36.8" cy="265.9" r="1.7" style="--i:124"/><circle cx="34.6" cy="260.2" r="1.7" style="--i:125"/><circle cx="32.6" cy="254.4" r="1.7" style="--i:126"/><circle cx="30.8" cy="248.5" r="1.7" style="--i:127"/><circle cx="29.2" cy="242.6" r="1.7" style="--i:128"/><circle cx="27.8" cy="236.6" r="1.7" style="--i:129"/><circle cx="26.7" cy="230.6" r="1.7" style="--i:130"/><circle cx="25.7" cy="224.5" r="1.7" style="--i:131"/><circle cx="25.0" cy="218.4" r="1.7" style="--i:132"/><circle cx="24.4" cy="212.3" r="1.7" style="--i:133"/><circle cx="24.1" cy="206.1" r="1.7" style="--i:134"/><circle cx="24.0" cy="200.0" r="1.7" style="--i:135"/><circle cx="24.1" cy="193.9" r="1.7" style="--i:136"/><circle cx="24.4" cy="187.7" r="1.7" style="--i:137"/><circle cx="25.0" cy="181.6" r="1.7" style="--i:138"/><circle cx="25.7" cy="175.5" r="1.7" style="--i:139"/><circle cx="26.7" cy="169.4" r="1.7" style="--i:140"/><circle cx="27.8" cy="163.4" r="1.7" style="--i:141"/><circle cx="29.2" cy="157.4" r="1.7" style="--i:142"/><circle cx="30.8" cy="151.5" r="1.7" style="--i:143"/><circle cx="32.6" cy="145.6" r="1.7" style="--i:144"/><circle cx="34.6" cy="139.8" r="1.7" style="--i:145"/><circle cx="36.8" cy="134.1" r="1.7" style="--i:146"/><circle cx="39.2" cy="128.4" r="1.7" style="--i:147"/><circle cx="41.8" cy="122.8" r="1.7" style="--i:148"/><circle cx="44.6" cy="117.4" r="1.7" style="--i:149"/><circle cx="47.6" cy="112.0" r="1.7" style="--i:150"/><circle cx="50.7" cy="106.7" r="1.7" style="--i:151"/><circle cx="54.1" cy="101.6" r="1.7" style="--i:152"/><circle cx="57.6" cy="96.5" r="1.7" style="--i:153"/><circle cx="61.3" cy="91.6" r="1.7" style="--i:154"/><circle cx="65.2" cy="86.9" r="1.7" style="--i:155"/><circle cx="69.2" cy="82.2" r="1.7" style="--i:156"/><circle cx="73.4" cy="77.7" r="1.7" style="--i:157"/><circle cx="77.7" cy="73.4" r="1.7" style="--i:158"/><circle cx="82.2" cy="69.2" r="1.7" style="--i:159"/><circle cx="86.9" cy="65.2" r="1.7" style="--i:160"/><circle cx="91.6" cy="61.3" r="1.7" style="--i:161"/><circle cx="96.5" cy="57.6" r="1.7" style="--i:162"/><circle cx="101.6" cy="54.1" r="1.7" style="--i:163"/><circle cx="106.7" cy="50.7" r="1.7" style="--i:164"/><circle cx="112.0" cy="47.6" r="1.7" style="--i:165"/><circle cx="117.4" cy="44.6" r="1.7" style="--i:166"/><circle cx="122.8" cy="41.8" r="1.7" style="--i:167"/><circle cx="128.4" cy="39.2" r="1.7" style="--i:168"/><circle cx="134.1" cy="36.8" r="1.7" style="--i:169"/><circle cx="139.8" cy="34.6" r="1.7" style="--i:170"/><circle cx="145.6" cy="32.6" r="1.7" style="--i:171"/><circle cx="151.5" cy="30.8" r="1.7" style="--i:172"/><circle cx="157.4" cy="29.2" r="1.7" style="--i:173"/><circle cx="163.4" cy="27.8" r="1.7" style="--i:174"/><circle cx="169.4" cy="26.7" r="1.7" style="--i:175"/><circle cx="175.5" cy="25.7" r="1.7" style="--i:176"/><circle cx="181.6" cy="25.0" r="1.7" style="--i:177"/><circle cx="187.7" cy="24.4" r="1.7" style="--i:178"/><circle cx="193.9" cy="24.1" r="1.7" style="--i:179"/></g>
+  <g class="L L-orbitas"><g class="orb" style="--d:38s;--r:0"><circle cx="200" cy="200" r="96" /><circle class="pl" cx="296" cy="200" r="4.5"/></g><g class="orb" style="--d:56s;--r:120"><circle cx="200" cy="200" r="124" /><circle class="pl" cx="324" cy="200" r="3.5"/></g><g class="orb" style="--d:80s;--r:240"><circle cx="200" cy="200" r="152" /><circle class="pl" cx="352" cy="200" r="5"/></g></g>
+  <g class="L L-pilares"><line x1="257.3" y1="240.2" x2="322.9" y2="286.0"/><line x1="142.7" y1="240.2" x2="77.1" y2="286.0"/><line x1="142.7" y1="159.8" x2="77.1" y2="114.0"/><line x1="257.3" y1="159.8" x2="322.9" y2="114.0"/></g>
+  <g class="L L-ambitos"><g transform="translate(140 140)"><ellipse cx="60" cy="36" rx="9.5" ry="27" transform="rotate(0 60 36)"/><ellipse cx="78.8" cy="45" rx="9.5" ry="27" transform="rotate(51.43 78.8 45)"/><ellipse cx="83.4" cy="65.3" rx="9.5" ry="27" transform="rotate(102.86 83.4 65.3)"/><ellipse cx="70.4" cy="81.6" rx="9.5" ry="27" transform="rotate(154.29 70.4 81.6)"/><ellipse cx="49.6" cy="81.6" rx="9.5" ry="27" transform="rotate(205.71 49.6 81.6)"/><ellipse cx="36.6" cy="65.3" rx="9.5" ry="27" transform="rotate(257.14 36.6 65.3)"/><ellipse cx="41.2" cy="45" rx="9.5" ry="27" transform="rotate(308.57 41.2 45)"/></g></g>
+  <g class="L L-centro"><circle cx="200" cy="200" r="16" class="cc"/><circle cx="200" cy="200" r="26" class="halo"/></g>
+</svg></div>
+    <ol class="itens"><li class="it" data-l="centro" tabindex="0"><span class="bol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="6.5"/></svg></span><span class="tx"><b>o centro</b><span>as histórias que te contaram sobre quem você deveria ser, os papéis que você exerce, o que você sente e do que precisa. é aqui que tudo começa: você.</span></span></li><li class="it" data-l="orbitas" tabindex="0"><span class="bol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="1.8" fill="currentColor"/><circle cx="12" cy="12" r="8" stroke-dasharray="2 2"/><circle cx="17.7" cy="6.3" r="1.7" fill="currentColor"/></svg></span><span class="tx"><b>as órbitas</b><span>trabalho, família, casa, tudo o que gira ao seu redor. o que cada coisa faz de bom e de ruim pra você.</span></span></li><li class="it" data-l="pilares" tabindex="0"><span class="bol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 19V7M12 19V5M18 19V7M4 19h16"/></svg></span><span class="tx"><b>os pilares</b><span>o que sustenta a sua vida de verdade, e por que cada coisa importa pra você.</span></span></li><li class="it" data-l="ambitos" tabindex="0"><span class="bol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(0.0 12 12)"/><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(51.43 12 12)"/><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(102.86 12 12)"/><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(154.29 12 12)"/><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(205.72 12 12)"/><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(257.15 12 12)"/><ellipse cx="12" cy="6.6" rx="1.8" ry="5" transform="rotate(308.58 12 12)"/></svg></span><span class="tx"><b>os 7 âmbitos da energia</b><span>físico, mental, emocional, social, sensorial, criativo e espiritual. o que te cansa e o que te recarrega em cada um.</span></span></li><li class="it" data-l="dias" tabindex="0"><span class="bol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20.0" cy="12.0" r="1.1" fill="currentColor"/><circle cx="18.9" cy="16.0" r="1.1" fill="currentColor"/><circle cx="16.0" cy="18.9" r="1.1" fill="currentColor"/><circle cx="12.0" cy="20.0" r="1.1" fill="currentColor"/><circle cx="8.0" cy="18.9" r="1.1" fill="currentColor"/><circle cx="5.1" cy="16.0" r="1.1" fill="currentColor"/><circle cx="4.0" cy="12.0" r="1.1" fill="currentColor"/><circle cx="5.1" cy="8.0" r="1.1" fill="currentColor"/><circle cx="8.0" cy="5.1" r="1.1" fill="currentColor"/><circle cx="12.0" cy="4.0" r="1.1" fill="currentColor"/><circle cx="16.0" cy="5.1" r="1.1" fill="currentColor"/><circle cx="18.9" cy="8.0" r="1.1" fill="currentColor"/></svg></span><span class="tx"><b>seis meses, um dia de cada vez</b><span>uma página por dia, com mês e semana, pra registrar o que drenou, o que deu energia e o que te deixou mais feliz. o dia a dia vai alimentando tudo o que veio antes.</span></span></li></ol>
   </div>
+  <p class="colinha"><span class="bol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4h9l3 3v13H6z"/><path d="M9 10h6M9 13h6M9 16h4"/></svg></span>e em todo exercício tem colinha, com exemplos e opções, pra você nunca ficar olhando pra página em branco.</p>
 </section>
 
 <section class="por-que">
   <img src="/teste/clara.jpg" alt="clara ramos" width="96" height="96">
-  <p>“eu li muitos livros nesse meu processo de autoconhecimento e fui montando exercícios a partir das técnicas que encontrei neles. juntei tudo num planner que eu fiz pra mim, usei, e agora quero compartilhar.”<span>clara ramos, criadora da the relax club</span></p>
+  <p>“eu li alguns livros no meu processo de autoconhecimento e fui montando exercícios a partir das técnicas que encontrei neles. então juntei tudo num planner que fiz pra mim, usei, e agora quero compartilhar.”<span>clara ramos, criadora da the relax club</span></p>
 </section>
 
 <div class="fim-cta"><a href="#form" id="subir">entrar na lista de espera</a></div>
@@ -170,6 +186,68 @@
     })
     .catch(function(){ btn.disabled=false; btn.textContent='quero entrar na lista'; msg.textContent='não consegui salvar agora. tenta de novo em um minutinho?'; });
   });
+})();
+</script>
+
+<script>
+/* universo do planner: passa o mouse, toca ou rola até cada parte e ela acende no desenho */
+(function(){
+  var uni=document.querySelector('.uni'), its=[].slice.call(document.querySelectorAll('.it')), atual=null, auto=true, idx=0;
+  function liga(k){ atual=k; uni.classList.toggle('foco',!!k);
+    [].forEach.call(uni.querySelectorAll('.L'),function(g){ g.classList.toggle('on',g.classList.contains('L-'+k)); });
+    its.forEach(function(i){ i.classList.toggle('on',i.dataset.l===k); }); }
+  its.forEach(function(i){
+    i.addEventListener('mouseenter',function(){ auto=false; liga(i.dataset.l); });
+    i.addEventListener('focus',function(){ auto=false; liga(i.dataset.l); });
+    i.addEventListener('click',function(){ auto=false; liga(i.dataset.l); try{gtag('event','planner_universo',{parte:i.dataset.l});}catch(e){} });
+  });
+  document.querySelector('.itens').addEventListener('mouseleave',function(){ if(matchMedia('(hover:hover)').matches){ auto=true; } });
+  if(matchMedia('(hover:none)').matches && 'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ auto=false; liga(e.target.dataset.l); } }); },{rootMargin:'-55% 0px -35% 0px'});
+    its.forEach(function(i){ io.observe(i); });
+  }
+  setInterval(function(){ if(!auto) return; liga(its[idx%its.length].dataset.l); idx++; },2600);
+})();
+
+/* maré na diagonal, no alto à direita: o mouse (ou o dedo) faz a água reverberar */
+(function(){
+  var c=document.getElementById('mare-d'), x=c.getContext('2d');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, touch=matchMedia('(hover: none)').matches;
+  var W=0,H=0,lines=[], ang=-0.52, ux=Math.cos(ang), uy=Math.sin(ang), nx=-uy, ny=ux;
+  function fit(){ var d=devicePixelRatio||1; W=document.documentElement.clientWidth; H=Math.min(1100,Math.max(700,innerHeight*1.15)); c.style.height=H+'px';
+    c.width=W*d; c.height=H*d; x.setTransform(d,0,0,d,0,0);
+    var gap=W<700?30:38, n=Math.ceil((W+H)/gap)+2; lines=[]; for(var i=0;i<n;i++) lines.push({o:(i-n/2)*gap,a:3+Math.random()*4,f:1+Math.random()*1.2,s:.15+Math.random()*.2,p:Math.random()*6}); }
+  fit(); addEventListener('resize',fit);
+  var rip=[], last=0;
+  function add(px,py,force,amp){ var now=performance.now(); if(now-last<90&&!force) return; last=now; rip.push({x:px,y:py,t:now,amp:amp||(force?16:9)}); if(rip.length>14) rip.shift(); }
+  addEventListener('pointermove',function(e){ if(e.pointerType==='mouse') add(e.clientX,e.clientY+scrollY,false); });
+  addEventListener('pointerdown',function(e){ add(e.clientX,e.clientY+scrollY,true); });
+  var cx=0,cy=0;
+  function draw(t){
+    var T=t/1000; x.clearRect(0,0,W,H); cx=W*.72; cy=H*.32; var L=Math.hypot(W,H);
+    for(var r=rip.length-1;r>=0;r--) if(t-rip[r].t>3200) rip.splice(r,1);
+    x.globalCompositeOperation='source-over'; x.strokeStyle='#293729'; x.lineWidth=1; x.globalAlpha=W<700?.38:.55;
+    lines.forEach(function(Ln,i){
+      x.beginPath();
+      for(var s=-L;s<=L;s+=7){
+        var w=Math.sin(s/L*Math.PI*2*Ln.f+T*Ln.s*2+Ln.p)*Ln.a+Math.sin(s/90+T*.6+i)*1.1;
+        var bx=cx+nx*Ln.o+ux*s, by=cy+ny*Ln.o+uy*s;
+        for(var k=0;k<rip.length;k++){ var R=rip[k], age=(t-R.t)/1000, dx=bx-R.x, dy=by-R.y, dist=Math.sqrt(dx*dx+dy*dy), front=age*170, kk=dist-front; if(kk>40) continue;
+          w+=R.amp*Math.exp(-age*1.3)*Math.exp(-Math.abs(kk)/60)*Math.sin(kk/14); }
+        var px=bx+nx*w, py=by+ny*w;
+        if(s===-L) x.moveTo(px,py); else x.lineTo(px,py);
+      }
+      x.stroke();
+    });
+    // some pro lado esquerdo e pra baixo: a maré mora no alto, à direita
+    x.globalCompositeOperation='destination-in'; x.globalAlpha=1;
+    var m=W<700, g=m?x.createRadialGradient(W*1.05,-H*.02,0,W*1.05,-H*.02,W*1.05):x.createRadialGradient(W*1.02,-H*.05,0,W*1.02,-H*.05,Math.max(W*.85,H*1.05));
+    g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(.45,'rgba(0,0,0,.75)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=g; x.fillRect(0,0,W,H); x.globalCompositeOperation='source-over';
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  if(!reduce){ var autoR=function(){ if(scrollY<H) add(W*(.55+Math.random()*.4),H*(.08+Math.random()*.45),true,touch?9:7); }; setInterval(autoR,touch?1800:3200); }
 })();
 </script>
 </body>
