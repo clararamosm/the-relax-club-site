@@ -179,3 +179,9 @@ html:not(.js) .filtros{display:none}
 .rel h3{font-family:var(--serif);font-weight:300;font-size:26px;color:var(--green-deep);margin-bottom:6px}
 
 @media (prefers-reduced-motion:reduce){.an,.toca .eq i,.sede-card .live i{animation:none!important}.card{transition:none}}
+
+/* redes no rodapé (igual à sede) */
+.fim .social{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:22px}
+.fim .social a{display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:11px 18px;font-size:15px;color:var(--green);background:var(--cream)}
+.fim .social a:hover{background:#FBF8F2}
+.fim .social svg{width:18px;height:18px;flex:none}
