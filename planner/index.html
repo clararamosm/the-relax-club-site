@@ -204,33 +204,27 @@
 </script>
 
 <script>
-/* gravidade: com o mouse (ou o dedo) em cima do desenho, o universo inteiro se inclina na direção dele.
-   cada órbita se desloca (as de fora mais que as de dentro), os planetas vão junto e são puxados um pouco mais,
-   e tudo volta pro lugar quando ele sai */
+/* gravidade: com o mouse (ou o dedo) em cima do desenho, todos os planetinhas são puxados na direção dele,
+   saindo um pouco da órbita, e voltam pro lugar quando ele sai. as órbitas e o resto do desenho ficam parados */
 (function(){
   var svg=document.querySelector('.uni'); if(!svg) return;
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var aneis=[].slice.call(svg.querySelectorAll('.L-orbitas .anel')).map(function(c){ return {el:c,r:+c.getAttribute('r'),ox:0,oy:0}; });
-  var pls=[].slice.call(svg.querySelectorAll('.L-orbitas .pl')).map(function(c){ var r=+c.dataset.r; return {el:c,r:r,a:+c.dataset.a,w:.144/Math.pow(r/84,1.5),ox:0,oy:0}; });
-  var dias=[].slice.call(svg.querySelectorAll('.L-dias circle')).map(function(c){ return {el:c,x:+c.getAttribute('cx'),y:+c.getAttribute('cy'),ox:0,oy:0}; });
+  var pls=[].slice.call(svg.querySelectorAll('.L-orbitas .pl')).map(function(c){ var r=+c.dataset.r; return {el:c,r:r,a:+c.dataset.a,w:.144/Math.pow(r/84,1.5),ox:0,oy:0,v:.55+Math.random()*.35}; });
   var sol=null, ant=performance.now();
   function pt(e){ var p=svg.createSVGPoint(); p.x=e.clientX; p.y=e.clientY; var m=svg.getScreenCTM(); return m?p.matrixTransform(m.inverse()):null; }
   svg.addEventListener('pointermove',function(e){ sol=pt(e); });
   svg.addEventListener('pointerdown',function(e){ sol=pt(e); });
   svg.addEventListener('pointerleave',function(){ sol=null; });
   svg.addEventListener('pointerup',function(e){ if(e.pointerType!=='mouse') setTimeout(function(){ sol=null; },700); });
-  var mx=0,my=0; // quanto o mouse tá longe do centro (-1 a 1)
   function quadro(t){
-    var dt=Math.min(50,t-ant)/1000; ant=t, k=Math.min(1,dt*3.5);
-    var tx=sol?(sol.x-200)/200:0, ty=sol?(sol.y-200)/200:0;
-    mx+=(tx-mx)*k; my+=(ty-my)*k;
-    aneis.forEach(function(a){ var f=a.r/168*28; a.ox=mx*f; a.oy=my*f; a.el.setAttribute('cx',(200+a.ox).toFixed(2)); a.el.setAttribute('cy',(200+a.oy).toFixed(2)); });
+    var dt=Math.min(50,t-ant)/1000; ant=t;
     pls.forEach(function(p){
-      if(!reduce) p.a+=p.w*dt*(sol?1.8:1);
-      var f=p.r/168*40, cx=200+mx*f, cy=200+my*f;
-      p.el.setAttribute('cx',(cx+p.r*Math.cos(p.a)).toFixed(2)); p.el.setAttribute('cy',(cy+p.r*Math.sin(p.a)).toFixed(2));
+      if(!reduce) p.a+=p.w*dt;
+      var bx=200+p.r*Math.cos(p.a), by=200+p.r*Math.sin(p.a), gx=0, gy=0;
+      if(sol){ var dx=sol.x-bx, dy=sol.y-by, d=Math.hypot(dx,dy)||1, m=Math.min(d*p.v, 120); gx=dx/d*m; gy=dy/d*m; }
+      var k=Math.min(1,dt*(sol?3.2:2.2)); p.ox+=(gx-p.ox)*k; p.oy+=(gy-p.oy)*k;
+      p.el.setAttribute('cx',(bx+p.ox).toFixed(2)); p.el.setAttribute('cy',(by+p.oy).toFixed(2));
     });
-    dias.forEach(function(d){ var f=12; d.el.setAttribute('cx',(d.x+mx*f).toFixed(2)); d.el.setAttribute('cy',(d.y+my*f).toFixed(2)); });
     requestAnimationFrame(quadro);
   }
   requestAnimationFrame(quadro);
