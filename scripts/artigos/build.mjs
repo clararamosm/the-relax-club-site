@@ -230,6 +230,7 @@ ${conteudo}
 </div>
 ${rodape()}
 <script src="/js/artigos.js" defer></script>
+<script src="/js/instalar.js" defer></script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script>

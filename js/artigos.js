@@ -2,7 +2,8 @@
    - .toca: toca o mix do artigo aqui mesmo (arquivos de /sons/audio/, volumes do mix, em loop, timer de 30 min com fade)
    - .video: troca a capa pelo player do youtube (youtube-nocookie) só no clique
    - .filtros: filtra os grupos do índice /artigos/
-   - eventos do GA4: artigo_view, toca_play, abre_mixer, artigo_teste_click */
+   - eventos do GA4: artigo_view, toca_play, abre_mixer, artigo_teste_click
+   - o tempo tocado vai pro aviso de instalar como app (/js/instalar.js) via trc.tempoTocando(segundos) */
 (() => {
   const ga = (nome, dados) => { try { if (window.gtag) window.gtag('event', nome, dados || {}); } catch (e) {} };
   const ls = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } };
@@ -123,4 +124,13 @@
       else tocar();
     });
   });
+
+  /* tempo com som tocando de verdade: alimenta o aviso de instalar como app (/js/instalar.js) */
+  if (document.querySelector('.toca[data-sons]')) {
+    let ult = Date.now();
+    setInterval(() => {
+      const agora = Date.now(), d = Math.min(65, (agora - ult) / 1000); ult = agora;
+      if (ctx && ctx.state === 'running' && document.querySelector('.toca.tocando') && window.trc && window.trc.tempoTocando) window.trc.tempoTocando(d);
+    }, 5000);
+  }
 })();

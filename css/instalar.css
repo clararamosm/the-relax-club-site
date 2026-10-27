@@ -1,0 +1,24 @@
+/* aviso "instalar como app" (o comportamento fica em /js/instalar.js, que baixa este arquivo só quando o aviso vai aparecer).
+   barra fina no topo, de ponta a ponta, por cima da página (não empurra o layout), abaixo dos modais da conta. */
+.trc-aviso{
+  --av-fundo:#293729; --av-tx:#F1EBDC;
+  position:fixed;top:0;left:0;right:0;z-index:15;
+  background:var(--av-fundo);color:var(--av-tx);
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:13.5px;line-height:1.35;text-transform:lowercase;
+  padding:calc(8px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));
+  box-shadow:0 6px 24px rgba(41,55,41,.18);
+  transform:translateY(-100%);transition:transform .35s ease;
+}
+.trc-aviso.on{transform:translateY(0)}
+.trc-aviso-in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.trc-aviso-tx{flex:1;min-width:0;margin:0;text-wrap:pretty}
+.trc-aviso-tx small{display:block;font-size:12px;opacity:.72;margin-top:2px}
+.trc-aviso-bt{flex:none;display:inline-block;border:0;border-radius:99px;background:var(--av-tx);color:var(--av-fundo);font:inherit;font-weight:600;text-transform:lowercase;text-decoration:none;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.trc-aviso-bt:hover{background:#fff}
+.trc-aviso-x{flex:none;display:grid;place-items:center;width:32px;height:32px;margin-right:-6px;border:0;border-radius:50%;background:none;color:var(--av-tx);cursor:pointer;padding:0}
+.trc-aviso-x:hover{background:rgba(241,235,220,.12)}
+.trc-aviso-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.trc-aviso :focus-visible{outline:2px solid var(--av-tx);outline-offset:2px}
+@media (max-width:480px){.trc-aviso{font-size:12.5px;line-height:1.3;padding-top:calc(7px + env(safe-area-inset-top,0px));padding-bottom:7px}.trc-aviso-in{gap:8px}.trc-aviso-bt{padding:6px 12px}.trc-aviso-x{width:28px;height:28px;margin-right:-4px}.trc-aviso-tx small{font-size:11.5px;margin-top:1px}}
+@media (prefers-reduced-motion:reduce){.trc-aviso{transition:none}}
+@media print{.trc-aviso{display:none}}

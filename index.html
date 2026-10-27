@@ -723,6 +723,9 @@ $('#timer').onclick=()=>{
     const mm=Math.floor(left/60000), ss=Math.floor(left/1000)%60; $('#timer').textContent=`${mm}:${String(ss).padStart(2,'0')}`; };
   tick(); tInt=setInterval(tick,1000);
 };
+/* tempo com som tocando de verdade: alimenta o aviso de instalar como app (js/instalar.js) */
+(()=>{ let ult=Date.now(); setInterval(()=>{ const agora=Date.now(), d=Math.min(65,(agora-ult)/1000); ult=agora;
+  if(playing && ctx && ctx.state==='running' && +$('#master').value>0 && SONS.some(s=>st[s.id].on) && window.trc && trc.tempoTocando) trc.tempoTocando(d); },5000); })();
 function fadeAllOut(){ if(!master) return; const t=ctx.currentTime; master.gain.setTargetAtTime(0,t,3); setTimeout(()=>{ setPlaying(false); master.gain.setValueAtTime(+$('#master').value/100,ctx.currentTime); },12000); }
 
 /* salvar (protótipo: fica no navegador; depois vira conta) */
@@ -826,6 +829,7 @@ try{ const daUrl=mixDaUrl(); const saved=daUrl?daUrl.s:JSON.parse(localStorage.g
 })();
 </script>
 <script type="module" src="/js/conta.js"></script>
+<script src="/js/instalar.js" defer></script>
 <script>window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script>
