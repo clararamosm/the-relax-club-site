@@ -1,0 +1,12 @@
+{
+  "name": "the-relax-club-artigos",
+  "private": true,
+  "type": "module",
+  "description": "build dos artigos do therelax.club (gera html estático em /artigos/, /sobre/ e /news/)",
+  "dependencies": {
+    "@notionhq/client": "5.28.0",
+    "@resvg/resvg-js": "2.6.2",
+    "marked": "18.1.2",
+    "notion-to-md": "3.1.9"
+  }
+}

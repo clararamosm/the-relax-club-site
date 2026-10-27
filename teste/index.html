@@ -130,6 +130,7 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 .bar{height:12px;background:var(--cream-2);border-radius:99px;overflow:hidden}
 .bar i{display:block;height:100%;width:0;border-radius:99px;transition:width 1s ease}
 .bar-row b{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.bar-row .ler{display:block;font-size:12.5px;color:var(--muted);text-decoration:underline;text-decoration-color:var(--sage);text-underline-offset:3px;margin-top:1px}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
 .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--c)}
 .recargas{list-style:none;display:flex;flex-direction:column;gap:10px}
@@ -280,6 +281,10 @@ const CFG = {
 };
 // abrindo o arquivo direto no computador (sem a vercel), o teste roda em modo prévia: nada é enviado
 const PREVIA = location.protocol === 'file:';
+// artigo de cada tipo de descanso (só os publicados; gerado pelo build dos artigos)
+/* artigos:inicio (gerado por scripts/artigos/build.mjs) */
+const LER_SOBRE = {"fis":"/artigos/cansaco-fisico/","men":"/artigos/cansaco-mental/","emo":"/artigos/cansaco-emocional/","soc":"/artigos/cansaco-social/","sen":"/artigos/cansaco-sensorial/","cri":"/artigos/descanso-criativo/","esp":"/artigos/descanso-espiritual/"};
+/* artigos:fim */
 
 /* ============ os 7 âmbitos ============ */
 const AMB = {
@@ -745,7 +750,7 @@ function resultado(){
 
     </div><div class="r-map">
     <p class="sub">as suas 7 baterias</p>
-    <div class="map">${r.rank.map(k=>`<div class="bar-row"><span>${AMB[k].nome}</span><div class="bar"><i data-w="${r.bat[k]}" style="background:${cor(r.bat[k])}"></i></div><b>${r.bat[k]}%</b></div>`).join('')}</div>
+    <div class="map">${r.rank.map(k=>`<div class="bar-row"><span>${AMB[k].nome}${LER_SOBRE[k] ? `<a class="ler" href="${LER_SOBRE[k]}">ler sobre</a>` : ''}</span><div class="bar"><i data-w="${r.bat[k]}" style="background:${cor(r.bat[k])}"></i></div><b>${r.bat[k]}%</b></div>`).join('')}</div>
     <div class="legend"><span style="--c:var(--ok)">carregada</span><span style="--c:var(--mid)">pedindo recarga</span><span style="--c:var(--low)">no vermelho</span></div>
     </div></div>
 

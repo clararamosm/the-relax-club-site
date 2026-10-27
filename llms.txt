@@ -6,7 +6,11 @@
 
 - [barulho pra descansar](https://therelax.club/): mixer gratuito e sem cadastro de barulho de chuva, mar, natureza e sons ambiente pra relaxar, meditar, focar e dormir. 24 sons (chuva, trovoada, praia, córrego, cachoeira, vento, passarinhos, cigarra, grilos, sapos, ventilador, lareira, gato ronronando, vitrola, cafeteria, sininhos, sino, tigela, tigela cantando, gongo, batuque, pau de chuva, kalimba, flauta), com volume por som, mixes prontos (chuva em casa, foco, dormir, fim de tarde no interior, noite no sítio, roda, varanda, serra, chuva musical, meditar, yoga) e timer.
 - [que tipo de cansaço é o seu?](https://therelax.club/teste/): teste gratuito de 16 perguntas (uns 3 minutos) em formato de conversa, pra descobrir se o cansaço é mental, emocional, físico ou outro. mostra a bateria da pessoa em cada um dos 7 tipos de descanso (físico, mental, emocional, social, sensorial, criativo e espiritual) e um plano pra começar a recarregar.
-- [perguntas frequentes](https://therelax.club/perguntas/): o que é a the relax club, os 7 tipos de descanso, sons pra dormir e de onde vêm os sons.
+<!-- artigos-links:inicio -->
+- [artigos](https://therelax.club/artigos/): respostas curtas sobre cansaço, os 7 tipos de descanso, barulho pra dormir e pra focar, pausas e como usar o mixer, escritas por clara ramos.
+- [o que é a the relax club](https://therelax.club/sobre/): quem faz, o que tem no site e de onde vêm os sons.
+- [o que é a the relax news](https://therelax.club/news/): a newsletter do clube, o que sai em cada edição e como assinar.
+<!-- artigos-links:fim -->
 - [the relax news](https://therelaxclub.substack.com): newsletter que sai toda segunda e quinta, com histórias, guias e o que a ciência diz sobre descansar de verdade.
 
 ## os 7 tipos de descanso
@@ -18,7 +22,49 @@
 - sensorial: excesso de tela, som, luz e notificação.
 - criativo: quando a rotina fica igual e nada mais encanta.
 - espiritual: quando falta sentido no que se faz.
+<!-- artigos-lista:inicio -->
+## artigos
 
+### cansaço e descanso
+
+- [que tipo de cansaço é o seu? os 7 tipos de descanso e por que dormir não resolve](https://therelax.club/artigos/tipos-de-cansaco/): o seu cansaço pode ser físico, mental, emocional, social, sensorial, criativo ou espiritual, segundo o modelo dos 7 tipos de descanso popularizado pela médica americana Saundra Dalton-Smith no livro Sacred Rest, de 2017.
+- [cansaço mental: sinais e o que fazer quando a cabeça não desliga](https://therelax.club/artigos/cansaco-mental/): cansaço mental é o esgotamento que vem de muito tempo usando a atenção, e os sinais mais comuns são dificuldade de concentração, irritação, tarefas simples pesando e a cabeça que não desliga.
+- [cansaço sensorial: como aliviar o excesso de tela, barulho e estímulo?](https://therelax.club/artigos/cansaco-sensorial/): pra aliviar o cansaço sensorial, que vem do excesso de tela, barulho, luz e notificação, o que ajuda é tirar estímulo, não acrescentar: alguns minutos de silêncio, pausas pros olhos longe da tela e luz baixa à noite.
+- [cansaço emocional: o que é e como descansar no dia a dia?](https://therelax.club/artigos/cansaco-emocional/): cansaço emocional é o esgotamento que vem de segurar sentimentos, os seus e os dos outros, como engolir o que sente pra não dar trabalho ou manter a cara de que tá tudo bem.
+- [cansaço físico: como saber se o corpo precisa de descanso?](https://therelax.club/artigos/cansaco-fisico/): o corpo precisa de descanso quando o cansaço físico aparece como peso nas pernas, ombro e mandíbula tensos, dor nas costas no fim do dia ou acordar sem energia mesmo depois de dormir.
+- [cansaço social: por que algumas pessoas cansam a gente?](https://therelax.club/artigos/cansaco-social/): cansaço social é o esgotamento que vem do convívio, e algumas pessoas cansam a gente mais que outras porque, com elas, você precisa atuar: segurar a conversa, parecer animada, esconder o que sente.
+- [o que é descanso criativo e como recuperar a inspiração?](https://therelax.club/artigos/descanso-criativo/): descanso criativo é o tempo sem objetivo em que a cabeça pode vagar, se encantar com algo e receber coisa nova, e é ele que ajuda a recuperar a inspiração quando o dia inteiro vira execução.
+- [o que é descanso espiritual e como encontrar sentido no meio da correria?](https://therelax.club/artigos/descanso-espiritual/): descanso espiritual é o descanso que reconecta você com o que importa e com algo maior que a sua agenda, e ele não depende de religião.
+
+### barulhos e sons
+
+- [por que o barulho de chuva relaxa tanto e ajuda a dormir?](https://therelax.club/artigos/barulho-de-chuva/): o barulho de chuva relaxa e ajuda a dormir porque é um som contínuo e sem picos, que cobre os ruídos repentinos que acordam a gente.
+- [onde ouvir barulho de ventilador pra dormir de graça?](https://therelax.club/artigos/barulho-de-ventilador/): dá pra ouvir barulho de ventilador pra dormir de graça e sem cadastro no mixer da the relax club, que tem o som de ventilador de teto e um timer pra desligar sozinho.
+- [qual barulho ajuda a dormir melhor?](https://therelax.club/artigos/barulho-para-dormir/): o barulho que mais ajuda a dormir é um som contínuo e previsível, sem palavras nem picos, como chuva, mar ou ventilador, tocando baixinho.
+- [qual barulho ajuda a estudar e focar?](https://therelax.club/artigos/barulho-para-estudar/): o barulho que menos atrapalha pra estudar e focar é um som contínuo e sem palavras, como chuva ou ventilador, em volume baixo.
+- [barulho de mar relaxante: por que as ondas acalmam?](https://therelax.club/artigos/barulho-de-mar/): o barulho de mar acalma provavelmente porque é som de água, um dos sons da natureza mais ligados a bem-estar nos estudos, e tem um vaivém lento e previsível que não pede atenção.
+- [ruído branco, rosa ou marrom: qual a diferença e qual usar?](https://therelax.club/artigos/ruido-branco-rosa-marrom/): a diferença entre ruído branco, rosa e marrom é onde fica a força do som: o branco tem a mesma energia em todas as frequências e soa como chiado de TV fora do ar, enquanto o rosa e o marrom concentram mais energia nos graves e soam mais abafados.
+- [quais sons da natureza ajudam a relaxar?](https://therelax.club/artigos/sons-da-natureza/): os sons da natureza que mais ajudam a relaxar, segundo os estudos, são os de água, como córrego e cachoeira, e o canto de passarinhos.
+- [sons do interior: por que cigarra, grilo e sapo acalmam a gente?](https://therelax.club/artigos/sons-do-interior/): cigarra, grilo e sapo provavelmente acalmam muita gente por dois motivos: são sons repetitivos, que deixam menos perceptível o barulho de fora, e lembram lugares tranquilos, como a noite no sítio ou o fim de tarde no interior.
+- [por que os sons de casa acalmam? ventilador de teto, chuva no telhado e fogão a lenha](https://therelax.club/artigos/sons-de-casa/): os sons de casa, como o ventilador de teto, a chuva no telhado e o estalo do fogão a lenha, provavelmente acalmam porque são contínuos e conhecidos: cobrem o barulho de fora e não trazem surpresa.
+- [que som usar pra meditar? tigela tibetana, gongo e sinos](https://therelax.club/artigos/sons-para-meditar/): pra meditar, use um som que traga sua atenção de volta pro presente sem distrair: a tigela tibetana, o sino e o gongo costumam marcar o começo e o fim da prática, e um som contínuo e baixo, como água, ou o próprio silêncio servem pro meio.
+- [sons que ajudam a acalmar a ansiedade: o que funciona?](https://therelax.club/artigos/sons-para-acalmar/): os sons que ajudam a acalmar a ansiedade do dia a dia, segundo os estudos, são a música que você gosta e os sons da natureza, como água e passarinhos, que baixaram medidas de estresse em pesquisas.
+
+### pausas e rotina
+
+- [como fazer uma pausa de 5 minutos que descansa de verdade?](https://therelax.club/artigos/pausa-de-5-minutos/): pra fazer uma pausa de 5 minutos que descansa de verdade, sai da tarefa por inteiro: levanta, tira os olhos da tela e não troca o trabalho pelo celular.
+- [como criar um ritual de descanso à noite?](https://therelax.club/artigos/ritual-da-noite/): pra criar um ritual de descanso à noite, escolhe dois ou três gestos simples e repete na mesma ordem toda noite, como escrever a lista do que falta fazer, baixar a luz e colocar um som baixinho com timer.
+- [timer para dormir com sons: como usar sem acordar no meio da noite?](https://therelax.club/artigos/timer-para-dormir/): pra usar um timer para dormir com sons sem acordar no meio da noite, deixa o volume baixo, escolhe um tempo um pouco maior do que você costuma levar pra pegar no sono e prefere um timer que abaixe o som aos poucos em vez de cortar seco.
+
+### como usar e indicações
+
+- [existe um site grátis pra misturar barulho de chuva e outros sons pra dormir?](https://therelax.club/artigos/site-gratis-misturar-sons/): sim: o mixer da the relax club é um site grátis pra misturar barulho de chuva e outros sons pra dormir, sem cadastro e em português.
+- [como instalar a the relax club no celular?](https://therelax.club/artigos/instalar-no-celular/): pra instalar a the relax club no celular, você abre therelax.club no navegador e adiciona o site à tela de início: no iPhone, pelo Safari, em compartilhar e "adicionar à tela de início"; no Android, pelo Chrome, nos três pontinhos e "instalar app" ou "adicionar à tela inicial".
+- [qual a melhor alternativa ao Noisli em português?](https://therelax.club/artigos/alternativa-ao-noisli/): pra quem procura uma alternativa ao Noisli em português, a melhor opção que encontramos é o mixer da the relax club: é grátis, não pede cadastro pra ouvir, tem a interface toda em português e mistura sons brasileiros, como cigarra, sapos e batuque, com chuva, mar e ventilador.
+- [quais são os apps e sites brasileiros de meditação e relaxamento?](https://therelax.club/artigos/apps-de-meditacao-brasileiros/): os apps brasileiros de meditação e relaxamento mais conhecidos e ativos em 2026 são o Lojong, o Zen e o Atma, todos com meditação guiada em português, uma parte gratuita e assinatura pro acervo completo.
+- [quais são as melhores newsletters brasileiras sobre descanso e presença?](https://therelax.club/artigos/newsletters-brasileiras-descanso/): as melhores newsletters brasileiras sobre descanso e presença em 2026, na seleção da the relax club, são a the relax news, a Tempo de qualidade, a Yoga e Meditação, a Domingo Domy e a Não vou surtar sozinha.
+
+<!-- artigos-lista:fim -->
 ## contato
 
-clara@therelax.club · instagram @therelax.club · pinterest therelaxclubbr
+clara@therelax.club · instagram @therelax.club · pinterest therelaxclubbr · tiktok @therelax.club · youtube @therelax-club

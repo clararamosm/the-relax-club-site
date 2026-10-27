@@ -10,6 +10,26 @@
       "source": "/sons/",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/perguntas",
+      "destination": "/sobre/",
+      "permanent": true
+    },
+    {
+      "source": "/perguntas/",
+      "destination": "/sobre/",
+      "permanent": true
+    },
+    {
+      "source": "/artigos/sobre/",
+      "destination": "/sobre/",
+      "permanent": true
+    },
+    {
+      "source": "/artigos/news/",
+      "destination": "/news/",
+      "permanent": true
     }
   ]
 }
