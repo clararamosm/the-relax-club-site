@@ -66,9 +66,6 @@
 @keyframes gira{from{transform:rotate(calc(var(--r)*1deg))}to{transform:rotate(calc(var(--r)*1deg + 360deg))}}
 .L-pilares line{stroke-width:1.4;stroke-dasharray:3 4}
 .L-ambitos ellipse{stroke-opacity:.8}
-.L-ambitos > g{transform-origin:200px 200px}
-.uni:not(.foco) .L-ambitos > g,.L-ambitos.on > g{animation:respira 6s ease-in-out infinite}
-@keyframes respira{0%,100%{transform:translate(140px,140px) scale(1)}50%{transform:translate(140px,140px) scale(1.06)}}
 .L-centro .cc{fill:var(--green-deep);stroke:none}
 .L-centro .halo{stroke-opacity:.4;animation:halo 3.2s ease-out infinite;transform-origin:200px 200px}
 @keyframes halo{0%{transform:scale(.7);opacity:.9}100%{transform:scale(2.2);opacity:0}}
