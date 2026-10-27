@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   const enviados = [];
   for (const i of prontos) {
     if (!(await marcarEnvio('fila:' + i.id))) continue;
-    const r = await enviarParaTodos({ titulo: String(i.titulo || 'clara').slice(0, 80), texto: String(i.texto).slice(0, 240), url: i.url || '/', tag: 'fila-' + i.id });
+    const r = await enviarParaTodos({ titulo: String(i.titulo || '').slice(0, 80), texto: String(i.texto).slice(0, 240), url: i.url || '/', tag: 'fila-' + i.id });
     enviados.push({ id: i.id, ...r });
   }
   return res.status(200).json({ ok: true, enviados });

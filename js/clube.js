@@ -239,8 +239,15 @@ async function darNumero() {
   } catch (e) { console.error('numero', e); }
 }
 
+/* contas da equipe não contam nas estatísticas: marca o aparelho como tráfego interno (o google analytics filtra) */
+const INTERNOS = /@(therelax\.club|boldfy\.com\.br|operos\.ai)$|^therelaxclub\.br@gmail\.com$/i;
+function marcarInterno(u) {
+  if (!u || !INTERNOS.test(u.email || '')) return;
+  try { localStorage.setItem('trc-interno', '1'); } catch (e) {}
+  try { window.gtag && gtag('set', { traffic_type: 'internal' }); } catch (e) {}
+}
 onAuthStateChanged(auth, async u => {
-  user = u;
+  user = u; marcarInterno(u);
   if (!u) { perfil = null; avisa(); return; }
   avisa();
   const ref = doc(db, 'users', u.uid);

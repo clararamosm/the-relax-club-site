@@ -9,7 +9,7 @@ self.addEventListener('fetch', () => {});
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (er) { d = { texto: e.data ? e.data.text() : '' }; }
-  const titulo = d.titulo || 'the relax club';
+  const titulo = typeof d.titulo === 'string' ? d.titulo : ''; // sem título: o iphone já mostra "from the relax club" e a mensagem vem direto
   const opcoes = {
     body: d.texto || '',
     icon: '/teste/clara.jpg',

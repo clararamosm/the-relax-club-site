@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   const link = tag(item, 'link');
   const data = new Date(tag(item, 'pubDate'));
   const recente = !isNaN(data) && Date.now() - data.getTime() < JANELA;
-  const aviso = { titulo: 'saiu news nova', texto: titulo, url: link || 'https://therelaxclub.substack.com', tag: 'news' };
+  const aviso = { titulo: '', texto: 'saiu news nova: ' + titulo, url: link || 'https://therelaxclub.substack.com', tag: 'news' };
 
   if (req.query && req.query.ver) return res.status(200).json({ ok: true, recente, data: isNaN(data) ? null : data.toISOString(), aviso });
   if (!recente || !link) return res.status(200).json({ ok: true, enviou: false, motivo: 'sem edição nova' });
