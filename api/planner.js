@@ -60,7 +60,13 @@ export default async function handler(req, res) {
   };
   Object.keys(attributes).forEach(k => attributes[k] === undefined && delete attributes[k]);
 
-  const r = await brevo('/contacts', 'POST', { email, attributes, listIds: [listId], updateEnabled: true });
-  if (!r.ok) { console.error('brevo planner', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
+  // se o Brevo recusar os atributos, tenta de novo só com o essencial: o importante é a pessoa entrar na lista
+  let r = await brevo('/contacts', 'POST', { email, attributes, listIds: [listId], updateEnabled: true });
+  if (!r.ok) {
+    console.error('brevo planner', r.status, r.text);
+    r = await brevo('/contacts', 'POST', { email, listIds: [listId], updateEnabled: true });
+    if (!r.ok && atual.ok) r = await brevo(`/contacts/lists/${listId}/contacts/add`, 'POST', { emails: [email] });
+    if (!r.ok) { console.error('brevo planner minimo', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
+  }
   return res.status(200).json({ ok: true });
 }
