@@ -15,6 +15,6 @@ export default async function handler(req, res) {
   let url = String(b.url || '/').trim();
   if (!texto) return res.status(400).json({ ok: false, error: 'texto' });
   if (!url.startsWith('/') && !/^https:\/\//.test(url)) url = '/';
-  const r = await enviarParaTodos({ titulo: titulo || 'clara, da the relax club', texto, url: url.slice(0, 500), tag: 'aviso-' + Date.now() });
+  const r = await enviarParaTodos({ titulo: titulo || 'clara', texto, url: url.slice(0, 500), tag: 'aviso-' + Date.now() });
   return res.status(200).json({ ok: true, ...r });
 }

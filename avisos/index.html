@@ -67,15 +67,15 @@ function pintar(u) {
   if ((u.email || '').toLowerCase() !== ADMIN) { sub.textContent = 'essa página é só da clara.'; area.innerHTML = ''; return; }
   sub.innerHTML = 'manda uma notificação pra todo mundo que aceitou receber no app. <span id="qtos"></span>';
   area.innerHTML = `<div class="box">
-    <label for="t">título</label><input id="t" maxlength="80" placeholder="clara, da the relax club">
+    <label for="t">título</label><input id="t" maxlength="80" placeholder="clara">
     <label for="x">mensagem</label><textarea id="x" maxlength="240" placeholder="o que você quer dizer"></textarea><div class="cont" id="c">0/240</div>
     <label for="l">abre onde (quando tocar)</label><input id="l" value="/" placeholder="/ ou https://...">
     <p class="prevt">como chega no celular</p>
-    <div class="prev"><img src="/teste/clara.jpg" alt=""><div><b id="pt">clara, da the relax club</b><span id="px">o que você quer dizer</span></div></div>
+    <div class="prev"><img src="/teste/clara.jpg" alt=""><div><b id="pt">clara</b><span id="px">o que você quer dizer</span></div></div>
     <button class="bt" id="env" disabled>mandar pra todo mundo</button>
     <p class="res" id="res" role="status"></p></div>`;
   const t = $('#t'), x = $('#x'), l = $('#l'), env = $('#env'), res = $('#res');
-  const atualiza = () => { $('#pt').textContent = t.value.trim() || 'clara, da the relax club'; $('#px').textContent = x.value.trim() || 'o que você quer dizer'; $('#c').textContent = x.value.length + '/240'; env.disabled = !x.value.trim(); env.classList.remove('conf'); env.textContent = 'mandar pra todo mundo'; };
+  const atualiza = () => { $('#pt').textContent = t.value.trim() || 'clara'; $('#px').textContent = x.value.trim() || 'o que você quer dizer'; $('#c').textContent = x.value.length + '/240'; env.disabled = !x.value.trim(); env.classList.remove('conf'); env.textContent = 'mandar pra todo mundo'; };
   [t, x, l].forEach(i => i.oninput = atualiza);
   api('GET').then(r => { if (r.ok) $('#qtos').innerHTML = `hoje <b>${r.inscritos}</b> ${r.inscritos === 1 ? 'pessoa recebe' : 'pessoas recebem'}.`; });
   env.onclick = async () => {

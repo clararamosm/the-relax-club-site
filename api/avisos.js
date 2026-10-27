@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
   await guardar(sub, { plataforma });
   if (novo) {
-    await enviarPara(sub, { titulo: 'clara, da the relax club', texto: 'pronto, é por aqui que eu te aviso quando sair news nova. sem exagero, prometo.', url: '/', tag: 'boas-vindas' });
+    await enviarPara(sub, { titulo: 'clara', texto: 'pronto, a gente te avisa por aqui quando sair news nova.', url: '/', tag: 'boas-vindas' });
   }
   return res.status(200).json({ ok: true });
 }
