@@ -186,7 +186,12 @@ export const sair = () => signOut(auth);
 export let user = null, perfil = null;
 const ouvintes = [];
 export function quandoMudar(f) { ouvintes.push(f); }
-const avisa = () => ouvintes.forEach(f => { try { f(user, perfil); } catch (e) { console.error(e); } });
+const avisa = () => {
+  ouvintes.forEach(f => { try { f(user, perfil); } catch (e) { console.error(e); } });
+  /* ponte pros scripts comuns da página (ex.: o chat do /teste/ saber o nome de quem já tá logado) */
+  window.trcConta = { pronto: true, user, perfil, nome: primeiro(perfil?.nome || user?.displayName || '').toLowerCase(), email: user?.email || '', optin: !!perfil?.optin };
+  try { dispatchEvent(new CustomEvent('trc-conta', { detail: window.trcConta })); } catch (e) {}
+};
 export function atualizarPerfil(campos) { perfil = { ...(perfil || {}), ...campos }; avisa(); }
 
 const idTeste = t => String(t.data).replace(/[^0-9a-z]/gi, '-');

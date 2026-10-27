@@ -95,6 +95,7 @@ header{flex:none;padding:12px 18px 0;background:var(--paper)}
 .btn{display:inline-flex;justify-content:center;align-items:center;background:var(--green-deep);color:var(--paper);border:0;border-radius:99px;padding:16px 28px;font-size:16px;font-weight:500;cursor:pointer;text-transform:lowercase}
 .btn.ghost{background:transparent;color:var(--green-deep);border:1px solid var(--green-deep)}
 .btn.full{width:100%}
+.btn:disabled{opacity:.45;cursor:default}
 .note{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;text-wrap:balance}
 
 /* carregando */
@@ -543,8 +544,24 @@ function inicio(){
     track('teste_inicio');
   };
 }
+/* quem já tá logada no clube: a gente já sabe o nome (e o email), então não pergunta de novo.
+   o js/clube.js avisa com o evento 'trc-conta' e deixa os dados em window.trcConta. espera no máximo 1,5s. */
+const conta = () => window.trcConta || {};
+function esperarConta(){
+  if(conta().pronto) return Promise.resolve(conta());
+  return new Promise(ok => { const t = setTimeout(() => ok(conta()), 1500); addEventListener('trc-conta', () => { clearTimeout(t); ok(conta()); }, { once:true }); });
+}
 async function conversa(){
   setTop();
+  const c = await esperarConta();
+  if(c.user && c.nome){
+    st.nome = c.nome.slice(0,30);
+    await bot(fill('oi, {nome}! que bom te ver por aqui.'), 'nome');
+    await bot('vou te fazer umas perguntas rápidas, e você só escolhe a opção que mais tem a ver com você. no final eu te mostro qual tipo de descanso tá faltando aí.', 'nome');
+    await bot('não tem resposta certa, tá? vai na primeira que vier.', 'energia');
+    perguntar('energia');
+    return;
+  }
   await bot('oi! que bom que você veio.', 'nome');
   await bot('vou te fazer umas perguntas rápidas, e você só escolhe a opção que mais tem a ver com você. no final eu te mostro qual tipo de descanso tá faltando aí.', 'nome');
   await bot('antes, como posso te chamar?', 'nome', 'q');
@@ -630,6 +647,14 @@ async function teaser(){
       ${outros}
     </div>`, 'email', 'card');
   if(my!==gen) return;
+  const c = conta();
+  if(c.user && c.email){
+    // já tá logada: não pede email de novo
+    await bot('quer ver qual é, o que fazer com ela e o mapa completo? eu abro a sua página aqui e te mando o resultado inteiro no seu email.', 'email', 'q');
+    if(my!==gen) return;
+    pedirEmailLogada(c);
+    return;
+  }
   await bot('quer ver qual é, o que fazer com ela e o mapa completo? me passa o seu email que eu te mando o resultado inteiro e já abro a sua página aqui.', 'email', 'q');
   if(my!==gen) return;
   pedirEmail();
@@ -657,6 +682,22 @@ function pedirEmail(){
     if(!eok.checked){ document.getElementById('hint').textContent='marca a caixinha pra eu poder te mandar o resultado.'; return; }
     me(ein.value.trim(), 'email');
     enviar(ein.value.trim(), document.getElementById('hp').value);
+  };
+}
+
+/* logada: um botão só. quem ainda não aceitou os emails do clube vê a caixinha (o resultado vai pro email e entra na lista) */
+function pedirEmailLogada(c){
+  composer.innerHTML = `<form id="ef">
+    <button class="btn full" id="esend" type="submit">ver meu resultado</button>
+    ${c.optin ? '' : `<label class="check"><input type="checkbox" id="eok"> <span>pode me mandar o meu resultado e os emails da the relax club. dá pra sair quando quiser.</span></label>`}
+    <div class="hint" id="hint"></div></form>`;
+  const eok = document.getElementById('eok'), btn = document.getElementById('esend');
+  if(eok){ btn.disabled = true; eok.onchange = () => { btn.disabled = !eok.checked; }; }
+  document.getElementById('ef').onsubmit = e => {
+    e.preventDefault();
+    if(eok && !eok.checked){ document.getElementById('hint').textContent='marca a caixinha pra eu poder te mandar o resultado.'; return; }
+    me('ver meu resultado', 'email');
+    enviar(c.email, '');
   };
 }
 
