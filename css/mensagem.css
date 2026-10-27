@@ -1,11 +1,10 @@
 /* mensagem da clara (comportamento em /js/mensagem.js, que baixa este arquivo só quando uma mensagem vai aparecer).
-   canto de baixo à direita, acima da barra do mixer (--msg-base é a altura dela), abaixo dos modais da conta. */
+   rostinho fixo no canto de cima à direita; a mensagem abre pra baixo dele. fica abaixo dos modais da conta. */
 .trc-msg{
   --m-papel:#F1EBDC; --m-creme:#F7F3EA; --m-creme2:#DED3BB; --m-verde:#293729; --m-verde2:#3C4D3E; --m-salvia:#8B9479; --m-vermelho:#D2452F;
-  --msg-base:0px;
   position:fixed;z-index:15;
+  top:calc(16px + env(safe-area-inset-top,0px));
   right:max(16px,env(safe-area-inset-right,0px));
-  bottom:calc(var(--msg-base) + 16px);
   display:flex;flex-direction:column;align-items:flex-end;gap:10px;
   font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--m-verde);text-transform:lowercase;
   pointer-events:none;
@@ -15,17 +14,17 @@
 /* cartão aberto */
 .trc-msg-card{
   width:min(316px,calc(100vw - 32px));
-  background:var(--m-creme);border:1px solid rgba(41,55,41,.08);border-radius:22px 22px 8px 22px;
+  background:var(--m-creme);border:1px solid rgba(41,55,41,.08);border-radius:22px 8px 22px 22px;
   box-shadow:0 18px 50px rgba(41,55,41,.22),0 2px 6px rgba(41,55,41,.08);
   padding:12px 12px 14px;
-  transform-origin:100% 100%;
-  opacity:0;transform:translateY(10px) scale(.92);visibility:hidden;
+  transform-origin:100% 0;
+  opacity:0;transform:translateY(-8px) scale(.92);visibility:hidden;
   transition:opacity .3s ease,transform .35s cubic-bezier(.2,.9,.3,1.2),visibility 0s .35s;
 }
 .trc-msg.on.aberta .trc-msg-card{opacity:1;transform:none;visibility:visible;transition:opacity .3s ease,transform .35s cubic-bezier(.2,.9,.3,1.2),visibility 0s}
-.trc-msg:not(.aberta) .trc-msg-card{position:absolute;right:0;bottom:0}
+.trc-msg:not(.aberta) .trc-msg-card{position:absolute;right:0;top:56px}
 
-.trc-msg-topo{display:flex;align-items:center;gap:9px;padding:0 0 10px 2px}
+.trc-msg-topo{display:flex;align-items:center;gap:9px;padding:0 0 10px 4px}
 .trc-msg-quem{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
 .trc-msg-quem b{font-size:14.5px;font-weight:600}
 .trc-msg-quem small{font-size:11.5px;color:var(--m-salvia);display:flex;align-items:center;gap:5px}
@@ -35,9 +34,8 @@
 .trc-msg-min svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 /* foto da clara (cai pra letra c se a foto não carregar) */
-.trc-msg-foto{position:relative;display:inline-grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;overflow:hidden;background:var(--m-verde);color:var(--m-papel);font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:21px;line-height:1}
+.trc-msg-foto{position:relative;display:grid;place-items:center;flex:none;width:46px;height:46px;border-radius:50%;overflow:hidden;background:var(--m-verde);color:var(--m-papel);font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:26px;line-height:1}
 .trc-msg-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.trc-msg-foto.g{width:56px;height:56px;font-size:32px}
 
 /* conversa */
 .trc-msg-conversa{min-height:44px}
@@ -54,15 +52,14 @@
 .trc-msg-nao{border:0;background:none;font:inherit;font-size:13.5px;color:var(--m-verde2);opacity:.75;text-transform:lowercase;padding:9px 10px;cursor:pointer;border-radius:99px}
 .trc-msg-nao:hover{opacity:1;background:rgba(41,55,41,.06)}
 
-/* rostinho minimizado */
+/* rostinho (sempre visível enquanto a mensagem existe; toca pra abrir ou fechar) */
 .trc-msg-bolha{
   position:relative;display:block;border:0;padding:0;background:none;cursor:pointer;border-radius:50%;
-  box-shadow:0 10px 28px rgba(41,55,41,.28),0 0 0 3px var(--m-creme);
-  opacity:0;transform:scale(.6);visibility:hidden;
-  transition:opacity .25s ease,transform .3s cubic-bezier(.2,.9,.3,1.3),visibility 0s .3s;
+  box-shadow:0 8px 22px rgba(41,55,41,.22),0 0 0 2.5px var(--m-creme);
+  opacity:0;transform:scale(.6);
+  transition:opacity .25s ease,transform .3s cubic-bezier(.2,.9,.3,1.3);
 }
-.trc-msg.on.min .trc-msg-bolha{opacity:1;transform:none;visibility:visible;transition:opacity .25s ease .1s,transform .3s cubic-bezier(.2,.9,.3,1.3) .1s,visibility 0s}
-.trc-msg.aberta .trc-msg-bolha{position:absolute;right:0;bottom:0}
+.trc-msg.on .trc-msg-bolha{opacity:1;transform:none}
 .trc-msg-bolha:hover{transform:scale(1.05)}
 .trc-msg-ponto{position:absolute;top:-1px;right:-1px;width:15px;height:15px;border-radius:50%;background:var(--m-vermelho);box-shadow:0 0 0 2.5px var(--m-creme)}
 .trc-msg.lida .trc-msg-ponto{display:none}
@@ -71,14 +68,11 @@
 
 .trc-msg :focus-visible{outline:2px solid var(--m-verde);outline-offset:2px}
 
-/* sem a barra do mixer, respeita a área segura do iphone */
-@supports (bottom:env(safe-area-inset-bottom)){
-  .trc-msg.sem-barra{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
-}
 @media (max-width:480px){
-  .trc-msg{right:12px}
+  .trc-msg{right:12px;top:calc(12px + env(safe-area-inset-top,0px))}
   .trc-msg-card{width:min(300px,calc(100vw - 24px))}
-  .trc-msg-foto.g{width:52px;height:52px}
+  .trc-msg-foto{width:42px;height:42px}
+  .trc-msg:not(.aberta) .trc-msg-card{top:52px}
 }
 @media (prefers-reduced-motion:reduce){
   .trc-msg-card,.trc-msg-bolha,.trc-msg-tx,.trc-msg-acoes{transition:none!important;animation:none!important}

@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "artigos:instalar": "npm ci --prefix scripts/artigos",
     "artigos": "node scripts/artigos/build.mjs",
     "artigos:previa": "node scripts/artigos/build.mjs --previa"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.2",
+    "web-push": "^3.6.7"
   }
 }

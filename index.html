@@ -5,6 +5,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKVLJKH0GV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LKVLJKH0GV',{allow_google_signals:false,allow_ad_personalization_signals:false});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>/* app instalado (ou ?app pra testar no navegador): versão enxuta */try{if(matchMedia("(display-mode: standalone)").matches||navigator.standalone===true||/[?&]app\b/.test(location.search))document.documentElement.classList.add("app")}catch(e){}</script>
 <title>the relax club · barulho de chuva e sons pra relaxar, focar e dormir</title>
 <meta name="description" content="um lugar pra parar de propósito. monte o seu barulho de fundo com chuva no telhado, mar, cachoeira, passarinhos e tigela tibetana, grátis e sem cadastro, e descubra que tipo de cansaço é o seu.">
 <link rel="canonical" href="https://therelax.club/">
@@ -145,8 +146,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 @media(max-width:640px){.chip.share span{display:none}.chip.share{padding:9px 11px}}
 .chip.on{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
 .save{display:inline-flex;align-items:center;gap:6px}.save svg{width:15px;height:15px}
-@media(max-width:640px){.save span{display:none}.save{padding:9px 11px}.vol>span{display:none}
-  .bar{padding-left:14px;padding-right:14px}.bar .in{gap:8px}.vol{min-width:40px}
+@media(max-width:640px){.save span{display:none}.save{padding:9px 11px}
+  /* sem volume geral no celular: o volume é o do aparelho e cada som tem o seu */
+  .vol{display:none}
+  .bar{padding-left:14px;padding-right:14px}.bar .in{gap:8px;justify-content:space-between}
   #timer:not(.on){font-size:0;width:38px;height:38px;padding:0;background:var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233C4D3E' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2.5 2M9.5 2.5h5'/%3E%3C/svg%3E") center/17px no-repeat}
   .av{width:38px;height:38px}}
 .toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(10px);background:var(--green-deep);color:var(--paper);font-size:14px;padding:10px 16px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:6;max-width:calc(100% - 32px);text-align:center}
@@ -256,6 +259,15 @@ header{position:relative}
 .card.guias .mini svg{width:100%;height:100%;display:block}
 .card.guias .mais{display:inline-block;margin-top:10px;font-size:14px;font-weight:600;color:var(--green-deep)}
 .ct-btn{display:inline-block;background:var(--green-deep);color:var(--paper);text-decoration:none;border-radius:99px;padding:9px 16px;font-size:14px}
+
+/* versão app (aberta da tela de início, ou ?app pra ver no navegador): só o essencial, o mixer na frente.
+   a classe .app vem do script no começo do head. artigos e textos longos ficam só no navegador. */
+.app .lead,.app .card.guias,.app .card span,.app .orb,.app .flinks,.app .fim i,.app .fim>span{display:none}
+.app .side{gap:10px}
+.app .card{padding:14px 18px;border-radius:18px}
+.app .card b{font-size:22px}
+.app .card small{margin-bottom:2px}
+/* rodapé no app: só as redes sociais */
 </style>
 </head>
 <body>
@@ -704,7 +716,9 @@ function setPlaying(p){
 }
 $('#play').onclick=()=>{ const any=SONS.some(s=>st[s.id].on); if(!any){ document.querySelector('.mix').click(); return; } setPlaying(!playing); };
 $('#master').oninput=e=>{ if(master) master.gain.setTargetAtTime(+e.target.value/100,ctx.currentTime,.1); try{ localStorage.setItem('trc-vol',e.target.value); }catch(_){} };
-try{ const v=localStorage.getItem('trc-vol'); if(v!=null) $('#master').value=v; }catch(e){}
+/* no celular não tem volume geral (vale o volume do próprio aparelho): fica no padrão, sem puxar o salvo */
+const SEM_VOL_GERAL=matchMedia('(max-width:640px)').matches;
+try{ const v=localStorage.getItem('trc-vol'); if(v!=null && !SEM_VOL_GERAL) $('#master').value=v; }catch(e){}
 /* barra de espaço: pausa e toca (menos quando a pessoa está digitando) */
 addEventListener('keydown',e=>{ if(e.code!=='Space'||e.repeat) return; const t=e.target; if(t.closest&&t.closest('input:not([type=range]),textarea,select,[contenteditable],.conta-modal')) return; e.preventDefault(); $('#play').click(); });
 addEventListener('keyup',e=>{ if(e.code==='Space'&&e.target.tagName==='BUTTON'&&!e.target.closest('.conta-modal')) e.preventDefault(); });

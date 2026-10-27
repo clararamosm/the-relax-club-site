@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>avisos · the relax club</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F1EBDC">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/css/clube.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* página interna da clara pra mandar notificação pra quem aceitou receber no app. não aparece em busca nem no site. */
+:root{--paper:#F1EBDC;--cream:#F7F3EA;--cream-2:#DED3BB;--green-deep:#293729;--green:#3C4D3E;--sage:#8B9479;--ink:#293729;--muted:#5d6b5d;--line:rgba(41,55,41,.14);
+  --serif:"Instrument Serif",Georgia,serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;text-transform:lowercase;padding:0 16px 80px}
+main{max-width:520px;margin:0 auto;padding-top:40px}
+header{display:flex;justify-content:center;padding:22px 0 0}header img{height:44px}
+h1{font-family:var(--serif);font-weight:400;font-size:44px;line-height:1;margin:26px 0 8px}
+.sub{color:var(--muted);font-size:15px;margin-bottom:24px;text-wrap:pretty}
+.box{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:20px}
+label{display:block;font-size:13px;font-weight:600;color:var(--green);margin:14px 0 6px}
+label:first-child{margin-top:0}
+input,textarea{width:100%;font:inherit;font-size:16px;text-transform:none;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+textarea{min-height:92px;resize:vertical}
+.cont{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+.prev{margin:20px 0 4px;display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 6px 20px rgba(41,55,41,.1);text-transform:none}
+.prev img{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none}
+.prev b{display:block;font-size:14px}.prev span{display:block;font-size:14px;color:var(--muted);line-height:1.35}
+.prevt{font-size:12px;color:var(--muted);margin-top:18px}
+.bt{display:inline-block;border:0;border-radius:99px;background:var(--green-deep);color:var(--paper);font:inherit;font-weight:600;padding:12px 22px;cursor:pointer;margin-top:18px}
+.bt[disabled]{opacity:.5;cursor:default}
+.bt.conf{background:#9a3a26}
+.res{margin-top:14px;font-size:15px;color:var(--green)}
+.n{font-family:var(--serif);font-size:30px;line-height:1}
+</style>
+</head>
+<body>
+<header><a href="/"><img src="/logo.svg" alt="the relax club"></a></header>
+<main>
+  <h1>avisos</h1>
+  <p class="sub" id="sub">carregando…</p>
+  <div id="area"></div>
+</main>
+<script type="module">
+import { auth, abrir, quandoMudar, esc } from '/js/clube.js';
+const ADMIN = 'clara@therelax.club';
+const $ = s => document.querySelector(s);
+const sub = $('#sub'), area = $('#area');
+const token = () => auth.currentUser.getIdToken();
+const api = async (metodo, corpo) => {
+  const r = await fetch('/api/notificar/', { method: metodo, headers: { authorization: 'Bearer ' + await token(), 'content-type': 'application/json' }, body: corpo ? JSON.stringify(corpo) : undefined });
+  return r.json().catch(() => ({ ok: false }));
+};
+
+function pintar(u) {
+  if (!u) {
+    sub.textContent = 'entra com a conta da the relax club pra mandar avisos.';
+    area.innerHTML = '<button class="bt" id="entrar">entrar</button>';
+    $('#entrar').onclick = () => abrir('inicio', 'avisos');
+    return;
+  }
+  if ((u.email || '').toLowerCase() !== ADMIN) { sub.textContent = 'essa página é só da clara.'; area.innerHTML = ''; return; }
+  sub.innerHTML = 'manda uma notificação pra todo mundo que aceitou receber no app. <span id="qtos"></span>';
+  area.innerHTML = `<div class="box">
+    <label for="t">título</label><input id="t" maxlength="80" placeholder="clara, da the relax club">
+    <label for="x">mensagem</label><textarea id="x" maxlength="240" placeholder="o que você quer dizer"></textarea><div class="cont" id="c">0/240</div>
+    <label for="l">abre onde (quando tocar)</label><input id="l" value="/" placeholder="/ ou https://...">
+    <p class="prevt">como chega no celular</p>
+    <div class="prev"><img src="/teste/clara.jpg" alt=""><div><b id="pt">clara, da the relax club</b><span id="px">o que você quer dizer</span></div></div>
+    <button class="bt" id="env" disabled>mandar pra todo mundo</button>
+    <p class="res" id="res" role="status"></p></div>`;
+  const t = $('#t'), x = $('#x'), l = $('#l'), env = $('#env'), res = $('#res');
+  const atualiza = () => { $('#pt').textContent = t.value.trim() || 'clara, da the relax club'; $('#px').textContent = x.value.trim() || 'o que você quer dizer'; $('#c').textContent = x.value.length + '/240'; env.disabled = !x.value.trim(); env.classList.remove('conf'); env.textContent = 'mandar pra todo mundo'; };
+  [t, x, l].forEach(i => i.oninput = atualiza);
+  api('GET').then(r => { if (r.ok) $('#qtos').innerHTML = `hoje <b>${r.inscritos}</b> ${r.inscritos === 1 ? 'pessoa recebe' : 'pessoas recebem'}.`; });
+  env.onclick = async () => {
+    if (!env.classList.contains('conf')) { env.classList.add('conf'); env.textContent = 'confirmar envio'; return; }
+    env.disabled = true; env.textContent = 'mandando…';
+    const r = await api('POST', { titulo: t.value, texto: x.value, url: l.value });
+    if (r.ok) { res.textContent = `mandei pra ${r.enviadas} ${r.enviadas === 1 ? 'pessoa' : 'pessoas'}.` + (r.removidas ? ` ${r.removidas} não recebem mais (desinstalaram ou bloquearam).` : '') + (r.falhas ? ` ${r.falhas} falharam.` : ''); x.value = ''; }
+    else res.textContent = 'não deu certo: ' + esc(r.error || 'erro');
+    atualiza();
+  };
+}
+let ultimo = null; quandoMudar(u => { const k = u ? (u.email || u.uid) : ''; if (k === ultimo) return; ultimo = k; pintar(u); });
+</script>
+</body>
+</html>

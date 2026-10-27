@@ -1,0 +1,18 @@
+# notificação de news nova: de hora em hora, nos dias de news (e no dia seguinte, caso saia tarde),
+# chama /api/news-aviso, que confere o feed do substack e avisa quem aceitou notificação no app.
+# cada edição só é avisada uma vez (o controle fica no servidor), então rodar a mais não repete nada.
+# não precisa de secret.
+name: avisos-news
+
+on:
+  schedule:
+    - cron: '41 9-23 * * 1,2,4,5'   # seg, ter, qui e sex, das 6h41 às 20h41 de brasília
+  workflow_dispatch:
+
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: confere se saiu news nova
+        run: curl -sS --fail-with-body --max-time 120 https://therelax.club/api/news-aviso/
