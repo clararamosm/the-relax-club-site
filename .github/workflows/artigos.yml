@@ -1,0 +1,47 @@
+# artigos do site: busca a base "Artigos do site" no notion, gera as páginas e publica no main se algo mudou.
+# roda 1x por dia, pelo botão "Run workflow" (aba Actions) e quando o build dos artigos muda no main.
+# precisa do secret NOTION_TOKEN (Settings > Secrets and variables > Actions), de uma integração do notion
+# com acesso às bases "Artigos do site" e "vídeos do youtube".
+name: artigos
+
+on:
+  schedule:
+    - cron: '17 9 * * *'   # todo dia às 6h17 de brasília
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/artigos/**', 'conteudo/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artigos
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: scripts/artigos/package-lock.json
+      - name: instalar
+        run: npm ci --prefix scripts/artigos
+      - name: gerar artigos (só os publicados)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: node scripts/artigos/build.mjs
+      - name: publicar se mudou
+        run: |
+          git add -A
+          if git diff --cached --quiet; then echo "nada mudou"; exit 0; fi
+          git config user.name "the relax club (artigos)"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "artigos: atualiza a partir do notion"
+          git push origin HEAD:main
