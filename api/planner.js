@@ -6,6 +6,7 @@
 // variáveis de ambiente na vercel: BREVO_API_KEY, BREVO_LIST_ID (já existem)
 
 const LISTA_PLANNER = 'planner · lista de espera';
+const TEMPLATE_CONFIRMA = 13; // "planner · 01 · lista de espera" no Brevo: confirma a entrada e dá um spoiler
 const ATRIBUTOS = [
   ['ORIGEM', 'text'], ['NOME', 'text'],
   ['PLANNER_ESPERA', 'boolean'], ['PLANNER_AT', 'date'],
@@ -44,8 +45,8 @@ export default async function handler(req, res) {
 
   // quem já era contato (do teste ou do clube) mantém ORIGEM e NOME
   const atual = await brevo(`/contacts/${encodeURIComponent(email)}`, 'GET');
-  let antes = {};
-  if (atual.ok) { try { antes = JSON.parse(atual.text).attributes || {}; } catch (e) {} }
+  let antes = {}, jaNaLista = false;
+  if (atual.ok) { try { const c = JSON.parse(atual.text); antes = c.attributes || {}; jaNaLista = (c.listIds || []).includes(listId); } catch (e) {} }
 
   const nome = corta(String(body.nome || '').split(/\s+/)[0], 60);
   const attributes = {
@@ -67,6 +68,11 @@ export default async function handler(req, res) {
     r = await brevo('/contacts', 'POST', { email, listIds: [listId], updateEnabled: true });
     if (!r.ok && atual.ok) r = await brevo(`/contacts/lists/${listId}/contacts/add`, 'POST', { emails: [email] });
     if (!r.ok) { console.error('brevo planner minimo', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
+  }
+  // email de confirmação, só na primeira vez que a pessoa entra na lista
+  if (!jaNaLista) {
+    const env = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_CONFIRMA, to: [{ email, name: nome || undefined }], params: { NOME: nome || '' } });
+    if (!env.ok) console.error('planner confirma', env.status, env.text);
   }
   return res.status(200).json({ ok: true });
 }
