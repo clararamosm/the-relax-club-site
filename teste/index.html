@@ -917,7 +917,11 @@ async function compartilhar(){
 
 
 /* ============ analytics (vercel) ============ */
-function track(name, data){ try{ window.va && window.va('event',{name,data}); }catch(_){} }
+/* etapas do teste vão pro google analytics (é onde o funil fica guardado). a vercel analytics não está ligada no projeto, mas mantém o envio caso seja ligada um dia */
+function track(name, data){
+  try{ window.gtag && window.gtag('event', name, data || {}); }catch(_){}
+  try{ window.va && window.va('event',{name,data}); }catch(_){}
+}
 
 // quando a área de resposta muda de tamanho, a conversa desce junto pra última mensagem ficar visível
 new ResizeObserver(()=>{ thread.scrollTop = thread.scrollHeight; }).observe(composer);

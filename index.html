@@ -669,7 +669,7 @@ let playing=true;
 
 document.querySelectorAll('.snd').forEach(el=>{
   const id=el.dataset.id;
-  el.querySelector('button').onclick=()=>{ if(!playing) setPlaying(true); setOn(id,!st[id].on); clearMix(); };
+  el.querySelector('button').onclick=()=>{ if(!playing) setPlaying(true); const liga=!st[id].on; setOn(id,liga); clearMix(); if(liga){ try{ gtag('event','som_ligado',{som:id}); }catch(e){} } };
   el.querySelector('input').oninput=e=>{ const S=st[id]; S.vol=+e.target.value; if(S.gain) S.gain.gain.setTargetAtTime(curve(S.vol),ctx.currentTime,.15); clearMix(); save(); };
 });
 $('#mixes').insertAdjacentHTML('beforeend',MIXES.map((m,i)=>`<button class="mix" data-m="${i}">${esc(m.nome)}</button>`).join(''));
@@ -737,7 +737,7 @@ $('#timer').onclick=()=>{
     const mm=Math.floor(left/60000), ss=Math.floor(left/1000)%60; $('#timer').textContent=`${mm}:${String(ss).padStart(2,'0')}`; };
   tick(); tInt=setInterval(tick,1000);
 };
-/* tempo com som tocando de verdade: alimenta o aviso de instalar como app (js/instalar.js) */
+/* tempo com som tocando de verdade: alimenta o aviso de instalar como app e os minutos tocados no google analytics (js/instalar.js) */
 (()=>{ let ult=Date.now(); setInterval(()=>{ const agora=Date.now(), d=Math.min(65,(agora-ult)/1000); ult=agora;
   if(playing && ctx && ctx.state==='running' && +$('#master').value>0 && SONS.some(s=>st[s.id].on) && window.trc && trc.tempoTocando) trc.tempoTocando(d); },5000); })();
 function fadeAllOut(){ if(!master) return; const t=ctx.currentTime; master.gain.setTargetAtTime(0,t,3); setTimeout(()=>{ setPlaying(false); master.gain.setValueAtTime(+$('#master').value/100,ctx.currentTime); },12000); }

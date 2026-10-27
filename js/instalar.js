@@ -58,9 +58,23 @@
   window.trc = window.trc || {};
   window.trc.tempoTocando = s => {
     s = +s; if (!(s > 0)) return;
-    ls(K_TEMPO, String(Math.round((tempo() + Math.min(s, 120)) * 10) / 10));
+    s = Math.min(s, 120);
+    ls(K_TEMPO, String(Math.round((tempo() + s) * 10) / 10));
+    pendente += s; if (pendente >= 600) enviarMinutos(); // a cada 10 minutos tocando
     checar();
   };
+
+  /* minutos tocados no google analytics (evento tempo_tocado, parâmetro minutos). anônimo: só soma tempo.
+     manda a cada 10 minutos de som e quando a pessoa sai ou esconde a página (se tiver pelo menos 30 segundos guardados). */
+  let pendente = 0;
+  const lugar = location.pathname.indexOf('/artigos/') === 0 ? 'artigo' : location.pathname === '/' ? 'sede' : 'outro';
+  function enviarMinutos() {
+    if (pendente < 30) return;
+    const minutos = Math.round(pendente / 6) / 10; pendente = 0;
+    ga('tempo_tocado', { minutos, lugar, app: comoApp() ? 'sim' : 'nao', transport_type: 'beacon' });
+  }
+  addEventListener('pagehide', enviarMinutos);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') enviarMinutos(); });
 
   function carregarComponente() {
     return new Promise(ok => {
