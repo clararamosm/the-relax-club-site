@@ -13,7 +13,7 @@ const ATRIBUTOS = {
   NOME:'text', AMBITO:'text', AMBITO_2:'text', PERFIL:'text', BATERIA:'text', ENERGIA:'float',
   BAT_FISICO:'float', BAT_MENTAL:'float', BAT_EMOCIONAL:'float', BAT_SOCIAL:'float',
   BAT_SENSORIAL:'float', BAT_CRIATIVO:'float', BAT_ESPIRITUAL:'float',
-  ORIGEM:'text', QUIZ_AT:'date', TESTE_RESPOSTAS:'text',
+  ORIGEM:'text', QUIZ_AT:'date', TESTE_RESPOSTAS:'text', EMAIL_RESULTADO_AT:'date',
   // mapa ordenado do menor % pro maior, igual ao da pagina de resultado
   BAT_SORT_1_NOME:'text', BAT_SORT_2_NOME:'text', BAT_SORT_3_NOME:'text', BAT_SORT_4_NOME:'text',
   BAT_SORT_5_NOME:'text', BAT_SORT_6_NOME:'text', BAT_SORT_7_NOME:'text',
@@ -173,6 +173,8 @@ export default async function handler(req, res) {
     });
     if (send.ok) {
       emailSent = true;
+      // marca no contato que o email 1 (resultado) saiu: é o que o painel conta no funil
+      await brevo(`/contacts/${encodeURIComponent(emailNorm)}`, 'PUT', { attributes: { EMAIL_RESULTADO_AT: hoje() } }).catch(() => null);
     } else {
       console.error('brevo smtp send error', send.status, send.text, 'templateId', templateId);
     }

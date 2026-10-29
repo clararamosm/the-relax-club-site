@@ -31,7 +31,7 @@ const ATRIBUTOS = [
   ['CLUBE_LOGIN', 'text'], ['CLUBE_PAGINA', 'text'], ['CLUBE_GATILHO', 'text'],
   ['CLUBE_UTM_SOURCE', 'text'], ['CLUBE_UTM_MEDIUM', 'text'], ['CLUBE_UTM_CAMPAIGN', 'text'],
   ['CLUBE_REFERRER', 'text'], ['CLUBE_ENTRADA', 'text'],
-  ['DESCANSO_PRINCIPAL', 'text'], ['ULTIMO_TESTE_AT', 'date']
+  ['DESCANSO_PRINCIPAL', 'text'], ['ULTIMO_TESTE_AT', 'date'], ['EMAIL_BOAS_VINDAS_AT', 'date']
 ];
 const AMB = { fis: 'físico', men: 'mental', emo: 'emocional', soc: 'social', sen: 'sensorial', cri: 'criativo', esp: 'espiritual' };
 
@@ -146,6 +146,8 @@ export default async function handler(req, res) {
       const env = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_BOAS_VINDAS, to: [{ email, name: String(nome).trim() || undefined }] });
       boasVindas = env.ok;
       if (!env.ok) console.error('boas-vindas', env.status, env.text);
+      // marca no contato que o email de boas-vindas saiu: é o que o painel conta no funil do clube
+      else await brevo(`/contacts/${encodeURIComponent(email)}`, 'PUT', { attributes: { EMAIL_BOAS_VINDAS_AT: dia(Date.now()) } }).catch(() => null);
     }
   }
   return res.status(200).json({ ok: true, lista: optin ? 'principal' : 'sem opt-in', boasVindas });
