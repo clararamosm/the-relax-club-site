@@ -8,8 +8,8 @@ export const LIGADA = MODO === 'todos';
 export const TESTE_PARA = 'clara@therelax.club';
 
 // modelos no brevo (transacionais, remetente clara@therelax.club)
-export const TEMPLATE_SONS = 14; // "quiz · 02 · sons"
-export const TEMPLATE_APP = 15;  // "quiz · 03 · app" (teste e clube)
+export const TEMPLATE_SONS = 14; // "teste 2 · sons"
+export const TEMPLATE_APP = 15;  // "teste 3 · app (também clube 2)"
 
 // quantos dias depois de cada passo sai o próximo email
 export const DIAS_SONS = 3;        // depois do teste
