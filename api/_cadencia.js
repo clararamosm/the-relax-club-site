@@ -5,8 +5,8 @@
 export const LIGADA = false;
 
 // modelos no brevo (transacionais, remetente clara@therelax.club)
-export const TEMPLATE_SONS = null;
-export const TEMPLATE_APP = null;
+export const TEMPLATE_SONS = 14; // "quiz · 02 · sons"
+export const TEMPLATE_APP = 15;  // "quiz · 03 · app" (teste e clube)
 
 // quantos dias depois de cada passo sai o próximo email
 export const DIAS_SONS = 3;        // depois do teste
