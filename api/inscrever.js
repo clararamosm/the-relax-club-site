@@ -71,7 +71,7 @@ async function garantirAtributos() {
 }
 
 function hoje() {
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD (UTC; ok pro quiz_at)
+  return new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10); // YYYY-MM-DD no horário de brasília (a cadência conta os dias a partir daqui)
 }
 
 export default async function handler(req, res) {
