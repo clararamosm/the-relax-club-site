@@ -8,6 +8,8 @@
 //   BREVO_API_KEY  -> chave da api do brevo (configuracoes > sms & email > chaves api)
 //   BREVO_LIST_ID  -> numero da lista no brevo (hoje: 3, "The Relax Club")
 
+import { marcarFormulario } from './_formularios.js';
+
 const NOMES = { fis:'físico', men:'mental', emo:'emocional', soc:'social', sen:'sensorial', cri:'criativo', esp:'espiritual' };
 const ATRIBUTOS = {
   NOME:'text', AMBITO:'text', AMBITO_2:'text', PERFIL:'text', BATERIA:'text', ENERGIA:'float',
@@ -162,6 +164,8 @@ export default async function handler(req, res) {
       return res.status(502).json({ ok: false, error: 'brevo' });
     }
   }
+
+  await marcarFormulario(brevo, emailNorm, 'teste');
 
   // contato gravado: tenta enviar o transactional; falha do email nao derruba a request
   const templateId = templateIdPara(perfilOk, principal);

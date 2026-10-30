@@ -5,6 +5,8 @@
 //
 // variáveis de ambiente na vercel: BREVO_API_KEY, BREVO_LIST_ID (já existem)
 
+import { marcarFormulario } from './_formularios.js';
+
 const LISTA_PLANNER = 'planner · lista de espera';
 const TEMPLATE_CONFIRMA = 13; // "planner · 01 · lista de espera" no Brevo: confirma a entrada e dá um spoiler
 const ATRIBUTOS = [
@@ -69,6 +71,7 @@ export default async function handler(req, res) {
     if (!r.ok && atual.ok) r = await brevo(`/contacts/lists/${listId}/contacts/add`, 'POST', { emails: [email] });
     if (!r.ok) { console.error('brevo planner minimo', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
   }
+  await marcarFormulario(brevo, email, 'planner');
   // email de confirmação, só na primeira vez que a pessoa entra na lista
   if (!jaNaLista) {
     const env = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_CONFIRMA, to: [{ email, name: nome || undefined }], params: { NOME: nome || '' } });

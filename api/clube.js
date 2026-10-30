@@ -10,6 +10,8 @@
 //
 // variáveis de ambiente na vercel: BREVO_API_KEY, BREVO_LIST_ID (já existem)
 
+import { marcarFormulario } from './_formularios.js';
+
 const FIREBASE_API_KEY = 'AIzaSyDwhk7BcD59scuOpUYbGBEmoWepLA-rR7E'; // chave pública do app web
 const PROJETO = 'the-relax-club';
 const FUNDADORES_ATE = 199;
@@ -131,6 +133,7 @@ export default async function handler(req, res) {
   if (!payload.listIds.length) delete payload.listIds;
   const r = await brevo('/contacts', 'POST', payload);
   if (!r.ok) { console.error('brevo clube', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
+  if (p.membro) await marcarFormulario(brevo, email, 'clube');
   const tirarDe = optin ? semId : (acao === 'sair' ? listId : null);
   if (tirarDe) await brevo(`/contacts/lists/${tirarDe}/contacts/remove`, 'POST', { emails: [email] });
 
