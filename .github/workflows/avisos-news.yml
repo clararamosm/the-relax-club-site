@@ -1,6 +1,7 @@
 # notificações automáticas, de hora em hora das 7h41 às 21h41 de brasília:
 # 1. /api/news-aviso/ confere o feed do substack e avisa quando sai edição nova da the relax news (paga ou gratuita).
 # 2. /api/fila/ manda as notificações que a clara decidiu mandar (lista em api/_fila.js) quando chega o horário.
+# 3. /api/cadencia/ manda os emails da cadência do teste e do clube que já chegaram no dia (regras em api/_cadencia.js).
 # cada envio só acontece uma vez (o controle fica no servidor), então rodar a mais não repete nada. não precisa de secret.
 name: avisos
 
@@ -19,3 +20,6 @@ jobs:
       - name: fila de notificações
         if: always()
         run: curl -sS --fail-with-body --max-time 120 https://therelax.club/api/fila/
+      - name: emails da cadência (sons e app)
+        if: always()
+        run: curl -sS --fail-with-body --max-time 120 https://therelax.club/api/cadencia/
