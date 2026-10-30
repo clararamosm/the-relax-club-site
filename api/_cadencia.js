@@ -1,8 +1,11 @@
 // conteúdo e regras da cadência do teste e do clube (os emails que saem depois do email 1).
 // quem manda é /api/cadencia (chamado de hora em hora pelo workflow "avisos").
 
-// liga e desliga o envio de verdade. desligado: /api/cadencia só mostra quem receberia.
-export const LIGADA = false;
+// 'teste': a cadência está ligada, mas só manda pro email de teste da clara (pelo link de teste); ninguém de fora recebe.
+// 'todos': manda pra todo mundo que chegou no dia. troca pra 'todos' só depois da clara aprovar os testes.
+export const MODO = 'teste';
+export const LIGADA = MODO === 'todos';
+export const TESTE_PARA = 'clara@therelax.club';
 
 // modelos no brevo (transacionais, remetente clara@therelax.club)
 export const TEMPLATE_SONS = 14; // "quiz · 02 · sons"

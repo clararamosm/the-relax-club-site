@@ -2,7 +2,7 @@
 // chamado de hora em hora pelo workflow "avisos"; cada email sai uma vez só (marca CAD_SONS_AT / CAD_APP_AT no contato).
 // GET /api/cadencia?ver=1 -> só mostra quantas pessoas receberiam agora, sem mandar nada e sem mostrar emails.
 // só manda entre 9h e 20h de brasília, e só com LIGADA = true em _cadencia.js.
-import { LIGADA, TEMPLATE_SONS, TEMPLATE_APP, proximo, paramsSons, paramsApp } from './_cadencia.js';
+import { LIGADA, MODO, TESTE_PARA, TEMPLATE_SONS, TEMPLATE_APP, MIXES, proximo, paramsSons, paramsApp } from './_cadencia.js';
 
 async function brevo(path, method = 'GET', body) {
   const r = await fetch('https://api.brevo.com/v3' + path, {
@@ -32,6 +32,18 @@ const horaBrasilia = () => new Date(Date.now() - 3 * 3600e3).getUTCHours();
 
 export default async function handler(req, res) {
   if (!process.env.BREVO_API_KEY) return res.status(500).json({ ok: false, error: 'brevo_key' });
+
+  // teste: manda o email dos sons e o do app só pro email de teste da clara, com o tipo pedido. não marca nada no contato.
+  // protegido pelo MANUTENCAO_TOKEN; ?teste=TOKEN&tipo=físico (ou mental, emocional, social, sensorial, criativo, espiritual, em_dia, espalhado)
+  if (req.query && req.query.teste) {
+    if (!process.env.MANUTENCAO_TOKEN || req.query.teste !== process.env.MANUTENCAO_TOKEN) return res.status(404).end();
+    const tipo = String(req.query.tipo || 'físico');
+    if (!MIXES[tipo]) return res.status(400).json({ ok: false, error: 'tipo' });
+    const at = tipo === 'em_dia' || tipo === 'espalhado' ? { PERFIL: tipo, NOME: 'clara' } : { AMBITO: tipo, NOME: 'clara' };
+    const r1 = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_SONS, to: [{ email: TESTE_PARA }], params: paramsSons(at), tags: ['cadencia', 'teste'] });
+    const r2 = await brevo('/smtp/email', 'POST', { templateId: TEMPLATE_APP, to: [{ email: TESTE_PARA }], params: paramsApp(at, 'teste'), tags: ['cadencia', 'teste'] });
+    return res.status(200).json({ ok: r1.ok && r2.ok, sons: r1.status, app: r2.status, detalhe: r1.ok && r2.ok ? undefined : (r1.text + ' ' + r2.text).slice(0, 300) });
+  }
   const contatos = await contatosDaLista(Number(process.env.BREVO_LIST_ID || 3));
   const fila = contatos.map(c => ({ c, p: proximo(c) })).filter(x => x.p && (x.p.qual === 'sons' ? TEMPLATE_SONS || !LIGADA : TEMPLATE_APP || !LIGADA));
   const resumo = {
@@ -41,7 +53,7 @@ export default async function handler(req, res) {
   };
   const h = horaBrasilia();
   if ((req.query && req.query.ver) || !LIGADA || h < 9 || h >= 20) {
-    return res.status(200).json({ ok: true, ligada: LIGADA, mandaria_agora: resumo, na_lista: contatos.length, horario_ok: h >= 9 && h < 20 });
+    return res.status(200).json({ ok: true, modo: MODO, mandaria_agora: resumo, na_lista: contatos.length, horario_ok: h >= 9 && h < 20 });
   }
   const enviados = { sons: 0, app: 0, falhas: 0 };
   for (const { c, p } of fila.slice(0, 40)) {
