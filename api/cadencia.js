@@ -27,6 +27,18 @@ async function contatosDaLista(listId) {
   return todos;
 }
 
+// os campos que marcam cada envio no contato; o brevo ignora campo que não existe, então cria antes
+async function garantirCampos() {
+  await Promise.all(['CAD_SONS_AT', 'CAD_APP_AT'].map(n => brevo(`/contacts/attributes/normal/${n}`, 'POST', { type: 'date' }).catch(() => null)));
+}
+
+// segunda trava: confere no histórico do brevo se esse email já foi mandado pra pessoa
+async function jaRecebeu(email, templateId) {
+  const r = await brevo(`/smtp/statistics/events?email=${encodeURIComponent(email)}&templateId=${templateId}&days=90&limit=10`);
+  const ev = (r.json && r.json.events) || [];
+  return ev.some(e => (e.event === 'requests' || e.event === 'delivered') && !String(e.tag || '').includes('teste'));
+}
+
 const hojeBrasilia = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10);
 const horaBrasilia = () => new Date(Date.now() - 3 * 3600e3).getUTCHours();
 
@@ -55,15 +67,21 @@ export default async function handler(req, res) {
   if ((req.query && req.query.ver) || !LIGADA || h < 9 || h >= 20) {
     return res.status(200).json({ ok: true, modo: MODO, mandaria_agora: resumo, na_lista: contatos.length, horario_ok: h >= 9 && h < 20 });
   }
-  const enviados = { sons: 0, app: 0, falhas: 0 };
+  await garantirCampos();
+  const enviados = { sons: 0, app: 0, falhas: 0, ja_tinham: 0 };
   for (const { c, p } of fila.slice(0, 40)) {
     const at = c.attributes || {};
     const params = p.qual === 'sons' ? paramsSons(at) : paramsApp(at, p.origem);
     if (!params) continue;
     // marca antes de mandar: se duas chamadas chegarem juntas, a segunda não manda de novo
     const campo = p.qual === 'sons' ? 'CAD_SONS_AT' : 'CAD_APP_AT';
+    const tpl = p.qual === 'sons' ? TEMPLATE_SONS : TEMPLATE_APP;
     const marca = await brevo(`/contacts/${encodeURIComponent(c.email)}`, 'PUT', { attributes: { [campo]: hojeBrasilia() } });
     if (!marca.ok) { enviados.falhas++; continue; }
+    // confere que a marca ficou mesmo gravada antes de mandar
+    const conf = await brevo(`/contacts/${encodeURIComponent(c.email)}`);
+    if (!conf.ok || !(conf.json && conf.json.attributes && conf.json.attributes[campo])) { enviados.falhas++; console.error('cadencia marca nao gravou', campo); continue; }
+    if (await jaRecebeu(c.email, tpl)) { enviados.ja_tinham++; continue; }
     const env = await brevo('/smtp/email', 'POST', {
       templateId: p.qual === 'sons' ? TEMPLATE_SONS : TEMPLATE_APP,
       to: [{ email: c.email }],
