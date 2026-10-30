@@ -23,7 +23,7 @@
 <tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">e, se você quiser, eu te aviso por lá quando sair news nova.</td></tr>
 <tr><td style="padding:4px 0 24px 0;"><a href="https://therelax.club/artigos/instalar-no-celular/?utm_source=brevo&utm_medium=email&utm_campaign={{ params.CAMPANHA }}" style="display:inline-block;background:#293729;color:#FFFFFF;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:500;text-decoration:none;border-radius:99px;padding:14px 24px;">como instalar no celular</a></td></tr>
 <tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">ps: no iphone tem que ser pelo safari.</td></tr>
-<!-- assinatura clara centrada -->
+<!-- rodapé padrão trc: assinatura centrada, redes, sede, logo, aviso -->
 <tr><td align="center" style="padding:14px 0 0 0;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
 <tr>
@@ -32,16 +32,18 @@
 </tr>
 </table>
 </td></tr>
-<tr><td align="center" style="padding:22px 0 26px 0;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
-<td style="padding:0 6px;"><a href="https://www.instagram.com/therelax.club/" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;display:inline-block;">instagram</a></td>
-<td style="padding:0 6px;"><a href="https://www.pinterest.com/therelaxclubbr/" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;display:inline-block;">pinterest</a></td>
-<td style="padding:0 6px;"><a href="https://therelaxclub.substack.com" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;display:inline-block;">substack</a></td>
-</tr></table>
+<tr><td align="center" style="padding:20px 0 0 0;">
+<a href="https://www.instagram.com/therelax.club/" style="display:inline-block;margin:0 3px 8px 3px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;">instagram</a><a href="https://www.pinterest.com/therelaxclubbr/" style="display:inline-block;margin:0 3px 8px 3px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;">pinterest</a><a href="https://www.youtube.com/@therelax-club" style="display:inline-block;margin:0 3px 8px 3px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;">youtube</a><a href="https://therelaxclub.substack.com" style="display:inline-block;margin:0 3px 8px 3px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;">substack</a>
 </td></tr>
-<tr><td align="center" style="padding:28px 0 0 0;border-top:1px solid #EFEAE0;">
-<img src="https://therelax.club/email/logo.png" width="70" alt="the relax club" style="display:block;margin:0 auto;width:70px;height:auto;">
+<tr><td align="center" style="padding:20px 0 0 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F3EEE3;border-radius:18px;">
+<tr><td align="center" style="padding:22px 22px 10px 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#293729;">a sede da the relax club é um lugar pra relaxar e se encontrar. acesse nosso mix de sons pra relaxar, focar ou dormir. grátis, no navegador.</td></tr>
+<tr><td align="center" style="padding:0 22px 22px 22px;"><a href="https://therelax.club/?utm_source=brevo&utm_medium=email&utm_campaign=cadencia-app" style="display:inline-block;background:#FFFFFF;color:#3C4D3E;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:500;text-decoration:none;border:1.5px solid #3C4D3E;border-radius:99px;padding:12px 22px;">crie seu som de descanso</a></td></tr>
+</table>
 </td></tr>
+<tr><td align="center" style="padding:28px 0 0 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="padding:28px 0 0 0;border-top:1px solid #EFEAE0;">
+<a href="https://therelax.club"><img src="https://therelax.club/email/logo.png" width="70" alt="the relax club" style="display:block;margin:0 auto;width:70px;height:auto;border:0;"></a>
+</td></tr></table></td></tr>
 <tr><td align="center" style="padding:14px 24px 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#a3a99f;">você recebeu porque {{ params.MOTIVO | default:"fez o teste dos 7 tipos de descanso" }} em <a href="https://therelax.club" style="color:#a3a99f;">therelax.club</a> e aceitou receber os emails da the relax club.<br><a href="{{ unsubscribe }}" style="color:#a3a99f;">sair da lista</a></td></tr>
 </table>
 </td></tr>
