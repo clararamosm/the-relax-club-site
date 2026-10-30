@@ -44,5 +44,5 @@ export async function marcarFormulario(brevo, email, form) {
 
 // quais formulários um contato já preencheu, pelos campos que ele tem (pra preencher quem entrou antes do campo existir)
 export function formulariosPelosCampos(at = {}) {
-  return [at.QUIZ_AT ? 'teste' : null, at.MEMBRO_NUM != null ? 'clube' : null, (at.PLANNER_AT || at.PLANNER_ESPERA) ? 'planner' : null].filter(Boolean);
+  return [(at.QUIZ_AT || at.ULTIMO_TESTE_AT) ? 'teste' : null, at.MEMBRO_NUM != null ? 'clube' : null, (at.PLANNER_AT || at.PLANNER_ESPERA) ? 'planner' : null].filter(Boolean);
 }

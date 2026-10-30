@@ -134,6 +134,7 @@ export default async function handler(req, res) {
   const r = await brevo('/contacts', 'POST', payload);
   if (!r.ok) { console.error('brevo clube', r.status, r.text); return res.status(502).json({ ok: false, error: 'brevo' }); }
   if (p.membro) await marcarFormulario(brevo, email, 'clube');
+  if (p.teste?.principal) await marcarFormulario(brevo, email, 'teste'); // fez o teste logado, mesmo sem deixar o email no fim
   const tirarDe = optin ? semId : (acao === 'sair' ? listId : null);
   if (tirarDe) await brevo(`/contacts/lists/${tirarDe}/contacts/remove`, 'POST', { emails: [email] });
 
