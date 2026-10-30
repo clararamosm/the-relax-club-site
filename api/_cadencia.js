@@ -78,7 +78,8 @@ export function paramsApp(at, origem) {
   };
 }
 
-const dias = (data, agora) => data ? Math.floor((agora - new Date(data + 'T12:00:00-03:00').getTime()) / 864e5) : -1;
+// dias de calendário entre a data e hoje, no horário de brasília (teste no dia 27 -> dia 30 conta 3)
+const dias = (data, agora) => data ? Math.round((new Date(new Date(agora - 3 * 3600e3).toISOString().slice(0, 10) + 'T00:00:00Z') - new Date(String(data).slice(0, 10) + 'T00:00:00Z')) / 864e5) : -1;
 
 // decide o próximo email de um contato: { qual: 'sons'|'app', origem } ou null
 export function proximo(c, agora = Date.now()) {
