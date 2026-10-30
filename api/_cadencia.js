@@ -3,7 +3,7 @@
 
 // 'teste': a cadência está ligada, mas só manda pro email de teste da clara (pelo link de teste); ninguém de fora recebe.
 // 'todos': manda pra todo mundo que chegou no dia. troca pra 'todos' só depois da clara aprovar os testes.
-export const MODO = 'teste';
+export const MODO = 'todos'; // liberada pela clara em 29/10/2026
 export const LIGADA = MODO === 'todos';
 export const TESTE_PARA = 'clara@therelax.club';
 
