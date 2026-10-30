@@ -10,7 +10,7 @@ export const TEMPLATE_APP = null;
 
 // quantos dias depois de cada passo sai o próximo email
 export const DIAS_SONS = 3;        // depois do teste
-export const DIAS_APP_TESTE = 7;   // depois do teste (e só depois do email dos sons)
+export const DIAS_APP_DEPOIS_SONS = 4; // depois do email dos sons
 export const DIAS_APP_CLUBE = 3;   // depois de entrar no clube (o email de boas-vindas sai na hora)
 
 // contas da clara: nunca entram na cadência automática
@@ -86,7 +86,7 @@ export function proximo(c, agora = Date.now()) {
   if (!(c.listIds || []).includes(3)) return null;
   if (at.QUIZ_AT) {
     if (!at.CAD_SONS_AT) return dias(at.QUIZ_AT, agora) >= DIAS_SONS && mixDe(at) ? { qual: 'sons', origem: 'teste' } : null;
-    if (!at.CAD_APP_AT && dias(at.QUIZ_AT, agora) >= DIAS_APP_TESTE && dias(at.CAD_SONS_AT, agora) >= 2) return { qual: 'app', origem: 'teste' };
+    if (!at.CAD_APP_AT && dias(at.CAD_SONS_AT, agora) >= DIAS_APP_DEPOIS_SONS) return { qual: 'app', origem: 'teste' };
     return null;
   }
   if (at.CLUBE_AT && at.CLUBE_OPTIN && !at.CAD_APP_AT && dias(at.CLUBE_AT, agora) >= DIAS_APP_CLUBE) return { qual: 'app', origem: 'clube' };
