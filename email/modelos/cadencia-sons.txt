@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<title>{{ params.ASSUNTO | default:"o som que eu escolheria pro seu cansaço físico" }}</title>
+<!--[if mso]><style>table,td{font-family:Arial,Helvetica,sans-serif !important;}</style><![endif]-->
+</head>
+<body style="margin:0;padding:0;background:#FFFFFF;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">um mix pronto pro seu cansaço, é só apertar o play</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;">
+<tr><td align="center" style="padding:0;">
+<table role="presentation" width="580" cellpadding="0" cellspacing="0" border="0" style="width:580px;max-width:580px;background:#FFFFFF;">
+<tr><td style="padding:36px 28px 40px 28px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td style="padding:0 0 22px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td valign="middle" style="padding-right:10px;"><img src="https://therelax.club/teste/clara.jpg" width="34" height="34" alt="clara" style="display:block;width:34px;height:34px;border-radius:50%;"></td>
+<td valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#3C4D3E;">a clara preparou isso pra você</td></tr></table></td></tr>
+<tr><td style="padding:0 0 22px 0;font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.1;color:#293729;font-weight:normal;">{{ params.TITULO | default:"um som pro seu cansaço" }} <i>{{ params.TITULO_ITALICO | default:"físico" }}</i></td></tr>
+<tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">oi{{ params.NOME_VIRGULA | default:"" }}. {{ params.ABERTURA | default:"no teste, o seu cansaço principal foi o físico. hoje eu quero te mostrar um som pra ele." }}</td></tr>
+<tr><td style="padding:4px 0 22px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#293729;border-radius:22px;"><tr><td style="padding:22px 22px 24px 22px;">
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:.06em;color:#B9BFA9;padding-bottom:6px;">o seu mix</div>
+<div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.1;color:#F1EBDC;padding-bottom:6px;">{{ params.MIX_NOME | default:"dormir" }}</div>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#B9BFA9;padding-bottom:14px;">{{ params.MIX_SONS | default:"praia, ventilador e grilos" }}</div>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.55;color:#F1EBDC;padding-bottom:18px;">{{ params.MIX_TEXTO | default:"cansaço físico pede o corpo deitado e nada pra resolver. é esse que eu deixo tocando na hora de deitar." }}</div>
+<a href="https://therelax.club/?mix={{ params.MIX_SLUG }}&utm_source=brevo&utm_medium=email&utm_campaign={{ params.CAMPANHA }}" style="display:inline-block;background:#F1EBDC;color:#293729;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:500;text-decoration:none;border-radius:99px;padding:13px 22px;">ouvir esse mix</a>
+</td></tr></table></td></tr>
+<tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">deixa baixinho e liga o timer de 15 ou 30 minutos, ele abaixa o volume aos poucos e desliga sozinho. se quiser, mexe no volume de cada som até ficar do seu jeito.</td></tr>
+<tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">ps: me responde contando onde você ouviu. eu leio todas.</td></tr>
+<!-- assinatura clara centrada -->
+<tr><td align="center" style="padding:14px 0 0 0;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+<tr>
+<td valign="middle" style="padding-right:14px;"><img src="https://therelax.club/teste/clara.jpg" width="52" height="52" alt="Clara" style="display:block;width:52px;height:52px;border-radius:50%;"></td>
+<td valign="middle" align="left" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.45;color:#5d6b5d;text-align:left;"><span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:24px;color:#293729;">Clara</span><br>The Relax Club</td>
+</tr>
+</table>
+</td></tr>
+<tr><td align="center" style="padding:22px 0 26px 0;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+<td style="padding:0 6px;"><a href="https://www.instagram.com/therelax.club/" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;display:inline-block;">instagram</a></td>
+<td style="padding:0 6px;"><a href="https://www.pinterest.com/therelaxclubbr/" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;display:inline-block;">pinterest</a></td>
+<td style="padding:0 6px;"><a href="https://therelaxclub.substack.com" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#3C4D3E;text-decoration:none;border:1px solid #E4DCCB;border-radius:99px;padding:8px 12px;display:inline-block;">substack</a></td>
+</tr></table>
+</td></tr>
+<tr><td align="center" style="padding:28px 0 0 0;border-top:1px solid #EFEAE0;">
+<img src="https://therelax.club/email/logo.png" width="70" alt="the relax club" style="display:block;margin:0 auto;width:70px;height:auto;">
+</td></tr>
+<tr><td align="center" style="padding:14px 24px 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#a3a99f;">você recebeu porque {{ params.MOTIVO | default:"fez o teste dos 7 tipos de descanso" }} em <a href="https://therelax.club" style="color:#a3a99f;">therelax.club</a> e aceitou receber os emails da the relax club.<br><a href="{{ unsubscribe }}" style="color:#a3a99f;">sair da lista</a></td></tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

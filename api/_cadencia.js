@@ -17,7 +17,6 @@ export const DIAS_APP_CLUBE = 3;   // depois de entrar no clube (o email de boas
 export const INTERNOS_DOMINIO = ['therelax.club', 'boldfy.com.br', 'operos.ai', 'example.com', 'b.com'];
 export const INTERNOS_EMAIL = ['mathaeusnora@gmail.com', 'therelaxclub.br@gmail.com'];
 
-const utm = (campanha) => `utm_source=brevo&utm_medium=email&utm_campaign=${campanha}`;
 
 // o mix de cada cansaço (o mesmo que aparece no email dos sons e é citado no email do app)
 export const MIXES = {
@@ -56,7 +55,8 @@ export function paramsSons(at) {
     NOME_VIRGULA: nomeVirgula(at),
     ABERTURA: abertura,
     MIX_NOME: m.nome, MIX_SONS: m.sons, MIX_TEXTO: m.texto,
-    MIX_URL: `https://therelax.club/?mix=${m.mix}&${utm(camp)}`,
+    MIX_SLUG: m.mix,
+    CAMPANHA: camp,
     MOTIVO: 'fez o teste dos 7 tipos de descanso'
   };
 }
