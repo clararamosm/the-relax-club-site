@@ -107,7 +107,7 @@
             try { await pd.prompt(); const r = await pd.userChoice; if (r && r.outcome === 'accepted') ls(K_INSTALADO, '1'); } catch (er) {}
             if (msg) msg.fechar();
           } }
-        : { rotulo: 'ver como', href: macSafari ? COMO + '#como-instalar-no-computador' : COMO },
+        : { rotulo: 'ver como', href: macSafari ? COMO + '#da-pra-instalar-no-computador' : COMO },
       aoAgir: snooze,      // já viu o caminho: não insiste por 14 dias
       aoFechar: snooze     // "agora não": some por 14 dias
     });

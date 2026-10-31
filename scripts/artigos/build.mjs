@@ -278,7 +278,7 @@ for (const a of VIS) {
 <article class="art-main">
 <p class="eyebrow">${esc(nomeCrumb)}</p>
 <h1>${esc(a.titulo)}</h1>
-<p class="by"><span class="av" aria-hidden="true">c</span><span>por ${POR_SLUG.has('sobre') && a.slug !== 'sobre' ? '<a href="/sobre/">clara ramos</a>' : 'clara ramos'}</span><span aria-hidden="true">·</span><span>atualizado em <time datetime="${a.data}">${dataBR(a.data)}</time></span><span aria-hidden="true">·</span><span>${min} min de leitura</span></p>
+<p class="by"><span class="av" aria-hidden="true"><img src="/teste/clara.jpg" alt="" width="32" height="32" loading="lazy" decoding="async"></span><span>por ${POR_SLUG.has('sobre') && a.slug !== 'sobre' ? '<a href="/sobre/">clara ramos</a>' : 'clara ramos'}</span><span aria-hidden="true">·</span><span>atualizado em <time datetime="${a.data}">${dataBR(a.data)}</time></span><span aria-hidden="true">·</span><span>${min} min de leitura</span></p>
 <div class="resp"><small>resposta curta</small>${md.parseInline(semTravessao(a.respostaMd))}</div>
 ${blocoVideo(a)}
 <div class="corpo">
