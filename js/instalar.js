@@ -11,7 +11,7 @@
    - android/chrome: botão "instalar" (prompt do navegador). iphone/ipad: "ver como" + dica do compartilhar.
      outros celulares: "ver como" (vai pro artigo com o passo a passo).
    - clicar no botão ou em "agora não" faz sumir por 14 dias.
-   - eventos do GA4: os do componente (mensagem_*, com id "instalar") e app_instalado
+   - eventos do GA4: os do componente (mensagem_*, com id "instalar"), app_instalado (só android e computador avisam) e app_aberto (cada vez que alguém abre o app instalado, inclusive no iphone)
 
    2. notificações (só dentro do app: no iphone o navegador nem deixa, e assim o navegador fica sem pedido nenhum)
    - aparece uns segundos depois de abrir o app, se a pessoa ainda não respondeu ao pedido de notificação.
@@ -176,6 +176,8 @@
 
   if (comoApp()) {
     try { if (navigator.clearAppBadge) navigator.clearAppBadge().catch(() => {}); } catch (e) {} // abriu o app: tira o número do ícone
+    // conta quem usa o app instalado (uma vez por abertura). é o único jeito de ver o iphone, que não avisa quando alguém instala
+    try { if (!sessionStorage.getItem('trc-app-aberto')) { sessionStorage.setItem('trc-app-aberto', '1'); ls(K_INSTALADO, '1'); ga('app_aberto', { plataforma: !celular ? 'computador' : ios ? 'ios' : 'android' }); } } catch (e) {}
     const iniciarApp = () => { conferirAvisos(); setTimeout(mostrarAvisos, 4000); };
     if (document.readyState === 'complete') iniciarApp(); else addEventListener('load', iniciarApp);
   }
