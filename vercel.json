@@ -31,5 +31,19 @@
       "destination": "/news/",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cadencia/?h=10",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cadencia/?h=14",
+      "schedule": "0 17 * * *"
+    },
+    {
+      "path": "/api/cadencia/?h=18",
+      "schedule": "0 21 * * *"
+    }
   ]
 }

@@ -2,6 +2,7 @@
 # 1. /api/news-aviso/ confere o feed do substack e avisa quando sai edição nova da the relax news (paga ou gratuita).
 # 2. /api/fila/ manda as notificações que a clara decidiu mandar (lista em api/_fila.js) quando chega o horário.
 # 3. /api/cadencia/ manda os emails da cadência do teste e do clube que já chegaram no dia (regras em api/_cadencia.js).
+# o github costuma pular horários desse agendamento, então a cadência também roda pela vercel (crons no vercel.json, 10h, 14h e 18h de brasília).
 # cada envio só acontece uma vez (o controle fica no servidor), então rodar a mais não repete nada. não precisa de secret.
 name: avisos
 
