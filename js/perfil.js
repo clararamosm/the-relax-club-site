@@ -31,38 +31,30 @@ const ICO_PONTINHOS = '<svg class="ico" viewBox="0 0 24 24" role="img" aria-labe
 function caixasApp() {
   const aqui = d => APARELHO === d;
   const selo = d => aqui(d) ? `<span class="selo">${COMO_APP ? 'você já tá no app' : 'este aparelho'}</span>` : '';
-  // android e computador sempre têm o botão; ele só abre a instalação no aparelho certo. fora dele, explica o caminho
-  const botao = d => `<button class="btn dark" type="button" data-instalar="${d}">instalar</button><p class="dica" hidden></p>`;
-  const android = '<p>um toque e o ícone vai pra tela inicial do celular.</p>';
+  const botao = d => aqui(d) && instalar && !COMO_APP ? `<button class="btn dark" type="button" data-instalar="${d}">instalar</button>` : '';
+  const android = aqui('android')
+    ? (instalar && !COMO_APP ? '<p>um toque e pronto: o ícone vai pra tela inicial.</p>' : '<p>toca nos três pontinhos do navegador e escolhe "instalar app" ou "adicionar à tela inicial".</p>')
+    : '<p>abre esta página no celular e toca em instalar. o ícone vai pra tela inicial.</p>';
   const iphone = `<ol class="passos">
       <li>toca em compartilhar ${ICO_COMPARTILHAR}. se não achar, ele pode estar dentro dos três pontinhos ${ICO_PONTINHOS}.</li>
       <li>escolhe "adicionar à tela de início".</li>
       <li>confirma em "adicionar". o ícone aparece junto dos seus apps.</li></ol>`;
-  const computador = '<p>um clique e a sede abre numa janela própria, sem abas, no mac ou no windows.</p>';
-  return [['android', 'android', android, true], ['iphone', 'iphone e ipad', iphone, false], ['computador', 'computador', computador, true]]
-    .map(([d, nome, corpo, temBotao]) => `<div class="app-box${aqui(d) ? ' aqui' : ''}"><div class="app-top"><b>${nome}</b>${selo(d)}</div>${corpo}${temBotao ? botao(d) : ''}</div>`).join('');
-}
-// o que dizer quando o botão não consegue abrir a instalação
-function dicaApp(d) {
-  if (APARELHO !== d) return d === 'android'
-    ? 'esse botão instala no celular android. abre therelax.club/perfil nele e toca em instalar.'
-    : 'esse botão instala no computador. abre therelax.club/perfil nele (mac ou windows) e clica em instalar.';
-  if (COMO_APP) return 'você já tá usando o app neste aparelho.';
-  if (d === 'android') return 'o seu navegador não abriu a instalação. toca nos três pontinhos dele e escolhe "instalar app" ou "adicionar à tela inicial". se já instalou, o ícone tá na tela inicial.';
-  if (MAC_SAFARI) return 'no safari, vai no menu arquivo e clica em "adicionar ao dock".';
-  return 'esse navegador não instala direto. abre therelax.club no chrome ou no edge e clica em instalar, no fim da barra de endereço. se já instalou, a sede tá nos seus apps.';
+  const computador = aqui('computador')
+    ? (instalar && !COMO_APP ? '<p>um clique e a sede abre numa janela própria, sem abas.</p>'
+      : MAC_SAFARI ? '<p>no menu arquivo do safari, clica em "adicionar ao dock".</p>'
+      : '<p>abre therelax.club no chrome ou no edge e clica em instalar, no fim da barra de endereço. no safari do mac: menu arquivo, "adicionar ao dock".</p>')
+    : '<p>abre esta página no computador (mac ou windows) e clica em instalar. a sede abre numa janela própria, sem abas.</p>';
+  return [['android', 'android', android], ['iphone', 'iphone e ipad', iphone], ['computador', 'computador', computador]]
+    .map(([d, nome, corpo]) => `<div class="app-box${aqui(d) ? ' aqui' : ''}"><div class="app-top"><b>${nome}</b>${selo(d)}</div>${corpo}${botao(d)}</div>`).join('');
 }
 function ligarCaixasApp() {
   const el = $('#apps'); if (!el) return;
   el.innerHTML = caixasApp();
   el.querySelectorAll('[data-instalar]').forEach(b => b.onclick = async () => {
-    const d = b.dataset.instalar, pd = instalar;
-    gaApp('mensagem_clicou', { id: 'instalar_perfil', plataforma: d, aqui: APARELHO === d ? 'sim' : 'nao' });
-    if (APARELHO === d && pd && !COMO_APP) {
-      try { await pd.prompt(); await pd.userChoice; } catch (e) {}
-      instalar = null; ligarCaixasApp(); return;
-    }
-    const dica = b.nextElementSibling; dica.textContent = dicaApp(d); dica.hidden = false;
+    const pd = instalar; if (!pd) return;
+    gaApp('mensagem_clicou', { id: 'instalar_perfil', plataforma: b.dataset.instalar });
+    try { await pd.prompt(); await pd.userChoice; } catch (e) {}
+    instalar = null; ligarCaixasApp();
   });
 }
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); instalar = e; ligarCaixasApp(); });
