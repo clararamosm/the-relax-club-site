@@ -26,6 +26,8 @@ const APARELHO = IOS ? 'iphone' : ANDROID ? 'android' : CELULAR ? 'outro' : 'com
 const COMO_APP = (() => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } })();
 const gaApp = (nome, dados) => { try { if (window.gtag) window.gtag('event', nome, dados || {}); } catch (e) {} };
 
+const ICO_COMPARTILHAR = '<svg class="ico" viewBox="0 0 24 24" role="img" aria-label="ícone de compartilhar"><path d="M8 9H6.5A1.5 1.5 0 0 0 5 10.5v9A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 17.5 9H16M12 15V3M8.5 6.5 12 3l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICO_PONTINHOS = '<svg class="ico" viewBox="0 0 24 24" role="img" aria-label="ícone de três pontinhos"><circle cx="5.5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor"/></svg>';
 function caixasApp() {
   const aqui = d => APARELHO === d;
   const selo = d => aqui(d) ? `<span class="selo">${COMO_APP ? 'você já tá no app' : 'este aparelho'}</span>` : '';
@@ -34,7 +36,7 @@ function caixasApp() {
     ? (instalar && !COMO_APP ? '<p>um toque e pronto: o ícone vai pra tela inicial.</p>' : '<p>toca nos três pontinhos do navegador e escolhe "instalar app" ou "adicionar à tela inicial".</p>')
     : '<p>abre esta página no celular e toca em instalar. o ícone vai pra tela inicial.</p>';
   const iphone = `<ol class="passos">
-      <li>toca no botão de compartilhar do navegador (o quadradinho com a seta pra cima). se não achar, ele pode estar dentro dos três pontinhos.</li>
+      <li>toca em compartilhar ${ICO_COMPARTILHAR}. se não achar, ele pode estar dentro dos três pontinhos ${ICO_PONTINHOS}.</li>
       <li>escolhe "adicionar à tela de início".</li>
       <li>confirma em "adicionar". o ícone aparece junto dos seus apps.</li></ol>`;
   const computador = aqui('computador')
