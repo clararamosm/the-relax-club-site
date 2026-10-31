@@ -10,6 +10,8 @@
    - aparece como mensagem da clara no canto (componente /js/mensagem.js, id "instalar"), que dá pra minimizar.
    - android/chrome: botão "instalar" (prompt do navegador). iphone/ipad: "ver como" + dica do compartilhar.
      outros celulares: "ver como" (vai pro artigo com o passo a passo).
+   - computador: chrome e edge (mac, windows e linux) mostram o botão "instalar". safari 17+ no mac: "ver como" + dica do
+     menu arquivo > adicionar ao dock. firefox e safari antigo não instalam, então não aparece.
    - clicar no botão ou em "agora não" faz sumir por 14 dias.
    - eventos do GA4: os do componente (mensagem_*, com id "instalar"), app_instalado (só android e computador avisam) e app_aberto (cada vez que alguém abre o app instalado, inclusive no iphone)
 
@@ -33,6 +35,8 @@
   const ios = /iP(hone|ad|od)/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1); // ipad se apresenta como mac
   const iosSafari = ios && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|Instagram|FBAN|FBAV|Line\//.test(ua);
   const celular = ios || /Android|Mobi/i.test(ua);
+  // safari do mac a partir da versão 17 (macOS sonoma): instala pelo menu arquivo > adicionar ao dock, sem pedido do navegador
+  const macSafari = !celular && /Macintosh/.test(ua) && /Safari/.test(ua) && !/Chrome|Chromium|Edg\/|OPR\/|Firefox/.test(ua) && +((ua.match(/Version\/(\d+)/) || [])[1] || 0) >= 17;
   const comoApp = () => { try { return matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true; } catch (e) { return navigator.standalone === true; } };
 
   let pedido = null, mostrando = false, msg = null;
@@ -41,13 +45,13 @@
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); pedido = e; checar(); });
   addEventListener('appinstalled', () => { ls(K_INSTALADO, '1'); ga('app_instalado', { plataforma: !celular ? 'computador' : ios ? 'ios' : 'android' }); fechar(); });
 
-  const plataforma = () => pedido ? (celular ? 'android' : 'computador') : ios ? (iosSafari ? 'ios_safari' : 'ios_outro') : 'outro_celular';
+  const plataforma = () => pedido ? (celular ? 'android' : 'computador') : macSafari ? 'mac_safari' : ios ? (iosSafari ? 'ios_safari' : 'ios_outro') : 'outro_celular';
   const tempo = () => { const n = parseFloat(ls(K_TEMPO)); return isFinite(n) && n > 0 ? n : 0; };
 
   function pode() {
     if (comoApp() || ls(K_INSTALADO)) return false;
     const f = +ls(K_FECHOU); if (f && Date.now() - f < PAUSA) return false;
-    if (!celular && !pedido) return false;           // computador sem instalação pelo navegador
+    if (!celular && !pedido && !macSafari) return false; // computador: só chrome/edge (mac, windows, linux) e safari 17+ no mac instalam
     if (location.pathname.indexOf(COMO) === 0) return false; // já tá no passo a passo
     return true;
   }
@@ -92,7 +96,8 @@
     const texto = celular
       ? 'quer ter a the relax club como app? fica na tela de início do celular e abre num toque.'
       : 'quer ter a the relax club como app no computador? abre direto, sem precisar do navegador.';
-    const nota = p === 'ios_safari' ? 'no iphone: toque em compartilhar e depois em adicionar à tela de início.' : '';
+    const nota = p === 'ios_safari' ? 'no iphone: toque em compartilhar e depois em adicionar à tela de início.'
+      : p === 'mac_safari' ? 'no mac: no menu arquivo do safari, clique em adicionar ao dock.' : '';
     const snooze = () => ls(K_FECHOU, String(Date.now()));
     msg = await window.trc.mensagem({
       id: 'instalar', texto, nota,
@@ -102,7 +107,7 @@
             try { await pd.prompt(); const r = await pd.userChoice; if (r && r.outcome === 'accepted') ls(K_INSTALADO, '1'); } catch (er) {}
             if (msg) msg.fechar();
           } }
-        : { rotulo: 'ver como', href: COMO },
+        : { rotulo: 'ver como', href: macSafari ? COMO + '#como-instalar-no-computador' : COMO },
       aoAgir: snooze,      // já viu o caminho: não insiste por 14 dias
       aoFechar: snooze     // "agora não": some por 14 dias
     });
