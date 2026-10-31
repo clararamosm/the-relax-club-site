@@ -1,4 +1,4 @@
-/* página de perfil do membro: carteirinha, dados, foto, mixes, histórico de testes, emails, instalar no celular e excluir conta */
+/* página de perfil do membro: carteirinha, dados, foto, mixes, histórico de testes, emails, instalar como app (android, iphone, computador) e excluir conta */
 import { auth, db, $, esc, AMB, DIAS_REFAZER, FUNDADORES_ATE, primeiro, abrir, fechar, msg, quandoMudar, atualizarPerfil, fotoDe, sair, sincronizarBrevo } from '/js/clube.js';
 import * as clube from '/js/clube.js';
 import { updateProfile, verifyBeforeUpdateEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
@@ -14,7 +14,49 @@ const fotoCart = f => !f ? '' : f.startsWith('data:') ? f : '/api/foto/?u=' + en
 const linkMix = sons => location.origin + '/?mix=' + Object.entries(sons).map(([k, v]) => `${k}-${v}`).join(',');
 let mixes = [], testes = [], instalar = null;
 
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); instalar = e; const b = $('#instalar-btn'); if (b) b.hidden = false; });
+/* ---------- app: três caixas (android, iphone, computador) ----------
+   o botão de instalar só existe no aparelho em que a pessoa está (o navegador entrega um pedido por aparelho),
+   então a caixa do aparelho dela ganha o botão e as outras explicam o caminho. no iphone não tem botão: são os passos. */
+const UA = navigator.userAgent || '';
+const IOS = /iP(hone|ad|od)/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+const ANDROID = /Android/i.test(UA);
+const CELULAR = IOS || ANDROID || /Mobi/i.test(UA);
+const MAC_SAFARI = !CELULAR && /Macintosh/.test(UA) && /Safari/.test(UA) && !/Chrome|Chromium|Edg\/|OPR\/|Firefox/.test(UA) && +((UA.match(/Version\/(\d+)/) || [])[1] || 0) >= 17;
+const APARELHO = IOS ? 'iphone' : ANDROID ? 'android' : CELULAR ? 'outro' : 'computador';
+const COMO_APP = (() => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } })();
+const gaApp = (nome, dados) => { try { if (window.gtag) window.gtag('event', nome, dados || {}); } catch (e) {} };
+
+function caixasApp() {
+  const aqui = d => APARELHO === d;
+  const selo = d => aqui(d) ? `<span class="selo">${COMO_APP ? 'você já tá no app' : 'este aparelho'}</span>` : '';
+  const botao = d => aqui(d) && instalar && !COMO_APP ? `<button class="btn dark" type="button" data-instalar="${d}">instalar</button>` : '';
+  const android = aqui('android')
+    ? (instalar && !COMO_APP ? '<p>um toque e pronto: o ícone vai pra tela inicial.</p>' : '<p>toca nos três pontinhos do navegador e escolhe "instalar app" ou "adicionar à tela inicial".</p>')
+    : '<p>abre esta página no celular e toca em instalar. o ícone vai pra tela inicial.</p>';
+  const iphone = `<ol class="passos">
+      <li>toca no botão de compartilhar do navegador (o quadradinho com a seta pra cima). se não achar, ele pode estar dentro dos três pontinhos.</li>
+      <li>escolhe "adicionar à tela de início".</li>
+      <li>confirma em "adicionar". o ícone aparece junto dos seus apps.</li></ol>`;
+  const computador = aqui('computador')
+    ? (instalar && !COMO_APP ? '<p>um clique e a sede abre numa janela própria, sem abas.</p>'
+      : MAC_SAFARI ? '<p>no menu arquivo do safari, clica em "adicionar ao dock".</p>'
+      : '<p>abre therelax.club no chrome ou no edge e clica em instalar, no fim da barra de endereço. no safari do mac: menu arquivo, "adicionar ao dock".</p>')
+    : '<p>abre esta página no computador (mac ou windows) e clica em instalar. a sede abre numa janela própria, sem abas.</p>';
+  return [['android', 'android', android], ['iphone', 'iphone e ipad', iphone], ['computador', 'computador', computador]]
+    .map(([d, nome, corpo]) => `<div class="app-box${aqui(d) ? ' aqui' : ''}"><div class="app-top"><b>${nome}</b>${selo(d)}</div>${corpo}${botao(d)}</div>`).join('');
+}
+function ligarCaixasApp() {
+  const el = $('#apps'); if (!el) return;
+  el.innerHTML = caixasApp();
+  el.querySelectorAll('[data-instalar]').forEach(b => b.onclick = async () => {
+    const pd = instalar; if (!pd) return;
+    gaApp('mensagem_clicou', { id: 'instalar_perfil', plataforma: b.dataset.instalar });
+    try { await pd.prompt(); await pd.userChoice; } catch (e) {}
+    instalar = null; ligarCaixasApp();
+  });
+}
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); instalar = e; ligarCaixasApp(); });
+addEventListener('appinstalled', () => { instalar = null; ligarCaixasApp(); });
 
 /* ---------- carteirinha ---------- */
 function carteirinha(u, p) {
@@ -79,13 +121,9 @@ function desenhar(u, p) {
       : `<p class="vazio">ainda nenhum. na sede, liga uns sons e toca em salvar.</p>`}
   </section>
 
-  <section class="sec"><h2>o clube no seu celular</h2>
-    <p class="sub">dá pra deixar a sede na tela de início, com ícone, abrindo em tela cheia como um app.</p>
-    <button class="btn dark" id="instalar-btn" type="button" ${instalar ? '' : 'hidden'}>colocar na tela de início</button>
-    <ol class="passos" id="passos">
-      <li><b>no iphone:</b> abre therelax.club no safari, toca no botão de compartilhar (o quadradinho com a seta) e escolhe "adicionar à tela de início".</li>
-      <li><b>no android:</b> abre no chrome, toca nos três pontinhos e escolhe "instalar app" ou "adicionar à tela inicial".</li>
-    </ol>
+  <section class="sec"><h2>a the relax club como app</h2>
+    <p class="sub">no celular ou no computador: a sede ganha ícone e abre direto, sem a barra do navegador.</p>
+    <div class="apps" id="apps"></div>
   </section>
 
   <section class="sec"><h2>conta</h2>
@@ -178,7 +216,7 @@ function ligar(u, p) {
       toast(optin ? 'pronto, você vai receber os emails' : 'pronto, não mando mais emails');
     } catch (err) { msg('#m-optin', 'não consegui salvar agora.'); }
   };
-  if ($('#instalar-btn')) $('#instalar-btn').onclick = async () => { if (!instalar) return; instalar.prompt(); await instalar.userChoice.catch(() => {}); instalar = null; $('#instalar-btn').hidden = true; };
+  ligarCaixasApp();
   $('#sair').onclick = () => sair();
   $('#excluir').onclick = () => excluir(u);
   $('#baixar').onclick = () => baixar(u, p);
