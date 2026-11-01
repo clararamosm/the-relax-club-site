@@ -14,9 +14,6 @@
 <table role="presentation" width="580" cellpadding="0" cellspacing="0" border="0" style="width:580px;max-width:580px;background:#FFFFFF;">
 <tr><td style="padding:36px 28px 40px 28px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:0 0 22px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-<td valign="middle" style="padding-right:10px;"><img src="https://therelax.club/teste/clara.jpg" width="34" height="34" alt="clara" style="display:block;width:34px;height:34px;border-radius:50%;"></td>
-<td valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#3C4D3E;">a clara preparou isso pra você</td></tr></table></td></tr>
 <tr><td style="padding:0 0 22px 0;font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.1;color:#293729;font-weight:normal;">a the relax club <i>no seu celular</i></td></tr>
 <tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">oi{{ params.NOME_VIRGULA | default:"" }}. dá pra ter a the relax club na tela do celular, como um app, sem baixar nada da loja: é só abrir therelax.club e adicionar à tela de início.</td></tr>
 <tr><td style="padding:0 0 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#293729;">aberta pelo ícone, ela vai direto pro mixer, sem artigo nem menu no caminho. {{ params.MIX_LINHA | default:"o seu mix dormir fica a um toque." }}</td></tr>
