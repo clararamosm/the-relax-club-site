@@ -96,7 +96,7 @@
     const texto = celular
       ? 'quer ter a the relax club como app? fica na tela de início do celular e abre num toque.'
       : 'quer ter a the relax club como app no computador? abre direto, sem precisar do navegador.';
-    const nota = p === 'ios_safari' ? 'no iphone: toque em compartilhar e depois em adicionar à tela de início.'
+    const nota = p.startsWith('ios') ? 'no iphone: toque em compartilhar e depois em adicionar à tela de início.'
       : p === 'mac_safari' ? 'no mac: no menu arquivo do safari, clique em adicionar ao dock.' : '';
     const snooze = () => ls(K_FECHOU, String(Date.now()));
     msg = await window.trc.mensagem({
