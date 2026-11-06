@@ -47,6 +47,15 @@
 .form .fine{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.5}
 .form .msg{font-size:13.5px;color:#9a5b3c;margin:8px 0 0;min-height:1em}
 .form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.formato{border:0;padding:0;margin:12px 0 0}
+.formato legend{font-size:13.5px;color:var(--green);margin:0 0 8px;padding:0}
+.formato .ops{display:flex;gap:8px;flex-wrap:wrap}
+.formato label{flex:1 1 0;min-width:88px;position:relative;cursor:pointer}
+.formato input{position:absolute;opacity:0;pointer-events:none}
+.formato span{display:block;text-align:center;border:1px solid var(--line);background:#fff;border-radius:99px;padding:11px 12px;font-size:14.5px;color:var(--green-deep);transition:background .25s,color .25s,border-color .25s}
+.formato label:hover span{border-color:var(--sage)}
+.formato input:checked+span{background:var(--green-deep);color:var(--paper);border-color:var(--green-deep)}
+.formato input:focus-visible+span{outline:2px solid var(--sage);outline-offset:2px}
 .ok-box{display:none}
 .form.feito .campos{display:none}.form.feito .ok-box{display:block}
 .ok-box b{display:block;font-family:var(--serif);font-weight:300;font-size:28px;line-height:1.1;color:var(--green-deep);margin-bottom:8px}
@@ -125,6 +134,14 @@
           <input type="text" name="nome" id="nome" placeholder="seu nome" autocomplete="given-name" maxlength="60">
           <input type="email" name="email" id="email" placeholder="seu email" autocomplete="email" required maxlength="200">
         </div>
+        <fieldset class="formato" id="formato">
+          <legend>como você quer o seu planner?</legend>
+          <div class="ops">
+            <label><input type="radio" name="formato" value="fisico"><span>físico</span></label>
+            <label><input type="radio" name="formato" value="digital"><span>digital</span></label>
+            <label><input type="radio" name="formato" value="os dois"><span>os dois</span></label>
+          </div>
+        </fieldset>
         <label class="hp" aria-hidden="true">não preencha<input type="text" name="site" tabindex="-1" autocomplete="off"></label>
         <button type="submit" id="btn">quero entrar na lista</button>
         <p class="msg" id="msg" role="status"></p>
@@ -171,15 +188,17 @@
     e.preventDefault(); msg.textContent='';
     var nome=f.nome.value.trim(), email=f.email.value.trim();
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent='confere o seu email?'; f.email.focus(); return; }
+    var fm=f.querySelector('input[name=formato]:checked'), formato=fm?fm.value:'';
+    if(!formato){ msg.textContent='escolhe se você quer o físico, o digital ou os dois?'; f.querySelector('input[name=formato]').focus(); return; }
     btn.disabled=true; btn.textContent='entrando…';
-    fetch('/api/planner/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({nome:nome,email:email,site:f.site.value,
+    fetch('/api/planner/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({nome:nome,email:email,formato:formato,site:f.site.value,
       source:q.get('utm_source')||'',medium:q.get('utm_medium')||'',campaign:q.get('utm_campaign')||'',ref:ref})})
     .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
     .then(function(r){
       if(!r.ok) throw 0;
       document.getElementById('ok-t').textContent=nome?('pronto, '+nome.split(/\s+/)[0].toLowerCase()+', você tá na lista'):'pronto, você tá na lista';
       f.classList.add('feito');
-      try{ gtag('event','lista_planner',{origem:q.get('utm_source')||ref||'direto'}); }catch(e){}
+      try{ gtag('event','lista_planner',{origem:q.get('utm_source')||ref||'direto',formato:formato}); }catch(e){}
     })
     .catch(function(){ btn.disabled=false; btn.textContent='quero entrar na lista'; msg.textContent='não consegui salvar agora. tenta de novo em um minutinho?'; });
   });

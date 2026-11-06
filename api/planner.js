@@ -1,4 +1,4 @@
-// POST /api/planner  { nome, email, source, medium, campaign, ref, site }
+// POST /api/planner  { nome, email, formato, source, medium, campaign, ref, site }
 // lista de espera do planner: grava o contato no Brevo, na lista "planner · lista de espera"
 // (criada sozinha no primeiro cadastro, na mesma pasta da lista principal).
 // quem entra aqui não vai pra lista principal do clube: é uma lista segmentada só do planner.
@@ -9,9 +9,10 @@ import { marcarFormulario } from './_formularios.js';
 
 const LISTA_PLANNER = 'planner · lista de espera';
 const TEMPLATE_CONFIRMA = 13; // "planner · 01 · lista de espera" no Brevo: confirma a entrada e dá um spoiler
+const FORMATOS = { fisico: 'físico', digital: 'digital', 'os dois': 'os dois' };
 const ATRIBUTOS = [
   ['ORIGEM', 'text'], ['NOME', 'text'],
-  ['PLANNER_ESPERA', 'boolean'], ['PLANNER_AT', 'date'],
+  ['PLANNER_ESPERA', 'boolean'], ['PLANNER_FORMATO', 'text'], ['PLANNER_AT', 'date'],
   ['PLANNER_UTM_SOURCE', 'text'], ['PLANNER_UTM_MEDIUM', 'text'], ['PLANNER_UTM_CAMPAIGN', 'text'], ['PLANNER_REFERRER', 'text']
 ];
 
@@ -55,6 +56,8 @@ export default async function handler(req, res) {
     ORIGEM: antes.ORIGEM || 'planner',
     NOME: antes.NOME || nome,
     PLANNER_ESPERA: true,
+    // formato que a pessoa quer (físico, digital ou os dois); se ela entrar de novo, vale a escolha mais recente
+    PLANNER_FORMATO: FORMATOS[String(body.formato || '').trim().toLowerCase()] || antes.PLANNER_FORMATO,
     PLANNER_AT: antes.PLANNER_AT || new Date().toISOString().slice(0, 10),
     PLANNER_UTM_SOURCE: antes.PLANNER_UTM_SOURCE || corta(body.source),
     PLANNER_UTM_MEDIUM: antes.PLANNER_UTM_MEDIUM || corta(body.medium),
