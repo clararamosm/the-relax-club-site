@@ -2,7 +2,7 @@
 // cada formulário novo do site entra aqui: é só chamar marcarFormulario(brevo, email, 'nome-do-formulario').
 // o campo aparece como coluna no brevo e dá pra filtrar e segmentar por ele.
 export const CAMPO = 'FORMULARIOS';
-export const CONHECIDOS = ['teste', 'clube', 'planner'];
+export const CONHECIDOS = ['teste', 'clube', 'planner', 'calendario'];
 
 let opcoesProntas = null; // cache por instância
 
