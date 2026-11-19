@@ -8,7 +8,7 @@
 //
 // o que fica gravado no contato do brevo:
 //   CAL_OPTIN_AT  dia em que a pessoa confirmou
-//   CAL_INICIO    o dia 1 dela (01/12/2026 pra quem ativa antes; depois disso, o dia seguinte). nunca muda depois de gravado.
+//   CAL_INICIO    o dia 1 dela (01/01/2027 pra quem ativa antes; depois disso, o dia seguinte). nunca muda depois de gravado.
 //   CAL_ORIGEM    'email' (ativou pelo link) ou 'pagina' (formulário)
 // e a pessoa entra na lista "calendário · ativos" (usada pra tirar quem já ativou dos próximos emails de divulgação).
 //
@@ -18,7 +18,7 @@ import { marcarFormulario } from './_formularios.js';
 
 const LISTA_ATIVOS = 'calendário · ativos';
 const LISTAS_DIVULGACAO = [Number(process.env.BREVO_LIST_ID || 3), 5]; // the relax club + planner · lista de espera
-const LANCAMENTO = '2026-12-01';
+const LANCAMENTO = '2027-01-01'; // era 01/12/2026, passou pra janeiro em 19/11
 const ATRIBUTOS = [['CAL_TOKEN', 'text'], ['CAL_OPTIN_AT', 'date'], ['CAL_INICIO', 'date'], ['CAL_ORIGEM', 'text'],
   ['CAL_UTM_SOURCE', 'text'], ['CAL_UTM_MEDIUM', 'text'], ['CAL_UTM_CAMPAIGN', 'text'], ['CAL_REFERRER', 'text'], ['ORIGEM', 'text'], ['NOME', 'text']];
 
